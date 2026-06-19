@@ -1,0 +1,56 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Generate icon
+        run: python assets/make_icon.py
+
+      - name: Build WisprLite.exe
+        run: >
+          pyinstaller --noconfirm --clean --noconsole --onefile --name WisprLite
+          --icon assets/wisprlite.ico
+          --add-data "assets/wisprlite.ico;assets"
+          --collect-all deepgram
+          --collect-all faster_whisper
+          --collect-all ctranslate2
+          --collect-all pystray
+          --collect-all PIL
+          launch.py
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer
+        run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\WisprLite.iss'
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WisprLite-Setup
+          path: installer/Output/WisprLite-Setup.exe
+
+      - name: Attach installer to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: installer/Output/WisprLite-Setup.exe

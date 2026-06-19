@@ -1,0 +1,122 @@
+"""First-run welcome dialog: ask for the API key, save it, then carry on.
+
+Shown on startup only when the selected cloud engine has no key. Writes the key
+to %APPDATA%\\WisprLite\\.env so it persists. Runs a short-lived Tk root on the
+main thread, fully torn down before the overlay's UI thread starts.
+"""
+
+from __future__ import annotations
+
+import webbrowser
+
+from . import config
+
+BG = "#13151d"
+CARD = "#1b1e29"
+FG = "#e5e7eb"
+MUTED = "#94a3b8"
+ACCENT = "#34d399"
+
+PROVIDER = {
+    "openai": ("OpenAI", "OPENAI_API_KEY", "https://platform.openai.com/api-keys", "sk-..."),
+    "deepgram": ("Deepgram", "DEEPGRAM_API_KEY", "https://console.deepgram.com/", "your key"),
+}
+
+
+def has_key(engine: str) -> bool:
+    if engine == "openai":
+        return bool(config.openai_key())
+    if engine == "deepgram":
+        return bool(config.deepgram_key())
+    return True  # local needs no key
+
+
+def ensure_api_key(cfg) -> None:
+    if has_key(cfg.engine) or cfg.engine not in PROVIDER:
+        return
+    try:
+        _dialog(cfg.engine)
+    except Exception:
+        pass  # headless / no Tk -> app still runs; key can be set in Settings
+
+
+def _dialog(engine: str) -> None:
+    import tkinter as tk
+
+    label, env_name, url, placeholder = PROVIDER[engine]
+
+    root = tk.Tk()
+    root.title("Welcome to WisprLite")
+    root.configure(bg=BG)
+    root.resizable(False, False)
+    ico = config.asset_path("wisprlite.ico")
+    if ico:
+        try:
+            root.iconbitmap(ico)
+        except Exception:
+            pass
+
+    wrap = tk.Frame(root, bg=BG, padx=28, pady=24)
+    wrap.pack()
+
+    tk.Label(wrap, text="WisprLite", bg=BG, fg=ACCENT,
+             font=("Segoe UI", 18, "bold")).pack(anchor="w")
+    tk.Label(wrap, text=f"Paste your {label} API key to get started.",
+             bg=BG, fg=FG, font=("Segoe UI", 11)).pack(anchor="w", pady=(2, 14))
+
+    var = tk.StringVar()
+    entry = tk.Entry(wrap, textvariable=var, width=46, show="•",
+                     bg=CARD, fg=FG, insertbackground=FG, relief="flat",
+                     font=("Consolas", 11))
+    entry.pack(ipady=6, fill="x")
+    entry.insert(0, "")
+    entry.focus_set()
+
+    rowf = tk.Frame(wrap, bg=BG)
+    rowf.pack(fill="x", pady=(8, 0))
+    show_var = tk.BooleanVar(value=False)
+
+    def toggle():
+        entry.config(show="" if show_var.get() else "•")
+
+    tk.Checkbutton(rowf, text="Show", variable=show_var, command=toggle,
+                   bg=BG, fg=MUTED, selectcolor=CARD, activebackground=BG,
+                   activeforeground=FG, relief="flat",
+                   font=("Segoe UI", 9)).pack(side="left")
+
+    link = tk.Label(rowf, text="Get a key ↗", bg=BG, fg=ACCENT, cursor="hand2",
+                    font=("Segoe UI", 9, "underline"))
+    link.pack(side="right")
+    link.bind("<Button-1>", lambda e: webbrowser.open(url))
+
+    tk.Label(wrap, text="Stored locally in %APPDATA%\\WisprLite\\.env — never uploaded.",
+             bg=BG, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w", pady=(10, 16))
+
+    btns = tk.Frame(wrap, bg=BG)
+    btns.pack(fill="x")
+
+    def save(_=None):
+        config.save_api_key(env_name, var.get())
+        root.destroy()
+
+    def skip():
+        root.destroy()
+
+    tk.Button(btns, text="Skip for now", command=skip, bg=CARD, fg=FG,
+              activebackground="#262a3a", activeforeground=FG, relief="flat",
+              padx=14, pady=7, font=("Segoe UI", 9)).pack(side="left")
+    save_btn = tk.Button(btns, text="Save & start", command=save, bg=ACCENT,
+                         fg="#06281c", activebackground="#2bb588", relief="flat",
+                         padx=16, pady=7, font=("Segoe UI", 9, "bold"))
+    save_btn.pack(side="right")
+    entry.bind("<Return>", save)
+
+    root.update_idletasks()
+    w, h = root.winfo_width(), root.winfo_height()
+    sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
+    root.geometry(f"+{(sw - w) // 2}+{(sh - h) // 3}")
+    try:
+        root.attributes("-topmost", True)
+    except Exception:
+        pass
+    root.mainloop()

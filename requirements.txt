@@ -1,0 +1,17 @@
+# --- Core (always required) ---
+sounddevice>=0.4.6
+numpy>=1.24
+keyboard>=0.13.5
+python-dotenv>=1.0
+
+# --- Engines ---
+openai>=1.30          # OpenAI Whisper API (default engine)
+deepgram-sdk>=3.0     # Deepgram streaming (low-latency live transcription)
+faster-whisper>=1.0   # Local/offline Whisper (no internet needed)
+
+# --- UI niceties ---
+pystray>=0.19         # system tray icon + menu
+Pillow>=10.0          # renders the tray icon
+pyperclip>=1.8        # "Paste" output mode
+
+# tkinter (the overlay HUD) ships with the standard Windows Python installer.
