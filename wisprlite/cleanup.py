@@ -52,7 +52,16 @@ def _accent_clause(language: str) -> str:
     return ""
 
 
-def clean(text: str, model: str = "gpt-4o-mini", language: str = "") -> Optional[str]:
+def _notes_clause(notes: str) -> str:
+    notes = (notes or "").strip()
+    if not notes:
+        return ""
+    return (f' The speaker describes their own speech as: "{notes}". Take that into '
+            "account — correct likely mis-hearings from their accent, smooth over "
+            "stutters and repeated words, and remove their filler words.")
+
+
+def clean(text: str, model: str = "gpt-4o-mini", language: str = "", notes: str = "") -> Optional[str]:
     text = (text or "").strip()
     if not text:
         return None
@@ -64,7 +73,7 @@ def clean(text: str, model: str = "gpt-4o-mini", language: str = "") -> Optional
             model=model,
             temperature=0,
             messages=[
-                {"role": "system", "content": SYSTEM + _accent_clause(language)},
+                {"role": "system", "content": SYSTEM + _accent_clause(language) + _notes_clause(notes)},
                 {"role": "user", "content": text},
             ],
         )

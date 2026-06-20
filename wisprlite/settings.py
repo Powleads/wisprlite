@@ -123,6 +123,7 @@ def main(first_run: bool = False) -> None:
     mode_var = tk.StringVar(value=dict(MODES).get(cfg.mode, MODES[0][1]))
     output_var = tk.StringVar(value=dict(OUTPUTS).get(cfg.output_mode, OUTPUTS[0][1]))
     hotkey_var = tk.StringVar(value=cfg.hotkey)
+    clip_hotkey_var = tk.StringVar(value=cfg.clipboard_hotkey)
     lang_var = tk.StringVar(value=dict(LANGUAGES).get(cfg.language, LANGUAGES[0][1]))
     devices = _input_devices()
     dev_label = next((lbl for lbl, val in devices if val == cfg.device), devices[0][0])
@@ -136,6 +137,7 @@ def main(first_run: bool = False) -> None:
     auto_enter_var = tk.BooleanVar(value=cfg.auto_enter)
     vocab_var = tk.StringVar(value=cfg.vocabulary)
     fixes_var = tk.StringVar(value=", ".join(f"{k}={v}" for k, v in cfg.replacements.items()))
+    speech_notes_var = tk.StringVar(value=cfg.speech_notes)
     overlay_var = tk.BooleanVar(value=cfg.overlay)
     sounds_var = tk.BooleanVar(value=cfg.sounds)
     autostart_var = tk.BooleanVar(value=autostart.is_enabled())
@@ -184,6 +186,7 @@ def main(first_run: bool = False) -> None:
 
     cap_btn.config(command=capture)
     row += 1
+    label("Clipboard hotkey", "hold to dictate to the clipboard"); entry(clip_hotkey_var, width=20); row += 1
 
     # --- Audio ---
     header("Audio")
@@ -218,6 +221,7 @@ def main(first_run: bool = False) -> None:
                                                   sticky="w", padx=14, pady=3); row += 1
     label("Vocabulary", "names/jargon, comma-sep"); entry(vocab_var); row += 1
     label("Word fixes", "wrong=right, comma-sep"); entry(fixes_var); row += 1
+    label("Speech notes", "accent / stutter / fillers — guides AI cleanup"); entry(speech_notes_var); row += 1
 
     # --- Toggles ---
     header("Behaviour")
@@ -241,6 +245,7 @@ def main(first_run: bool = False) -> None:
         cfg.mode = value_for(mode_var, MODES)
         cfg.output_mode = value_for(output_var, OUTPUTS)
         cfg.hotkey = hotkey_var.get().strip() or "right ctrl"
+        cfg.clipboard_hotkey = clip_hotkey_var.get().strip()
         cfg.language = value_for(lang_var, LANGUAGES)
         cfg.device = dict((lbl, val) for lbl, val in devices).get(device_var.get(), "")
         cfg.openai_model = oai_var.get().strip() or "whisper-1"
@@ -251,6 +256,7 @@ def main(first_run: bool = False) -> None:
         cfg.ai_cleanup = bool(ai_cleanup_var.get())
         cfg.auto_enter = bool(auto_enter_var.get())
         cfg.vocabulary = vocab_var.get().strip()
+        cfg.speech_notes = speech_notes_var.get().strip()
         fixes = {}
         for part in fixes_var.get().split(","):
             if "=" in part:

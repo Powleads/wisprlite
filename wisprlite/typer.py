@@ -54,3 +54,16 @@ def type_text(text: str, mode: str = "type", press_enter: bool = False) -> None:
     if press_enter:
         time.sleep(0.05)
         keyboard.send("enter")
+
+
+def copy_clipboard(text: str) -> bool:
+    """Copy text to the clipboard without typing or pasting it. True on success."""
+    if not text:
+        return False
+    try:
+        import pyperclip
+
+        pyperclip.copy(text)
+        return True
+    except Exception:
+        return False
