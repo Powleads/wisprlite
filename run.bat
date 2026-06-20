@@ -1,5 +1,5 @@
 @echo off
-REM Launch WisprLite. First run sets up a virtual environment and installs deps.
+REM Launch Pipevoice. First run sets up a virtual environment and installs deps.
 REM If keystrokes don't reach an *elevated* terminal, right-click -> Run as administrator.
 cd /d "%~dp0"
 if not exist ".venv" (

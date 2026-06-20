@@ -71,7 +71,7 @@ class Tray:
             )
 
         menu = Menu(
-            Item("WisprLite", None, enabled=False),
+            Item("Pipevoice", None, enabled=False),
             Menu.SEPARATOR,
             Item("Engine", Menu(
                 engine_item("openai", "OpenAI Whisper  (cloud)"),
@@ -100,7 +100,7 @@ class Tray:
             Item("Quit", lambda i, it: app.quit()),
         )
 
-        self.icon = pystray.Icon("wisprlite", self._state_image("idle"), "WisprLite", menu)
+        self.icon = pystray.Icon("wisprlite", self._state_image("idle"), "Pipevoice", menu)
         self.ok = True
         try:
             self.icon.run_detached()

@@ -1,6 +1,6 @@
 @echo off
-REM One-shot: push this folder to https://github.com/Powleads/wisprlite
-REM which triggers the GitHub Actions build of WisprLite-Setup.exe.
+REM One-shot: push this folder to https://github.com/Powleads/PipeVoice
+REM which triggers the GitHub Actions build of Pipevoice-Setup.exe.
 REM First push opens a GitHub sign-in in your browser (Git Credential Manager).
 cd /d "%~dp0"
 
@@ -24,10 +24,10 @@ echo === Files that will be pushed: ===
 git status --short
 echo ==================================
 echo.
-git commit -m "WisprLite update"
+git commit -m "Pipevoice update"
 git branch -M main
 git remote remove origin 2>nul
-git remote add origin https://github.com/Powleads/wisprlite.git
+git remote add origin https://github.com/Powleads/PipeVoice.git
 
 echo.
 echo Pushing to GitHub (a browser sign-in may pop up the first time)...
@@ -41,6 +41,6 @@ if errorlevel 1 (
 )
 
 echo.
-echo Pushed! Now go to https://github.com/Powleads/wisprlite/actions
-echo Wait for the green build, open it, and download the WisprLite-Setup artifact.
+echo Pushed! Now go to https://github.com/Powleads/PipeVoice/actions
+echo Wait for the green build, open it, and download the Pipevoice-Setup artifact.
 pause

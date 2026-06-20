@@ -1,16 +1,16 @@
-; Inno Setup script for WisprLite.
-; Build WisprLite.exe first (run build_exe.bat), then compile this with Inno Setup
-; (ISCC.exe installer\WisprLite.iss, or open in the Inno Setup IDE).
-; Produces installer\Output\WisprLite-Setup.exe — a per-user install (no admin).
+; Inno Setup script for Pipevoice.
+; Build Pipevoice.exe first (run build_exe.bat), then compile this with Inno Setup
+; (ISCC.exe installer\Pipevoice.iss, or open in the Inno Setup IDE).
+; Produces installer\Output\Pipevoice-Setup.exe — a per-user install (no admin).
 
-#define AppName "WisprLite"
+#define AppName "Pipevoice"
 #define AppVersion "0.3.0"
-#define AppExe "WisprLite.exe"
+#define AppExe "Pipevoice.exe"
 
 [Setup]
 AppName={#AppName}
 AppVersion={#AppVersion}
-AppPublisher=WisprLite
+AppPublisher=Pipevoice
 DefaultDirName={localappdata}\Programs\{#AppName}
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes

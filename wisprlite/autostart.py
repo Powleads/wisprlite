@@ -1,4 +1,4 @@
-"""Run WisprLite at Windows login via the HKCU Run registry key.
+"""Run Pipevoice at Windows login via the HKCU Run registry key.
 
 Works both from source (launches pythonw + a tiny generated launcher with an
 absolute sys.path so cwd doesn't matter) and from a PyInstaller .exe.
@@ -12,7 +12,7 @@ import sys
 from .config import config_dir
 
 RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
-VALUE_NAME = "WisprLite"
+VALUE_NAME = "Pipevoice"
 
 try:
     import winreg  # Windows only

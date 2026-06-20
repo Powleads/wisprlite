@@ -1,4 +1,4 @@
-"""WisprLite application: wires hotkey -> record -> transcribe -> type, plus the
+"""Pipevoice application: wires hotkey -> record -> transcribe -> type, plus the
 tray icon and the live overlay. State machine: idle -> recording -> transcribing.
 """
 
@@ -307,7 +307,7 @@ class App:
         self.tray.set_state(state)
 
     def _fail(self, msg: str) -> None:
-        log.error("WisprLite error: %s", msg)
+        log.error("Pipevoice error: %s", msg)
         self._beep(220, 200)
         self.overlay.set_state("error", msg[:80])
         self.tray.set_state("error")
@@ -334,7 +334,7 @@ class App:
 
     def run(self) -> None:
         if not self._acquire_single_instance():
-            print("WisprLite is already running.", file=sys.stderr)
+            print("Pipevoice is already running.", file=sys.stderr)
             return
 
         # First run: if a cloud engine has no key, ask for it in a dialog.
@@ -348,7 +348,7 @@ class App:
         self._prewarm()
         threading.Thread(target=self._watch_config, daemon=True).start()
 
-        print("WisprLite running.")
+        print("Pipevoice running.")
         print(f"  Engine: {self.cfg.engine}   Mode: {self.cfg.mode}   Hotkey: [{self.cfg.hotkey}]")
         print(f"  Output: {self.cfg.output_mode}   Overlay: {self.cfg.overlay}")
         if not self.tray.ok:
@@ -365,7 +365,7 @@ class App:
 def _setup_logging() -> None:
     try:
         logging.basicConfig(
-            filename=str(config.config_dir() / "wisprlite.log"),
+            filename=str(config.config_dir() / "pipevoice.log"),
             level=logging.INFO,
             format="%(asctime)s %(levelname)s %(message)s",
         )
@@ -375,7 +375,7 @@ def _setup_logging() -> None:
 
 def main() -> None:
     _setup_logging()
-    log.info("WisprLite starting (engine=%s)", config.Config.load().engine)
+    log.info("Pipevoice starting (engine=%s)", config.Config.load().engine)
     try:
         App().run()
     except Exception:

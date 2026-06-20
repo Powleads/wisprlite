@@ -1,6 +1,6 @@
 """Configuration: persisted user settings + secrets from the environment.
 
-Non-secret settings live in %APPDATA%\\WisprLite\\config.json so the tray menu
+Non-secret settings live in %APPDATA%\\Pipevoice\\config.json so the tray menu
 can change them at runtime. API keys are read from the environment / .env only
 and are never written to disk.
 """
@@ -13,7 +13,7 @@ import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
-APP_NAME = "WisprLite"
+APP_NAME = "Pipevoice"
 
 
 def config_dir() -> Path:
@@ -103,7 +103,7 @@ class Config:
 
 
 def save_api_key(env_name: str, value: str) -> None:
-    """Persist an API key to %APPDATA%\\WisprLite\\.env and the live process."""
+    """Persist an API key to %APPDATA%\\Pipevoice\\.env and the live process."""
     value = (value or "").strip()
     if not value:
         return

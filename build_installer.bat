@@ -1,13 +1,13 @@
 @echo off
-REM Build the full Windows installer: WisprLite.exe -> WisprLite-Setup.exe.
+REM Build the full Windows installer: Pipevoice.exe -> Pipevoice-Setup.exe.
 REM Requires: .venv set up (run.bat once) and Inno Setup 6 installed
-REM (https://jrsoftware.org/isdl.php). Output: installer\Output\WisprLite-Setup.exe
+REM (https://jrsoftware.org/isdl.php). Output: installer\Output\Pipevoice-Setup.exe
 cd /d "%~dp0"
 
-echo [1/2] Building WisprLite.exe with PyInstaller...
+echo [1/2] Building Pipevoice.exe with PyInstaller...
 call build_exe.bat
-if not exist "dist\WisprLite.exe" (
-    echo ERROR: dist\WisprLite.exe was not created. Aborting.
+if not exist "dist\Pipevoice.exe" (
+    echo ERROR: dist\Pipevoice.exe was not created. Aborting.
     pause
     exit /b 1
 )
@@ -20,8 +20,8 @@ if not exist "%ISCC%" (
     pause
     exit /b 1
 )
-"%ISCC%" "installer\WisprLite.iss"
+"%ISCC%" "installer\Pipevoice.iss"
 
 echo.
-echo Done. Installer at installer\Output\WisprLite-Setup.exe
+echo Done. Installer at installer\Output\Pipevoice-Setup.exe
 pause

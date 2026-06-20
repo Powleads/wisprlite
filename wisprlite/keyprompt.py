@@ -1,7 +1,7 @@
 """First-run welcome dialog: ask for the API key, save it, then carry on.
 
 Shown on startup only when the selected cloud engine has no key. Writes the key
-to %APPDATA%\\WisprLite\\.env so it persists. Runs a short-lived Tk root on the
+to %APPDATA%\\Pipevoice\\.env so it persists. Runs a short-lived Tk root on the
 main thread, fully torn down before the overlay's UI thread starts.
 """
 
@@ -47,7 +47,7 @@ def _dialog(cfg) -> None:
     label, env_name, url, placeholder = PROVIDER[engine]
 
     root = tk.Tk()
-    root.title("Welcome to WisprLite")
+    root.title("Welcome to Pipevoice")
     root.configure(bg=BG)
     root.resizable(False, False)
     ico = config.asset_path("wisprlite.ico")
@@ -60,7 +60,7 @@ def _dialog(cfg) -> None:
     wrap = tk.Frame(root, bg=BG, padx=28, pady=24)
     wrap.pack()
 
-    tk.Label(wrap, text="WisprLite", bg=BG, fg=ACCENT,
+    tk.Label(wrap, text="Pipevoice", bg=BG, fg=ACCENT,
              font=("Segoe UI", 18, "bold")).pack(anchor="w")
     tk.Label(wrap, text=f"Paste your {label} key — it stays on this PC.",
              bg=BG, fg=FG, font=("Segoe UI", 11)).pack(anchor="w", pady=(2, 3))
@@ -92,7 +92,7 @@ def _dialog(cfg) -> None:
     link.pack(side="right")
     link.bind("<Button-1>", lambda e: webbrowser.open(url))
 
-    tk.Label(wrap, text="Stored locally in %APPDATA%\\WisprLite\\.env — never uploaded.",
+    tk.Label(wrap, text="Stored locally in %APPDATA%\\Pipevoice\\.env — never uploaded.",
              bg=BG, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w", pady=(10, 16))
 
     err = tk.Label(wrap, text="", bg=BG, fg="#f87171", font=("Segoe UI", 9))

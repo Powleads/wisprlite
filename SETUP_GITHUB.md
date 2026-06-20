@@ -1,6 +1,6 @@
 # Getting the one-click installer via GitHub Actions
 
-GitHub's Windows servers build `WisprLite-Setup.exe` for you. You never need
+GitHub's Windows servers build `Pipevoice-Setup.exe` for you. You never need
 Python or any build tools — you just download the finished installer and click.
 
 ## Step 1 — create an empty repo (≈15 seconds)
@@ -20,7 +20,7 @@ In the unzipped folder, run:
 ```bat
 git init -b main
 git add .
-git commit -m "WisprLite"
+git commit -m "Pipevoice"
 git remote add origin https://github.com/Powleads/wisprlite.git
 git push -u origin main
 ```
@@ -32,15 +32,15 @@ git push -u origin main
 Every push builds it. To grab it:
 
 - **Quick (artifact):** repo → **Actions** tab → click the latest green run →
-  scroll to **Artifacts** → download **WisprLite-Setup** → unzip →
-  double-click `WisprLite-Setup.exe`.
+  scroll to **Artifacts** → download **Pipevoice-Setup** → unzip →
+  double-click `Pipevoice-Setup.exe`.
 - **Permanent link (release):** repo → **Releases** → **Draft a new release** →
   pick a tag like `v0.3.1` → **Publish**. The workflow attaches
-  `WisprLite-Setup.exe` to the release, giving you a stable download URL you can
+  `Pipevoice-Setup.exe` to the release, giving you a stable download URL you can
   bookmark or share.
 
 ## What the installer does
 
-Double-click `WisprLite-Setup.exe` → installs (per-user, no admin) → launches →
-WisprLite asks for your API key in a popup → you're dictating. The icon sits in
+Double-click `Pipevoice-Setup.exe` → installs (per-user, no admin) → launches →
+Pipevoice asks for your API key in a popup → you're dictating. The icon sits in
 your system tray; right-click it for Settings.

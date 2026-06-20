@@ -1,6 +1,6 @@
 """Standalone settings window (its own process, its own Tk root).
 
-Launched via `python -m wisprlite --settings` (or `WisprLite.exe --settings`).
+Launched via `python -m wisprlite --settings` (or `Pipevoice.exe --settings`).
 Editing config.json here; the running app watches the file and live-reloads.
 Kept in a separate process on purpose: the main app already owns a Tk root for
 the overlay, and two Tk roots in one process across threads is asking for
@@ -48,7 +48,7 @@ def main() -> None:
 
     cfg = config.Config.load()
     root = tk.Tk()
-    root.title("WisprLite settings")
+    root.title("Pipevoice settings")
     root.configure(bg=BG)
     root.resizable(False, False)
     ico = config.asset_path("wisprlite.ico")
