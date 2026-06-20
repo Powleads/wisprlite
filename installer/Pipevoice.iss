@@ -4,7 +4,7 @@
 ; Produces installer\Output\Pipevoice-Setup.exe — a per-user install (no admin).
 
 #define AppName "Pipevoice"
-#define AppVersion "0.3.0"
+#define AppVersion "2.1.0"
 #define AppExe "Pipevoice.exe"
 
 [Setup]
@@ -37,7 +37,7 @@ Name: "{group}\Uninstall {#AppName}"; Filename: "{uninstallexe}"
 Name: "{userstartup}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: startup
 
 [Tasks]
-Name: "startup"; Description: "Start {#AppName} automatically when I log in"; GroupDescription: "Startup:"
+Name: "startup"; Description: "Start {#AppName} automatically when I log in"; GroupDescription: "Startup:"; Flags: unchecked
 
 [Run]
 ; The app prompts for the API key on first launch, so just start it.

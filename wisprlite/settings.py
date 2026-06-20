@@ -42,13 +42,13 @@ def _input_devices():
     return items
 
 
-def main() -> None:
+def main(first_run: bool = False) -> None:
     import tkinter as tk
     from tkinter import ttk
 
     cfg = config.Config.load()
     root = tk.Tk()
-    root.title("Pipevoice settings")
+    root.title("Welcome to Pipevoice" if first_run else "Pipevoice settings")
     root.configure(bg=BG)
     root.resizable(False, False)
     ico = config.asset_path("wisprlite.ico")

@@ -55,19 +55,19 @@ _load_env()
 
 @dataclass
 class Config:
-    engine: str = "openai"          # openai | deepgram | local
+    engine: str = "deepgram"        # openai | deepgram | local
     mode: str = "ptt"               # ptt | toggle
-    hotkey: str = "right ctrl"      # any key/combo, e.g. "ctrl+alt", "f9"
+    hotkey: str = "ctrl+\\"          # any key/combo, e.g. "ctrl+alt", "f9"
     output_mode: str = "type"       # type | paste
     language: str = ""              # "" = auto-detect; else ISO code e.g. "en"
     device: str = ""                # mic index or name substring; "" = default
     openai_model: str = "whisper-1"
-    deepgram_model: str = "nova-2"
+    deepgram_model: str = "nova-3"
     local_model_size: str = "base.en"
     overlay: bool = True
-    sounds: bool = True
+    sounds: bool = False
     min_seconds: float = 0.35       # ignore taps shorter than this
-    ai_cleanup: bool = False        # polish transcript with an LLM
+    ai_cleanup: bool = True         # polish transcript with an LLM
     cleanup_model: str = "gpt-4o-mini"
     auto_enter: bool = False        # press Enter after typing (hands-free send)
     vocabulary: str = ""            # comma-separated terms to bias recognition
