@@ -11,13 +11,15 @@ from __future__ import annotations
 
 import threading
 
-from . import autostart, config
+from . import autostart, cleanup, config
 
 ENGINES = [("openai", "OpenAI Whisper  (cloud)"),
            ("deepgram", "Deepgram  (streaming)"),
            ("local", "Local Whisper  (offline)")]
 MODES = [("ptt", "Push-to-talk (hold)"), ("toggle", "Toggle (tap on/off)")]
 OUTPUTS = [("type", "Type keystrokes"), ("paste", "Clipboard + Ctrl+V")]
+CLEANUP_PROVIDERS = [("openai", "OpenAI"), ("gemini", "Google Gemini (free tier)"),
+                     ("openrouter", "OpenRouter (free models)"), ("ollama", "Local — Ollama (offline)")]
 LOCAL_SIZES = ["tiny.en", "base.en", "small.en", "medium.en",
                "tiny", "base", "small", "medium", "large-v3"]
 LANGUAGES = [
@@ -143,7 +145,11 @@ def main(first_run: bool = False) -> None:
     local_var = tk.StringVar(value=cfg.local_model_size)
     oai_key_var = tk.StringVar()
     dg_key_var = tk.StringVar()
+    gem_key_var = tk.StringVar()
+    or_key_var = tk.StringVar()
     ai_cleanup_var = tk.BooleanVar(value=cfg.ai_cleanup)
+    cleanup_var = tk.StringVar(value=dict(CLEANUP_PROVIDERS).get(cfg.cleanup_provider, CLEANUP_PROVIDERS[0][1]))
+    cleanup_model_var = tk.StringVar(value=cfg.cleanup_model)
     auto_enter_var = tk.BooleanVar(value=cfg.auto_enter)
     vocab_var = tk.StringVar(value=cfg.vocabulary)
     fixes_var = tk.StringVar(value=", ".join(f"{k}={v}" for k, v in cfg.replacements.items()))
@@ -241,15 +247,26 @@ def main(first_run: bool = False) -> None:
     label("Deepgram key", "saved" if config.deepgram_key() else "not set")
     e_dg = ttk.Entry(frm, textvariable=dg_key_var, width=29, show="•")
     e_dg.grid(row=row, column=1, padx=6, pady=5, sticky="w"); row += 1
+    label("Gemini key", "saved" if config.gemini_key() else "not set")
+    ttk.Entry(frm, textvariable=gem_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=5, sticky="w"); row += 1
+    label("OpenRouter key", "saved" if config.openrouter_key() else "not set")
+    ttk.Entry(frm, textvariable=or_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=5, sticky="w"); row += 1
     ttk.Label(frm, text="Leave a key blank to keep the current one.",
               style="Muted.TLabel").grid(row=row, column=0, columnspan=3,
                                           sticky="w", padx=14); row += 1
 
     # --- Transcription ---
     header("Transcription")
-    ttk.Checkbutton(frm, text="Polish with AI (Flow mode — needs OpenAI key)",
+    ttk.Checkbutton(frm, text="Polish with AI (Flow mode — tidies fillers & punctuation)",
                     variable=ai_cleanup_var).grid(row=row, column=0, columnspan=3,
                                                   sticky="w", padx=14, pady=3); row += 1
+    label("Cleanup with"); combo(cleanup_var, [l for _, l in CLEANUP_PROVIDERS], width=24); row += 1
+    label("Cleanup model", "blank = provider default"); entry(cleanup_model_var); row += 1
+
+    def _on_cleanup_provider(*_):
+        prov = value_for(cleanup_var, CLEANUP_PROVIDERS)
+        cleanup_model_var.set(cleanup.PROVIDERS.get(prov, cleanup.PROVIDERS["openai"])[2])
+    cleanup_var.trace_add("write", _on_cleanup_provider)
     ttk.Checkbutton(frm, text="Press Enter after typing (auto-send)",
                     variable=auto_enter_var).grid(row=row, column=0, columnspan=3,
                                                   sticky="w", padx=14, pady=3); row += 1
@@ -288,6 +305,8 @@ def main(first_run: bool = False) -> None:
         cfg.overlay = bool(overlay_var.get())
         cfg.sounds = bool(sounds_var.get())
         cfg.ai_cleanup = bool(ai_cleanup_var.get())
+        cfg.cleanup_provider = value_for(cleanup_var, CLEANUP_PROVIDERS)
+        cfg.cleanup_model = cleanup_model_var.get().strip()
         cfg.auto_enter = bool(auto_enter_var.get())
         cfg.vocabulary = vocab_var.get().strip()
         cfg.speech_notes = speech_notes_var.get().strip()
@@ -304,6 +323,10 @@ def main(first_run: bool = False) -> None:
             config.save_api_key("OPENAI_API_KEY", oai_key_var.get())
         if dg_key_var.get().strip():
             config.save_api_key("DEEPGRAM_API_KEY", dg_key_var.get())
+        if gem_key_var.get().strip():
+            config.save_api_key("GEMINI_API_KEY", gem_key_var.get())
+        if or_key_var.get().strip():
+            config.save_api_key("OPENROUTER_API_KEY", or_key_var.get())
         try:
             if autostart_var.get():
                 autostart.enable()

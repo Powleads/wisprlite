@@ -1,15 +1,19 @@
 """AI cleanup ("Flow mode"): polish a raw dictation transcript with an LLM.
 
-Removes fillers/false starts, fixes grammar, punctuation and obvious
-speech-to-text slips, without changing meaning or following any instructions
-embedded in the speech. Optionally accent-aware (keeps regional spelling and
-fixes accent mis-hears). Needs an OpenAI key. Returns None on any failure so the
-caller can fall back to the raw text.
+Provider-flexible. OpenAI, Google Gemini, OpenRouter, and a local Ollama model
+all speak the OpenAI chat-completions API, so the same client points at any of
+them by swapping base_url / key / model. That means the polish can be free
+(Gemini free tier or OpenRouter free models) or fully local/offline (Ollama).
+
+It removes fillers/false starts, fixes grammar, punctuation and obvious
+speech-to-text slips, and is optionally accent-aware. Returns None on any
+failure so the caller falls back to the raw text.
 """
 
 from __future__ import annotations
 
 import logging
+import os
 from typing import Optional
 
 log = logging.getLogger("wisprlite")
@@ -32,6 +36,16 @@ _ACCENTS = {
     "en-AU": "Australian English",
     "en-IN": "Indian English",
     "en-NZ": "New Zealand English",
+}
+
+# provider -> (base_url, API-key env var, default model). All OpenAI-compatible.
+PROVIDERS = {
+    "openai": (None, "OPENAI_API_KEY", "gpt-4o-mini"),
+    "gemini": ("https://generativelanguage.googleapis.com/v1beta/openai/",
+               "GEMINI_API_KEY", "gemini-2.0-flash"),
+    "openrouter": ("https://openrouter.ai/api/v1",
+                   "OPENROUTER_API_KEY", "google/gemini-2.0-flash-exp:free"),
+    "ollama": ("http://localhost:11434/v1", None, "llama3.2:3b"),
 }
 
 
@@ -61,14 +75,35 @@ def _notes_clause(notes: str) -> str:
             "stutters and repeated words, and remove their filler words.")
 
 
-def clean(text: str, model: str = "gpt-4o-mini", language: str = "", notes: str = "") -> Optional[str]:
+def provider_ready(provider: str) -> bool:
+    """True if the chosen cleanup provider is usable (key present, or local)."""
+    _, key_env, _ = PROVIDERS.get(provider, PROVIDERS["openai"])
+    if key_env is None:
+        return True  # local Ollama needs no key
+    return bool(os.getenv(key_env, "").strip())
+
+
+def clean(text: str, provider: str = "openai", model: str = "",
+          language: str = "", notes: str = "") -> Optional[str]:
     text = (text or "").strip()
     if not text:
         return None
+    base_url, key_env, default_model = PROVIDERS.get(provider, PROVIDERS["openai"])
+    model = (model or "").strip() or default_model
+    if key_env:
+        api_key = os.getenv(key_env, "").strip()
+        if not api_key:
+            log.warning("AI cleanup: no API key for provider %s", provider)
+            return None
+    else:
+        api_key = "ollama"  # local Ollama ignores it, but the client needs something
     try:
         from openai import OpenAI
 
-        client = OpenAI()
+        kwargs = {"api_key": api_key}
+        if base_url:
+            kwargs["base_url"] = base_url
+        client = OpenAI(**kwargs)
         resp = client.chat.completions.create(
             model=model,
             temperature=0,
@@ -80,5 +115,5 @@ def clean(text: str, model: str = "gpt-4o-mini", language: str = "", notes: str 
         out = (resp.choices[0].message.content or "").strip()
         return out or None
     except Exception as exc:
-        log.warning("AI cleanup failed, using raw text: %s", exc)
+        log.warning("AI cleanup failed (%s), using raw text: %s", provider, exc)
         return None

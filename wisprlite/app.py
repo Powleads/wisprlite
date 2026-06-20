@@ -148,12 +148,13 @@ class App:
                 self._set_icon("idle")
                 return
 
-            # AI cleanup ("Flow mode") — needs an OpenAI key; falls back to raw.
-            if self.cfg.ai_cleanup and config.openai_key():
-                self.overlay.set_state("transcribing", "Polishing…")
-                from . import cleanup
+            # AI cleanup ("Flow mode") — OpenAI / Gemini / OpenRouter / local Ollama; falls back to raw.
+            from . import cleanup
 
-                polished = cleanup.clean(text, self.cfg.cleanup_model, self.cfg.language, self.cfg.speech_notes)
+            if self.cfg.ai_cleanup and cleanup.provider_ready(self.cfg.cleanup_provider):
+                self.overlay.set_state("transcribing", "Polishing…")
+                polished = cleanup.clean(text, self.cfg.cleanup_provider, self.cfg.cleanup_model,
+                                         self.cfg.language, self.cfg.speech_notes)
                 if polished:
                     text = polished
 

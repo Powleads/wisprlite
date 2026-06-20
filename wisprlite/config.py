@@ -69,7 +69,8 @@ class Config:
     sounds: bool = False
     min_seconds: float = 0.35       # ignore taps shorter than this
     ai_cleanup: bool = True         # polish transcript with an LLM
-    cleanup_model: str = "gpt-4o-mini"
+    cleanup_provider: str = "openai"  # openai | gemini | openrouter | ollama (all OpenAI-compatible)
+    cleanup_model: str = ""           # blank = the provider's default model
     auto_enter: bool = False        # press Enter after typing (hands-free send)
     vocabulary: str = ""            # comma-separated terms to bias recognition
     speech_notes: str = ""          # free text about the user's accent / speech, fed to AI cleanup
@@ -154,6 +155,14 @@ def openai_key() -> str:
 
 def deepgram_key() -> str:
     return os.getenv("DEEPGRAM_API_KEY", "").strip()
+
+
+def gemini_key() -> str:
+    return os.getenv("GEMINI_API_KEY", "").strip()
+
+
+def openrouter_key() -> str:
+    return os.getenv("OPENROUTER_API_KEY", "").strip()
 
 
 def device_arg(cfg: Config):
