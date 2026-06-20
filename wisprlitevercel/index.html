@@ -28,7 +28,7 @@
     --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:hidden}
   body{background:var(--canvas);color:var(--text);
     font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -39,6 +39,7 @@
   .aura{position:absolute;top:-160px;left:50%;transform:translateX(-50%);
     width:900px;height:560px;pointer-events:none;z-index:0;
     background:radial-gradient(closest-side,rgba(224,108,117,.16),transparent 70%)}
+  @media(max-width:640px){.aura{width:100%;left:0;transform:none}}
 
   /* nav */
   nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:20px 0;
