@@ -97,6 +97,7 @@ class Tray:
             Item("Paused", lambda i, it: app.toggle_pause(),
                  checked=lambda it: app.paused),
             Menu.SEPARATOR,
+            Item("Check for updates…", lambda i, it: app.check_for_updates(manual=True)),
             Item("Quit", lambda i, it: app.quit()),
         )
 

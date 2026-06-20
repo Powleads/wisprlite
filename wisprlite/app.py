@@ -253,6 +253,33 @@ class App:
             self._fail(f"autostart: {exc}")
         self.tray.update()
 
+    def _notify(self, msg: str) -> None:
+        try:
+            if self.tray is not None and self.tray.icon is not None:
+                self.tray.icon.notify(msg, "Pipevoice")
+                return
+        except Exception:
+            pass
+        print(msg)
+
+    def check_for_updates(self, manual: bool = False) -> None:
+        def work():
+            try:
+                from . import updater
+                info = updater.check()
+                if not info:
+                    if manual:
+                        self._notify("Pipevoice is up to date.")
+                    return
+                self._notify(f"Updating Pipevoice to {info['version']}…")
+                if updater.download_and_run(info):
+                    self.quit()
+                elif manual:
+                    self._notify("Update download failed — try again later.")
+            except Exception as exc:
+                log.warning("update flow failed: %s", exc)
+        threading.Thread(target=work, daemon=True).start()
+
     def quit(self) -> None:
         self._stop.set()
         self.hotkeys.stop()
@@ -363,6 +390,13 @@ class App:
         self.clip_hotkeys.start()
         self._prewarm()
         threading.Thread(target=self._watch_config, daemon=True).start()
+        try:
+            from . import updater
+            updater.cleanup_old()
+        except Exception:
+            pass
+        if self.cfg.auto_update:
+            self.check_for_updates(manual=False)
 
         print("Pipevoice running.")
         print(f"  Engine: {self.cfg.engine}   Mode: {self.cfg.mode}   Hotkey: [{self.cfg.hotkey}]")

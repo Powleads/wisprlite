@@ -157,6 +157,7 @@ def main(first_run: bool = False) -> None:
     overlay_var = tk.BooleanVar(value=cfg.overlay)
     sounds_var = tk.BooleanVar(value=cfg.sounds)
     autostart_var = tk.BooleanVar(value=autostart.is_enabled())
+    auto_update_var = tk.BooleanVar(value=cfg.auto_update)
 
     def combo(var, options, width=26):
         c = ttk.Combobox(frm, textvariable=var, values=options, state="readonly", width=width)
@@ -282,6 +283,8 @@ def main(first_run: bool = False) -> None:
         row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
     ttk.Checkbutton(frm, text="Start on Windows login", variable=autostart_var).grid(
         row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
+    ttk.Checkbutton(frm, text="Automatic updates (check on startup)", variable=auto_update_var).grid(
+        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
 
     # --- Buttons ---
     status = ttk.Label(frm, text="", style="Muted.TLabel")
@@ -304,6 +307,7 @@ def main(first_run: bool = False) -> None:
         cfg.local_model_size = local_var.get().strip() or "base.en"
         cfg.overlay = bool(overlay_var.get())
         cfg.sounds = bool(sounds_var.get())
+        cfg.auto_update = bool(auto_update_var.get())
         cfg.ai_cleanup = bool(ai_cleanup_var.get())
         cfg.cleanup_provider = value_for(cleanup_var, CLEANUP_PROVIDERS)
         cfg.cleanup_model = cleanup_model_var.get().strip()

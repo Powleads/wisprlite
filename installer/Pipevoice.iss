@@ -4,10 +4,11 @@
 ; Produces installer\Output\Pipevoice-Setup.exe — a per-user install (no admin).
 
 #define AppName "Pipevoice"
-#define AppVersion "2.7.0"
+#define AppVersion "2.8.0"
 #define AppExe "Pipevoice.exe"
 
 [Setup]
+AppId={{41C3C77C-2125-40AF-AE40-5AAC67809491}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher=Pipevoice
@@ -20,6 +21,8 @@ OutputBaseFilename={#AppName}-Setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+CloseApplications=yes
+RestartApplications=yes
 SetupIconFile=..\assets\wisprlite.ico
 UninstallDisplayIcon={app}\{#AppExe}
 
@@ -41,7 +44,7 @@ Name: "startup"; Description: "Start {#AppName} automatically when I log in"; Gr
 
 [Run]
 ; The app prompts for the API key on first launch, so just start it.
-Filename: "{app}\{#AppExe}"; Description: "Launch {#AppName}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#AppExe}"; Description: "Launch {#AppName}"; Flags: nowait postinstall
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{userappdata}\{#AppName}"

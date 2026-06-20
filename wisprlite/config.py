@@ -67,6 +67,7 @@ class Config:
     local_model_size: str = "base.en"
     overlay: bool = True
     sounds: bool = False
+    auto_update: bool = True         # check GitHub for a newer release on startup and install it
     min_seconds: float = 0.35       # ignore taps shorter than this
     ai_cleanup: bool = True         # polish transcript with an LLM
     cleanup_provider: str = "openai"  # openai | gemini | openrouter | ollama (all OpenAI-compatible)

@@ -45,6 +45,12 @@ jobs:
       - name: Build installer
         run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\Pipevoice.iss'
 
+      - name: Compute SHA-256
+        shell: pwsh
+        run: |
+          $h = (Get-FileHash installer/Output/Pipevoice-Setup.exe -Algorithm SHA256).Hash.ToLower()
+          [System.IO.File]::WriteAllText("installer/Output/Pipevoice-Setup.exe.sha256", $h)
+
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
@@ -55,5 +61,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: installer/Output/Pipevoice-Setup.exe
+          files: |
+            installer/Output/Pipevoice-Setup.exe
+            installer/Output/Pipevoice-Setup.exe.sha256
           generate_release_notes: true
