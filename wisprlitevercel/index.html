@@ -130,6 +130,8 @@
   .spot{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:42px 32px;margin-top:18px;
     display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}
   @media(max-width:820px){.spot{grid-template-columns:1fr;padding:32px 24px}}
+  .spot.rev{grid-template-columns:.9fr 1.1fr}
+  @media(max-width:820px){.spot.rev{grid-template-columns:1fr}}
   .spot h2{text-align:left;margin-top:6px}
   .spot .eyebrow{text-align:left}
   .spot p{color:var(--muted);margin-top:14px;font-size:15.5px}
@@ -341,6 +343,42 @@
     </div>
   </section>
 
+  <!-- CLIPBOARD HOTKEY -->
+  <section>
+    <div class="spot rev">
+      <div class="mini">
+        <div class="bar"><i style="background:#e06c75;width:9px;height:9px;border-radius:50%"></i><i style="background:#e5c07b;width:9px;height:9px;border-radius:50%"></i><i style="background:#98c379;width:9px;height:9px;border-radius:50%"></i><span class="t">two keys</span></div>
+        <div class="body mono">
+          <span class="dim">hold</span> <span class="ok">Ctrl + \</span>  <span class="ar">&#8594;</span> types where your cursor is<br/><br/>
+          <span class="dim">hold</span> <span class="ok">F8</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="ar">&#8594;</span> copies to your clipboard<span class="cur"></span>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow">Two hotkeys</p>
+        <h2>Talk to your editor,<br />or to your clipboard.</h2>
+        <p>Your main key types straight into whatever app is focused. A second key copies the text to your clipboard instead, so you can dictate while you're reading the page you're giving feedback on, then paste it into your editor when you get back.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCENT -->
+  <section>
+    <div class="spot">
+      <div>
+        <p class="eyebrow">Every voice</p>
+        <h2>It speaks your accent.</h2>
+        <p>Pick your English in the tray (British, US, Australian, Indian, New Zealand) and the engine loads the matching model. Not a native English accent? Just describe it in plain words, like "native Russian speaker" or "I stutter and use a lot of fillers", and the AI cleanup corrects for it.</p>
+      </div>
+      <div class="mini">
+        <div class="bar"><i style="background:#e06c75;width:9px;height:9px;border-radius:50%"></i><i style="background:#e5c07b;width:9px;height:9px;border-radius:50%"></i><i style="background:#98c379;width:9px;height:9px;border-radius:50%"></i><span class="t">settings</span></div>
+        <div class="body mono">
+          <span class="dim">Accent / language</span>&nbsp;&nbsp;<span class="ok">English &middot; UK / British</span><br/><br/>
+          <span class="dim">Speech notes</span>&nbsp;&nbsp;native Russian speaker<span class="cur"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- SETUP -->
   <section id="how">
     <p class="eyebrow">Setup</p>
@@ -391,6 +429,10 @@
         <p>Pipevoice is free (no $144/yr subscription), runs <b>offline</b> so your voice can stay on your PC, is built Windows-first instead of a Mac port, and is fully open source — you can read every line. The trade-off: you bring your own key for the cloud engines.</p></details>
       <details><summary>Does it work with Claude Code and Cursor?</summary>
         <p>Yes. Pipevoice types real keystrokes into whatever window is focused — a terminal running Claude Code, Cursor's chat, your editor, the browser. Anything you can type into, you can talk into.</p></details>
+      <details><summary>Can it handle my accent?</summary>
+        <p>Pick your English variant in the tray (British, US, Australian, Indian, New Zealand) and the engine switches to the matching model. For a non-native accent, a stutter, or heavy filler words, add a line of "speech notes" like "native Russian speaker" and the AI cleanup adjusts for it. The engines are trained on a wide range of accents to begin with.</p></details>
+      <details><summary>Can I dictate to my clipboard instead of typing?</summary>
+        <p>Yes. A second hotkey (F8 by default) records and copies the result straight to your clipboard without typing into the focused window. Handy for giving feedback while you read one window, then pasting into another.</p></details>
       <details><summary>Windows says "unrecognised app" — is it safe?</summary>
         <p>Yes. That SmartScreen warning shows for any app without a paid code-signing certificate. Click <b>More info → Run anyway</b>. It's open source — read every line on <a href="https://github.com/Powleads/PipeVoice">GitHub</a>.</p></details>
       <details><summary>Is my voice uploaded anywhere?</summary>
