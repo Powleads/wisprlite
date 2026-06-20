@@ -58,6 +58,7 @@ class Config:
     engine: str = "deepgram"        # openai | deepgram | local
     mode: str = "ptt"               # ptt | toggle
     hotkey: str = "ctrl+\\"          # any key/combo, e.g. "ctrl+alt", "f9"
+    clipboard_hotkey: str = "f8"    # 2nd hotkey: dictate straight to the clipboard (no typing). "" = off
     output_mode: str = "type"       # type | paste
     language: str = ""              # "" = auto-detect; else ISO code e.g. "en"
     device: str = ""                # mic index or name substring; "" = default
@@ -71,6 +72,7 @@ class Config:
     cleanup_model: str = "gpt-4o-mini"
     auto_enter: bool = False        # press Enter after typing (hands-free send)
     vocabulary: str = ""            # comma-separated terms to bias recognition
+    speech_notes: str = ""          # free text about the user's accent / speech, fed to AI cleanup
     replacements: dict = field(default_factory=dict)  # {wrong: right} post-fixes
 
     @classmethod

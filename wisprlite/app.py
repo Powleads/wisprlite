@@ -14,7 +14,7 @@ from .audio import Recorder
 from .hotkey import HotkeyManager
 from .overlay import Overlay
 from .tray import Tray
-from .typer import apply_replacements, type_text
+from .typer import apply_replacements, copy_clipboard, type_text
 
 log = logging.getLogger("wisprlite")
 
@@ -35,13 +35,22 @@ class App:
         self.hotkeys = HotkeyManager(
             get_hotkey=lambda: self.cfg.hotkey,
             get_mode=lambda: self.cfg.mode,
-            on_start=self._on_start,
+            on_start=lambda: self._on_start(clipboard=False),
+            on_stop=self._on_stop,
+            is_paused=lambda: self.paused,
+        )
+        # second hotkey: same record flow, but the result goes to the clipboard
+        self.clip_hotkeys = HotkeyManager(
+            get_hotkey=lambda: self.cfg.clipboard_hotkey,
+            get_mode=lambda: self.cfg.mode,
+            on_start=lambda: self._on_start(clipboard=True),
             on_stop=self._on_stop,
             is_paused=lambda: self.paused,
         )
 
         self._engine = None
         self._session = None
+        self._clipboard_only = False
         self._started_at = 0.0
         self._busy = threading.Lock()
         self._stop = threading.Event()
@@ -91,9 +100,10 @@ class App:
         threading.Thread(target=work, daemon=True).start()
 
     # ---- hotkey callbacks (run on the hotkey thread) ----------------------
-    def _on_start(self) -> None:
+    def _on_start(self, clipboard: bool = False) -> None:
         if not self._busy.acquire(blocking=False):
             return  # still finishing the previous utterance
+        self._clipboard_only = clipboard
         try:
             engine = self._get_engine()
             self._session = engine.start_session(on_partial=self.overlay.set_text)
@@ -143,15 +153,19 @@ class App:
                 self.overlay.set_state("transcribing", "Polishing…")
                 from . import cleanup
 
-                polished = cleanup.clean(text, self.cfg.cleanup_model, self.cfg.language)
+                polished = cleanup.clean(text, self.cfg.cleanup_model, self.cfg.language, self.cfg.speech_notes)
                 if polished:
                     text = polished
 
             # user word-fixes, applied last so they always stick
             text = apply_replacements(text, self.cfg.replacements)
 
-            self.overlay.set_state("done", text)
-            type_text(text, self.cfg.output_mode, press_enter=self.cfg.auto_enter)
+            if self._clipboard_only:
+                copy_clipboard(text)
+                self.overlay.set_state("done", "Copied to clipboard")
+            else:
+                self.overlay.set_state("done", text)
+                type_text(text, self.cfg.output_mode, press_enter=self.cfg.auto_enter)
             self._beep(990, 60)
             self._set_icon("idle")
         finally:
@@ -345,6 +359,7 @@ class App:
         self.overlay.start()
         self.tray.start()
         self.hotkeys.start()
+        self.clip_hotkeys.start()
         self._prewarm()
         threading.Thread(target=self._watch_config, daemon=True).start()
 
