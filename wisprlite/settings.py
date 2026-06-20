@@ -20,6 +20,17 @@ MODES = [("ptt", "Push-to-talk (hold)"), ("toggle", "Toggle (tap on/off)")]
 OUTPUTS = [("type", "Type keystrokes"), ("paste", "Clipboard + Ctrl+V")]
 LOCAL_SIZES = ["tiny.en", "base.en", "small.en", "medium.en",
                "tiny", "base", "small", "medium", "large-v3"]
+LANGUAGES = [
+    ("", "Auto-detect"),
+    ("en-US", "English — US"),
+    ("en-GB", "English — UK / British"),
+    ("en-AU", "English — Australian"),
+    ("en-IN", "English — Indian"),
+    ("en-NZ", "English — New Zealand"),
+    ("es", "Spanish"), ("fr", "French"), ("de", "German"),
+    ("pt", "Portuguese"), ("it", "Italian"), ("nl", "Dutch"),
+    ("ja", "Japanese"), ("zh", "Chinese"),
+]
 
 BG = "#13151d"
 CARD = "#1b1e29"
@@ -112,7 +123,7 @@ def main(first_run: bool = False) -> None:
     mode_var = tk.StringVar(value=dict(MODES).get(cfg.mode, MODES[0][1]))
     output_var = tk.StringVar(value=dict(OUTPUTS).get(cfg.output_mode, OUTPUTS[0][1]))
     hotkey_var = tk.StringVar(value=cfg.hotkey)
-    lang_var = tk.StringVar(value=cfg.language)
+    lang_var = tk.StringVar(value=dict(LANGUAGES).get(cfg.language, LANGUAGES[0][1]))
     devices = _input_devices()
     dev_label = next((lbl for lbl, val in devices if val == cfg.device), devices[0][0])
     device_var = tk.StringVar(value=dev_label)
@@ -177,7 +188,7 @@ def main(first_run: bool = False) -> None:
     # --- Audio ---
     header("Audio")
     label("Microphone"); combo(device_var, [lbl for lbl, _ in devices], width=34); row += 1
-    label("Language", "blank = auto-detect"); entry(lang_var, width=12); row += 1
+    label("Accent / language", "pick yours for best accuracy"); combo(lang_var, [l for _, l in LANGUAGES], width=24); row += 1
 
     # --- Models ---
     header("Models")
@@ -230,7 +241,7 @@ def main(first_run: bool = False) -> None:
         cfg.mode = value_for(mode_var, MODES)
         cfg.output_mode = value_for(output_var, OUTPUTS)
         cfg.hotkey = hotkey_var.get().strip() or "right ctrl"
-        cfg.language = lang_var.get().strip()
+        cfg.language = value_for(lang_var, LANGUAGES)
         cfg.device = dict((lbl, val) for lbl, val in devices).get(device_var.get(), "")
         cfg.openai_model = oai_var.get().strip() or "whisper-1"
         cfg.deepgram_model = dg_var.get().strip() or "nova-2"

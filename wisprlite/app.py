@@ -56,7 +56,7 @@ class App:
             if not config.openai_key():
                 raise RuntimeError("OPENAI_API_KEY is not set")
             return OpenAIEngine(model=self.cfg.openai_model,
-                                language=self.cfg.language or None, prompt=vocab)
+                                language=(self.cfg.language or "").split("-")[0] or None, prompt=vocab)
         if name == "deepgram":
             from .engines.deepgram_engine import DeepgramEngine
 
@@ -73,7 +73,7 @@ class App:
             from .engines.local_engine import LocalEngine
 
             return LocalEngine(model_size=self.cfg.local_model_size,
-                               language=self.cfg.language or None, prompt=vocab)
+                               language=(self.cfg.language or "").split("-")[0] or None, prompt=vocab)
         raise RuntimeError(f"Unknown engine: {name}")
 
     def _get_engine(self):
@@ -143,7 +143,7 @@ class App:
                 self.overlay.set_state("transcribing", "Polishing…")
                 from . import cleanup
 
-                polished = cleanup.clean(text, self.cfg.cleanup_model)
+                polished = cleanup.clean(text, self.cfg.cleanup_model, self.cfg.language)
                 if polished:
                     text = polished
 
@@ -167,7 +167,7 @@ class App:
             self.overlay.set_state("transcribing", "Cloud failed — using local…")
             from .engines.local_engine import LocalEngine
 
-            local = LocalEngine(model_size=self.cfg.local_model_size, language=self.cfg.language or None)
+            local = LocalEngine(model_size=self.cfg.local_model_size, language=(self.cfg.language or "").split("-")[0] or None)
             return local.start_session(on_partial=self.overlay.set_text).finish(audio)
         except Exception as exc:
             self._fail(f"{err} (local fallback: {exc})")
