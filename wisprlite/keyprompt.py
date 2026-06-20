@@ -35,14 +35,15 @@ def ensure_api_key(cfg) -> None:
     if has_key(cfg.engine) or cfg.engine not in PROVIDER:
         return
     try:
-        _dialog(cfg.engine)
+        _dialog(cfg)
     except Exception:
         pass  # headless / no Tk -> app still runs; key can be set in Settings
 
 
-def _dialog(engine: str) -> None:
+def _dialog(cfg) -> None:
     import tkinter as tk
 
+    engine = cfg.engine
     label, env_name, url, placeholder = PROVIDER[engine]
 
     root = tk.Tk()
@@ -61,8 +62,10 @@ def _dialog(engine: str) -> None:
 
     tk.Label(wrap, text="WisprLite", bg=BG, fg=ACCENT,
              font=("Segoe UI", 18, "bold")).pack(anchor="w")
-    tk.Label(wrap, text=f"Paste your {label} API key to get started.",
-             bg=BG, fg=FG, font=("Segoe UI", 11)).pack(anchor="w", pady=(2, 14))
+    tk.Label(wrap, text=f"Paste your {label} key — it stays on this PC.",
+             bg=BG, fg=FG, font=("Segoe UI", 11)).pack(anchor="w", pady=(2, 3))
+    tk.Label(wrap, text="No key? Use the offline engine instead — free and fully private.",
+             bg=BG, fg=MUTED, font=("Segoe UI", 9)).pack(anchor="w", pady=(0, 14))
 
     var = tk.StringVar()
     entry = tk.Entry(wrap, textvariable=var, width=46, show="•",
@@ -92,11 +95,37 @@ def _dialog(engine: str) -> None:
     tk.Label(wrap, text="Stored locally in %APPDATA%\\WisprLite\\.env — never uploaded.",
              bg=BG, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w", pady=(10, 16))
 
+    err = tk.Label(wrap, text="", bg=BG, fg="#f87171", font=("Segoe UI", 9))
+    err.pack(anchor="w", pady=(0, 6))
+
     btns = tk.Frame(wrap, bg=BG)
     btns.pack(fill="x")
 
+    def _valid(k: str) -> bool:
+        k = (k or "").strip()
+        if not k:
+            err.config(text="Paste a key, or choose Use offline.")
+            return False
+        if engine == "openai" and not k.startswith("sk-"):
+            err.config(text="That doesn't look like an OpenAI key (it starts with 'sk-').")
+            return False
+        if len(k) < 16:
+            err.config(text="That key looks too short — double-check it.")
+            return False
+        return True
+
     def save(_=None):
+        if not _valid(var.get()):
+            return
         config.save_api_key(env_name, var.get())
+        root.destroy()
+
+    def use_offline():
+        cfg.engine = "local"
+        try:
+            cfg.save()
+        except Exception:
+            pass
         root.destroy()
 
     def skip():
@@ -104,7 +133,10 @@ def _dialog(engine: str) -> None:
 
     tk.Button(btns, text="Skip for now", command=skip, bg=CARD, fg=FG,
               activebackground="#262a3a", activeforeground=FG, relief="flat",
-              padx=14, pady=7, font=("Segoe UI", 9)).pack(side="left")
+              padx=12, pady=7, font=("Segoe UI", 9)).pack(side="left")
+    tk.Button(btns, text="Use offline", command=use_offline, bg=CARD, fg=FG,
+              activebackground="#262a3a", activeforeground=FG, relief="flat",
+              padx=12, pady=7, font=("Segoe UI", 9)).pack(side="left", padx=(8, 0))
     save_btn = tk.Button(btns, text="Save & start", command=save, bg=ACCENT,
                          fg="#06281c", activebackground="#2bb588", relief="flat",
                          padx=16, pady=7, font=("Segoe UI", 9, "bold"))

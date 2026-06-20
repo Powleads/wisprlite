@@ -3,131 +3,60 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>WisprLite — talk faster than you type</title>
-<meta name="description" content="Push-to-talk voice typing for Windows. Hold a key, talk, release — your words land in the focused app. Whisper, Deepgram, or fully offline. Open source, bring your own key." />
+<title>Pipevoice — Quickstart &amp; Docs</title>
+<meta name="description" content="Set up Pipevoice in a minute: install, pick an engine (cloud key or fully offline), set your hotkey, and start dictating into any app on Windows." />
+<link rel="canonical" href="https://pipevoice.vercel.app/docs" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b1e24'/%3E%3Crect x='26' y='15' width='12' height='23' rx='6' fill='%23e06c75'/%3E%3Cpath d='M21 32a11 11 0 0 0 22 0' stroke='%23e06c75' stroke-width='3' fill='none'/%3E%3Cline x1='32' y1='43' x2='32' y2='50' stroke='%23e06c75' stroke-width='3'/%3E%3Cline x1='24' y1='50' x2='40' y2='50' stroke='%23e06c75' stroke-width='3'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --canvas:#282c34; --deep:#131313; --card:#1b1e24; --popover:#20242c;
+    --canvas:#282c34; --deep:#131313; --card:#1b1e24;
     --border:rgba(53,90,102,.55); --border-soft:rgba(53,90,102,.28);
     --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.55);
-    --glow:0 0 22px rgba(224,108,117,.32);
+    --good:#98c379; --warn:#e5c07b;
     --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
     --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{background:var(--canvas);color:var(--text);
-    font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    line-height:1.55;-webkit-font-smoothing:antialiased}
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-  .mono{font-family:var(--mono)}
-
-  /* nav */
-  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;
-    border-bottom:1px solid var(--border-soft)}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.01em}
-  .logo svg{width:30px;height:30px}
-  .nav-links{display:flex;gap:28px;align-items:center;color:var(--muted);font-size:14.5px}
-  .nav-links a:hover{color:var(--text)}
-  .nav-links .gh{color:var(--text)}
-
-  .btn{display:inline-flex;align-items:center;gap:9px;border-radius:var(--r);
-    font-weight:600;cursor:pointer;transition:.15s;border:1px solid transparent;font-size:15px}
-  .btn-primary{background:var(--accent);color:#1a0c0d;padding:13px 24px;box-shadow:var(--glow)}
-  .btn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
-  .btn-ghost{border-color:var(--border);color:var(--text);padding:13px 22px}
-  .btn-ghost:hover{border-color:var(--accent-line);background:var(--accent-soft)}
-  .btn-sm{padding:9px 16px;font-size:14px}
-
-  /* hero */
-  .hero{padding:78px 0 30px;text-align:center}
-  .kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);
-    color:var(--muted);border-radius:999px;padding:6px 14px;font-size:13px;margin-bottom:26px}
-  .kicker .d{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:var(--glow)}
-  h1{font-size:clamp(42px,7vw,72px);line-height:1.02;letter-spacing:-.03em;font-weight:800}
-  h1 .c{color:var(--accent)}
-  .sub{color:var(--muted);font-size:clamp(17px,2.3vw,20px);max-width:600px;margin:22px auto 34px}
-  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .fine{color:var(--muted);font-size:13px;margin-top:15px;font-family:var(--mono)}
-
-  /* faux terminal */
-  .stage{margin:56px auto 0;max-width:760px}
-  .win{background:var(--deep);border:1px solid var(--border);border-radius:var(--r);
-    box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;text-align:left}
-  .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--border-soft)}
-  .bar i{width:11px;height:11px;border-radius:50%;display:block}
-  .bar .t{margin-left:10px;color:var(--muted);font-size:12.5px;font-family:var(--mono)}
-  .body{padding:22px 20px;font-family:var(--mono);font-size:14.5px;line-height:1.7}
-  .body .p{color:var(--accent)}
-  .body .dim{color:var(--muted)}
-  .cur{display:inline-block;width:8px;height:17px;background:var(--accent);vertical-align:-3px;margin-left:3px;animation:bk 1.05s steps(1) infinite}
-  @keyframes bk{50%{opacity:0}}
-  .pill{display:inline-flex;align-items:center;gap:10px;margin:18px auto 0;
-    background:var(--card);border:1px solid var(--accent-line);border-radius:999px;
-    padding:8px 15px;font-size:13.5px;font-family:var(--mono);box-shadow:var(--glow)}
-  .pill .lv{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:ps 1.2s infinite}
-  @keyframes ps{0%,100%{opacity:1}50%{opacity:.3}}
-  .meter{letter-spacing:1px;color:var(--accent)}
-
-  /* logos strip */
-  .strip{padding:40px 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);margin-top:60px}
-  .strip p{text-align:center;color:var(--muted);font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em}
-  .strip .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-  .chip{border:1px solid var(--border-soft);border-radius:8px;padding:8px 14px;color:var(--text);font-size:14px}
-  .chip span{color:var(--muted)}
-
-  /* sections */
-  section{padding:72px 0}
-  .eyebrow{color:var(--accent);font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;text-align:center}
-  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;text-align:center;font-weight:800;margin-top:10px}
-  .lead{color:var(--muted);text-align:center;max-width:560px;margin:14px auto 0;font-size:16px}
-
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px}
-  @media(max-width:780px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r);padding:24px;transition:.15s}
-  .card:hover{border-color:var(--accent-line)}
-  .card .h{display:flex;align-items:center;gap:10px;margin-bottom:9px}
-  .card .h svg{width:18px;height:18px;flex:none}
-  .card h3{font-size:16.5px;font-weight:600}
-  .card p{color:var(--muted);font-size:14.5px}
-
-  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px;counter-reset:s}
-  @media(max-width:780px){.steps{grid-template-columns:1fr}}
-  .step{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r);padding:24px}
-  .step .n{font-family:var(--mono);font-size:13px;color:var(--accent);border:1px solid var(--accent-line);
-    width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
-  .step h3{font-size:16px;margin-bottom:6px}
-  .step p{color:var(--muted);font-size:14.5px}
-
-  /* email capture */
-  .signup{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:40px 28px;text-align:center;margin-top:20px}
-  .signup h2{font-size:clamp(24px,3.4vw,32px)}
-  .signup form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
-  .signup input,.signup select{background:var(--deep);border:1px solid var(--border);border-radius:var(--r);
-    color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit}
-  .signup input{width:280px;max-width:80vw}
-  .signup select{cursor:pointer}
-  .signup input:focus,.signup select:focus{outline:none;border-color:var(--accent-line)}
-  .signup .ok{margin-top:22px;color:var(--accent);font-family:var(--mono);font-size:15px}
-  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-  .signup .fine{margin-top:14px}
-
-  .faq{max-width:760px;margin:42px auto 0}
-  details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 20px;margin-bottom:10px;background:var(--card)}
-  summary{cursor:pointer;padding:16px 0;font-weight:600;list-style:none;font-size:15.5px}
-  summary::-webkit-details-marker{display:none}
-  summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
-  details[open] summary::after{content:"\2013"}
-  details p{color:var(--muted);padding:0 0 18px;font-size:14.5px}
-
-  footer{border-top:1px solid var(--border-soft);padding:28px 0;color:var(--muted);font-size:13.5px;
-    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono)}
-  footer a:hover{color:var(--accent)}
+    font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:780px;margin:0 auto;padding:0 24px}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:var(--text)}
+  .logo svg{width:28px;height:28px}
+  .logo a{color:var(--text)} .logo a:hover{text-decoration:none}
+  .nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px}
+  .nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+  header.h{padding:48px 0 14px}
+  h1{font-size:clamp(30px,5vw,42px);letter-spacing:-.02em;font-weight:800}
+  .sub{color:var(--muted);margin-top:10px;font-size:16px}
+  h2{font-size:22px;margin:42px 0 6px;letter-spacing:-.01em;scroll-margin-top:20px}
+  h3{font-size:16px;margin:22px 0 4px}
+  p{color:var(--muted);margin:8px 0}
+  ol,ul{color:var(--muted);margin:10px 0 10px 22px} li{margin:6px 0}
+  code,kbd{font-family:var(--mono);font-size:13px;background:var(--deep);border:1px solid var(--border-soft);
+    border-radius:6px;padding:2px 7px;color:var(--text)}
+  kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+  .card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r);padding:18px 20px;margin:14px 0}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+  th{color:var(--text);font-weight:600;white-space:nowrap}
+  td{color:var(--muted)}
+  .note{border-left:3px solid var(--warn);background:rgba(229,192,123,.07);padding:12px 16px;border-radius:0 var(--r) var(--r) 0;margin:14px 0}
+  .note b{color:var(--text)}
+  .toc{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .toc a{font-family:var(--mono);font-size:13px;border:1px solid var(--border-soft);border-radius:999px;padding:6px 13px;color:var(--muted)}
+  .toc a:hover{border-color:var(--accent-line);color:var(--text);text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:600;
+    border-radius:var(--r);padding:12px 20px;margin-top:8px}
+  .btn:hover{filter:brightness(1.06);text-decoration:none}
+  footer{border-top:1px solid var(--border-soft);margin-top:50px;padding:26px 0 40px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -135,181 +64,86 @@
 
   <nav>
     <div class="logo">
-      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <rect width="64" height="64" rx="14" fill="#1b1e24" stroke="rgba(53,90,102,.55)"/>
         <rect x="26" y="15" width="12" height="23" rx="6" fill="#e06c75"/>
         <path d="M21 32a11 11 0 0 0 22 0" stroke="#e06c75" stroke-width="3" fill="none" stroke-linecap="round"/>
         <line x1="32" y1="43" x2="32" y2="50" stroke="#e06c75" stroke-width="3" stroke-linecap="round"/>
         <line x1="24" y1="50" x2="40" y2="50" stroke="#e06c75" stroke-width="3" stroke-linecap="round"/>
       </svg>
-      WisprLite
+      <a href="/">Pipevoice</a>
     </div>
     <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#how">How it works</a>
-      <a class="gh" href="https://github.com/Powleads/wisprlite">GitHub ↗</a>
+      <a href="/">Home</a>
+      <a href="https://github.com/Powleads/wisprlite">GitHub ↗</a>
     </div>
   </nav>
 
-  <header class="hero">
-    <span class="kicker"><span class="d"></span> Windows 10 &amp; 11 · free · open source</span>
-    <h1>Talk faster<br />than you <span class="c">type.</span></h1>
-    <p class="sub">Push-to-talk voice typing for Windows. Hold a key, talk, release —
-      your words land in whatever window you're in. Built for talking to AI in a terminal.</p>
-    <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/Powleads/wisprlite/releases/latest/download/WisprLite-Setup.exe">↓ Download for Windows</a>
-      <a class="btn btn-ghost" href="https://github.com/Powleads/wisprlite">View source</a>
-    </div>
-    <p class="fine">one-click install · no account · bring your own key</p>
-
-    <div class="stage">
-      <div class="win">
-        <div class="bar">
-          <i style="background:#e06c75"></i><i style="background:#e5c07b"></i><i style="background:#98c379"></i>
-          <span class="t">terminal — claude</span>
-        </div>
-        <div class="body">
-          <span class="p">you@pc</span><span class="dim">:~$</span> refactor the auth middleware and add a test for the expired-token case<span class="cur"></span>
-        </div>
-      </div>
-      <div style="text-align:center"><span class="pill"><span class="lv"></span> Listening <span class="meter">▍▎▌▅▂▆▃▍▂▅</span></span></div>
+  <header class="h">
+    <h1>Quickstart</h1>
+    <p class="sub">Install Pipevoice, pick an engine, and start talking into any app on Windows — in about a minute.</p>
+    <div class="toc">
+      <a href="#install">Install</a>
+      <a href="#engines">Engines &amp; keys</a>
+      <a href="#hotkeys">Hotkeys &amp; modes</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#trouble">Troubleshooting</a>
     </div>
   </header>
 
-  <div class="strip">
-    <p>One key. Any window. Your choice of engine.</p>
-    <div class="row">
-      <span class="chip">OpenAI Whisper <span>· accurate</span></span>
-      <span class="chip">Deepgram <span>· live</span></span>
-      <span class="chip">Local Whisper <span>· offline</span></span>
-    </div>
-  </div>
+  <h2 id="install">1 · Install</h2>
+  <ol>
+    <li>Download the installer and run it. Pipevoice opens quietly to your system tray (look for the mic icon).</li>
+    <li>If Windows shows a blue <b>"unrecognised app"</b> SmartScreen warning, click <b>More info → Run anyway</b>. It appears for any app without a paid code-signing certificate — Pipevoice is open source, so you can read every line first.</li>
+  </ol>
+  <a class="btn" href="https://github.com/Powleads/wisprlite/releases/latest/download/WisprLite-Setup.exe">↓ Download for Windows</a>
 
-  <section id="features">
-    <p class="eyebrow">What it does</p>
-    <h2>Less typing. No new habits.</h2>
-    <p class="lead">It types real keystrokes into the app you're already using — not a special box you paste from.</p>
-    <div class="grid">
-      <div class="card">
-        <div class="h"><svg viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg><h3>Types into anything</h3></div>
-        <p>Terminal, editor, browser, chat box. Real keystrokes go to the focused window — nothing to copy or paste.</p>
-      </div>
-      <div class="card">
-        <div class="h"><svg viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg><h3>Three engines</h3></div>
-        <p>Whisper for accuracy, Deepgram for live words as you speak, local for fully offline. Swap in the tray.</p>
-      </div>
-      <div class="card">
-        <div class="h"><svg viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="2"><path d="M12 3v3m0 12v3M5 12H2m20 0h-3M6 6l2 2m8 8 2 2m0-12-2 2M8 16l-2 2"/><circle cx="12" cy="12" r="3"/></svg><h3>AI cleanup</h3></div>
-        <p>Optional "Flow mode" strips the ums and false starts and fixes punctuation, so you read like you meant to.</p>
-      </div>
-      <div class="card">
-        <div class="h"><svg viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="2"><rect x="3" y="9" width="2" height="6"/><rect x="8" y="5" width="2" height="14"/><rect x="13" y="7" width="2" height="10"/><rect x="18" y="10" width="2" height="4"/></svg><h3>Live overlay</h3></div>
-        <p>A corner pill shows a real-time mic meter — and, on Deepgram, your words forming as you talk.</p>
-      </div>
-      <div class="card">
-        <div class="h"><svg viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><h3>Private by default</h3></div>
-        <p>No account, no telemetry, no servers of ours. Your keys, your machine. Go offline and nothing leaves it.</p>
-      </div>
-      <div class="card">
-        <div class="h"><svg viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.3 1a7 7 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7 7 0 0 0-1.7 1l-2.3-1-2 3.5 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.3-1a7 7 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7 7 0 0 0 1.7-1l2.3 1 2-3.5-2-1.5a7 7 0 0 0 .1-1z"/></svg><h3>Yours to tune</h3></div>
-        <p>Custom hotkey, vocabulary boosting for your jargon, word-fixes, auto-send. Open source — fork it.</p>
-      </div>
-    </div>
-  </section>
+  <h2 id="engines">2 · Pick an engine</h2>
+  <p>On first run, Pipevoice asks how you want to transcribe. You can change this any time from the tray menu.</p>
+  <table>
+    <thead><tr><th>Engine</th><th>Needs</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td><b>Local</b> (offline)</td><td>Nothing — runs on your PC</td><td>Privacy &amp; zero cost. First use downloads a small model (~150&nbsp;MB).</td></tr>
+      <tr><td><b>OpenAI Whisper</b></td><td><code>OPENAI_API_KEY</code></td><td>Best accuracy. ~$0.006/min, billed by OpenAI.</td></tr>
+      <tr><td><b>Deepgram</b></td><td><code>DEEPGRAM_API_KEY</code></td><td>Lowest latency — words appear live as you speak.</td></tr>
+    </tbody>
+  </table>
+  <p>For the cloud engines, paste your key into the first-run dialog — it's stored locally on your PC and never uploaded. No key? Choose the <b>offline</b> engine and you're running, free.</p>
+  <div class="note"><b>Where to get a key:</b> OpenAI → <a href="https://platform.openai.com/api-keys">platform.openai.com/api-keys</a> · Deepgram → <a href="https://console.deepgram.com/">console.deepgram.com</a>. You pay the provider directly, usually a few cents a day.</div>
 
-  <section id="how">
-    <p class="eyebrow">Setup</p>
-    <h2>Running in a minute</h2>
-    <div class="steps">
-      <div class="step"><div class="n">01</div><h3>Install</h3><p>Download, run the installer. It opens to your system tray.</p></div>
-      <div class="step"><div class="n">02</div><h3>Drop in a key</h3><p>Paste an OpenAI or Deepgram key in the popup — or pick offline and skip it.</p></div>
-      <div class="step"><div class="n">03</div><h3>Hold &amp; talk</h3><p>Hold the hotkey, speak, release. Your words type where your cursor is.</p></div>
-    </div>
-  </section>
+  <h2 id="hotkeys">3 · Hold &amp; talk</h2>
+  <p>By default, <b>hold <kbd>Right&nbsp;Ctrl</kbd></b>, speak, and release — your words type in wherever the cursor is. A corner pill shows a live mic meter while it listens.</p>
+  <h3>Modes</h3>
+  <ul>
+    <li><b>Push-to-talk</b> (default) — hold the key while speaking, release to type.</li>
+    <li><b>Toggle</b> — tap once to start, tap again to stop. Good for longer dictation.</li>
+  </ul>
+  <h3>Change the hotkey or mode</h3>
+  <p>Right-click the tray icon → <b>Settings</b>. You can rebind the hotkey (with a "Capture" button), switch mode, pick your microphone, choose type-vs-paste output, set a language hint, and add vocabulary for your jargon. Changes apply live.</p>
 
-  <section>
-    <div class="signup">
-      <p class="eyebrow">Stay in the loop</p>
-      <h2>I build tools like this often.</h2>
-      <p class="lead">Drop your email and I'll send you WisprLite updates — and a heads-up when I ship the next app. No spam, unsubscribe anytime.</p>
-      <form id="signup">
-        <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" />
-        <select name="role" aria-label="What do you do?">
-          <option value="">What do you do?</option>
-          <option value="founder">Founder / business owner</option>
-          <option value="agency">Agency</option>
-          <option value="sales">Sales / marketing</option>
-          <option value="developer">Developer</option>
-          <option value="writer">Writer / creator</option>
-          <option value="other">Other</option>
-        </select>
-        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <button class="btn btn-primary" type="submit">Notify me</button>
-      </form>
-      <p class="ok" id="signup-ok" style="display:none">Thanks — you're on the list. ✦</p>
-      <p class="fine">no spam · just shipping updates</p>
-    </div>
-  </section>
+  <h2 id="privacy">Privacy</h2>
+  <p>Pipevoice has no servers of its own and no telemetry. What leaves your computer depends only on the engine you choose:</p>
+  <ul>
+    <li><b>Local engine</b> — nothing leaves your PC. Audio is transcribed entirely on-device.</li>
+    <li><b>Cloud engines</b> — audio is sent to OpenAI or Deepgram to transcribe, then discarded. Your API key stays on your machine.</li>
+  </ul>
+  <p>It's open source — audit it on <a href="https://github.com/Powleads/wisprlite">GitHub</a>.</p>
 
-  <section>
-    <p class="eyebrow">Good to know</p>
-    <h2>Questions</h2>
-    <div class="faq">
-      <details><summary>Windows says "unrecognised app" — is it safe?</summary>
-        <p>Yes. That SmartScreen warning shows for any app without a paid code-signing certificate. Click <b>More info → Run anyway</b>. It's open source — read every line on GitHub.</p></details>
-      <details><summary>Do I need an API key?</summary>
-        <p>For the cloud engines, yes — you bring your own and pay providers directly at cost (cents a day). Want zero keys? The offline local engine runs entirely on your machine, free.</p></details>
-      <details><summary>Is my voice uploaded anywhere?</summary>
-        <p>Only to the engine you pick. Cloud engines send audio to OpenAI/Deepgram to transcribe. The local engine sends nothing off your computer. WisprLite has no servers and no telemetry.</p></details>
-      <details><summary>Which engine should I use?</summary>
-        <p>Whisper for accuracy, Deepgram for live words as you speak, local for privacy and offline use. Switch any time from the tray.</p></details>
-    </div>
-  </section>
-
-  <div class="signup" style="background:transparent;border:none;padding:54px 0 20px">
-    <h2>Stop typing. Start talking.</h2>
-    <div class="cta" style="margin-top:24px;justify-content:center;display:flex">
-      <a class="btn btn-primary" href="https://github.com/Powleads/wisprlite/releases/latest/download/WisprLite-Setup.exe">↓ Download for Windows</a>
-    </div>
-    <p class="fine">free · open source · Windows 10 &amp; 11</p>
-  </div>
+  <h2 id="trouble">Troubleshooting</h2>
+  <h3>My words aren't appearing in an app</h3>
+  <p>If the target app runs <b>as administrator</b> (some terminals do), Windows blocks keystrokes from non-elevated apps. Run Pipevoice as administrator too, and they'll match.</p>
+  <h3>First offline transcription is slow</h3>
+  <p>The local engine downloads its model (~150&nbsp;MB) the first time you use it. After that it's cached and fast. Bigger models are more accurate but slower — a GPU helps a lot.</p>
+  <h3>Wrong microphone</h3>
+  <p>Settings → Microphone. Leave it blank to use the system default, or pick one by name/index.</p>
+  <h3>Nothing happens when I hold the key</h3>
+  <p>Confirm the hotkey in Settings, and that an engine is selected (the tray tooltip shows the current engine). For cloud engines, make sure a valid key is saved.</p>
 
   <footer>
-    <span>WisprLite — voice typing for Windows.</span>
-    <span><a href="https://github.com/Powleads/wisprlite">github.com/Powleads/wisprlite ↗</a></span>
+    <span>Pipevoice — free, private voice typing for Windows.</span>
+    <span><a href="/">Home</a> · <a href="https://github.com/Powleads/wisprlite">GitHub ↗</a></span>
   </footer>
 
 </div>
-<script>
-  (function () {
-    var form = document.getElementById("signup");
-    if (!form) return;
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var btn = form.querySelector("button");
-      var data = {
-        email: form.email.value,
-        role: form.role.value,
-        website: form.website.value,
-      };
-      btn.disabled = true;
-      btn.textContent = "Adding…";
-      fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-        .then(function (r) {
-          if (!r.ok) throw new Error();
-          form.style.display = "none";
-          document.getElementById("signup-ok").style.display = "block";
-        })
-        .catch(function () {
-          btn.disabled = false;
-          btn.textContent = "Try again";
-        });
-    });
-  })();
-</script>
 </body>
 </html>
