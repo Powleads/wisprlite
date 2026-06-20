@@ -102,8 +102,18 @@ def main(first_run: bool = False) -> None:
     style.configure("TEntry", fieldbackground=CARD, foreground=FG, insertcolor=FG)
 
     pad = dict(padx=14, pady=5, sticky="w")
-    frm = ttk.Frame(root, padding=18)
-    frm.grid(sticky="nsew")
+    # Scrollable content so the window fits any screen height. The Save/Cancel
+    # row lives at the bottom of this frame, so it's always reachable (scroll if
+    # the display is short).
+    _canvas = tk.Canvas(root, bg=BG, highlightthickness=0)
+    _vbar = ttk.Scrollbar(root, orient="vertical", command=_canvas.yview)
+    _canvas.configure(yscrollcommand=_vbar.set)
+    _vbar.pack(side="right", fill="y")
+    _canvas.pack(side="left", fill="both", expand=True)
+    frm = ttk.Frame(_canvas, padding=18)
+    _canvas.create_window((0, 0), window=frm, anchor="nw")
+    frm.bind("<Configure>", lambda e: _canvas.configure(scrollregion=_canvas.bbox("all")))
+    _canvas.bind_all("<MouseWheel>", lambda e: _canvas.yview_scroll(int(-e.delta / 120), "units"))
     row = 0
 
     def header(text):
@@ -186,7 +196,31 @@ def main(first_run: bool = False) -> None:
 
     cap_btn.config(command=capture)
     row += 1
-    label("Clipboard hotkey", "hold to dictate to the clipboard"); entry(clip_hotkey_var, width=20); row += 1
+    label("Clipboard hotkey", "hold to dictate to the clipboard"); entry(clip_hotkey_var, width=20)
+    clip_cap_btn = ttk.Button(frm, text="Capture")
+    clip_cap_btn.grid(row=row, column=1, padx=(190, 0), pady=5, sticky="w")
+
+    def clip_capture():
+        clip_cap_btn.config(text="Press keys…")
+
+        def work():
+            hk = None
+            try:
+                import keyboard
+                hk = keyboard.read_hotkey(suppress=False)
+            except Exception:
+                hk = None
+
+            def done():
+                if hk:
+                    clip_hotkey_var.set(hk)
+                clip_cap_btn.config(text="Capture")
+            root.after(0, done)
+
+        threading.Thread(target=work, daemon=True).start()
+
+    clip_cap_btn.config(command=clip_capture)
+    row += 1
 
     # --- Audio ---
     header("Audio")
@@ -286,9 +320,14 @@ def main(first_run: bool = False) -> None:
     ttk.Button(btns, text="Save", style="Accent.TButton", command=save).grid(row=0, column=1)
 
     root.update_idletasks()
-    w, h = root.winfo_width(), root.winfo_height()
+    cw = frm.winfo_reqwidth() + 22          # content width + scrollbar
+    ch = frm.winfo_reqheight()
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
-    root.geometry(f"+{(sw - w) // 2}+{(sh - h) // 3}")
+    win_w = cw
+    win_h = min(ch + 4, sh - 90)            # never taller than the screen
+    x = max(0, (sw - win_w) // 2)
+    y = max(0, (sh - win_h) // 3)
+    root.geometry(f"{win_w}x{win_h}+{x}+{y}")
     root.mainloop()
 
 
