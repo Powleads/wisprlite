@@ -76,6 +76,7 @@ class Config:
     vocabulary: str = ""            # comma-separated terms to bias recognition
     speech_notes: str = ""          # free text about the user's accent / speech, fed to AI cleanup
     replacements: dict = field(default_factory=dict)  # {wrong: right} post-fixes
+    key_prompt_skipped_for: str = ""  # engine the user dismissed the key prompt for (stops re-nagging)
 
     @classmethod
     def load(cls) -> "Config":

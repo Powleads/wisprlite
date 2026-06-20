@@ -34,6 +34,10 @@ def has_key(engine: str) -> bool:
 def ensure_api_key(cfg) -> None:
     if has_key(cfg.engine) or cfg.engine not in PROVIDER:
         return
+    # Don't nag every launch: if the user already dismissed the prompt for this
+    # engine, stay quiet until they pick a different engine (or add a key).
+    if getattr(cfg, "key_prompt_skipped_for", "") == cfg.engine:
+        return
     try:
         _dialog(cfg)
     except Exception:
@@ -122,6 +126,7 @@ def _dialog(cfg) -> None:
 
     def use_offline():
         cfg.engine = "local"
+        cfg.key_prompt_skipped_for = ""
         try:
             cfg.save()
         except Exception:
@@ -129,6 +134,12 @@ def _dialog(cfg) -> None:
         root.destroy()
 
     def skip():
+        # Remember the skip so we don't re-prompt for this engine every launch.
+        cfg.key_prompt_skipped_for = cfg.engine
+        try:
+            cfg.save()
+        except Exception:
+            pass
         root.destroy()
 
     tk.Button(btns, text="Skip for now", command=skip, bg=CARD, fg=FG,
