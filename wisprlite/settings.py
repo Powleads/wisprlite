@@ -48,7 +48,7 @@ def main(first_run: bool = False) -> None:
 
     cfg = config.Config.load()
     root = tk.Tk()
-    root.title("Welcome to Pipevoice" if first_run else "Pipevoice settings")
+    root.title("Set up Pipevoice" if first_run else "Pipevoice settings")
     root.configure(bg=BG)
     root.resizable(False, False)
     ico = config.asset_path("wisprlite.ico")

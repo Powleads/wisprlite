@@ -376,12 +376,14 @@ def _setup_logging() -> None:
 def main() -> None:
     _setup_logging()
     if not config.CONFIG_PATH.exists():
-        # First run: turn on start-at-login and show the settings window
-        # pre-filled with the defaults, so the user confirms engine/hotkey/keys.
+        # First run: a welcome/tutorial splash, then (if they continue) the
+        # settings window pre-filled with the defaults. Start-at-login on too.
         try:
-            from . import autostart, settings
+            from . import autostart, settings, welcome
             autostart.enable()
-            settings.main(first_run=True)
+            config.Config.load()  # write config.json with defaults so we don't re-prompt
+            if welcome.show_welcome():
+                settings.main(first_run=True)
         except Exception:
             log.exception("first-run setup failed")
     log.info("Pipevoice starting (engine=%s)", config.Config.load().engine)
