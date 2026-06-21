@@ -1,0 +1,33 @@
+# Pipevoice
+
+> Pipevoice is free, open-source, push-to-talk voice typing for Windows 10 and 11. Hold a hotkey, speak, release, and your words are typed as real keystrokes into any focused app (terminal, editor, browser, chat). It is the free, Windows-native, privacy-first alternative to paid Mac-first dictation apps.
+
+Key facts:
+- Free forever and open source (github.com/Powleads/PipeVoice). No account, no telemetry.
+- Three transcription engines: Deepgram (fastest, streaming), OpenAI Whisper (most accurate), Local Whisper (fully offline, free, no key).
+- Optional AI cleanup via OpenAI, free Google Gemini, free OpenRouter, or local Ollama. A Local Whisper + Ollama setup is 100% offline.
+- Types into ANY Windows app, including terminals running Claude Code, Cursor, and VS Code.
+- Windows only. Download: https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe
+
+## Guides
+- [Free Voice Typing Software for Windows (2026): The Honest Guide](https://pipevoice.app/blog/free-voice-typing-software-windows): An honest 2026 guide to free voice typing software for Windows: Win+H limits, free apps compared, and a fully offline open-source option that types anywhere.
+- [How to Dictate on Windows: Type Into Any App With Your Voice](https://pipevoice.app/blog/how-to-dictate-on-windows): Learn how to dictate on Windows 10 and 11. Use built-in Win+H voice typing or a free push-to-talk app that types into any app, including the terminal.
+- [Speech to Text on Windows: Engines, Accuracy, and Free Setup](https://pipevoice.app/blog/speech-to-text-windows): A practical guide to speech to text on Windows: how engines work, Deepgram vs Whisper vs local accuracy, and a free offline setup with Pipevoice.
+- [Offline Voice Typing for Windows: 100% Private, No Cloud](https://pipevoice.app/blog/offline-voice-typing-windows): Run fully offline voice typing on Windows with Local Whisper plus Ollama. No cloud, no API key, no account. Free and open source. Here is how to set it up.
+- [Private Voice Typing: No Account, No Telemetry, No Servers](https://pipevoice.app/blog/private-voice-typing-no-telemetry): Private voice typing for Windows with no account, no telemetry, and an offline mode. See exactly where your audio goes and how to verify it.
+- [Dictate Into Claude Code (and Cursor) by Voice on Windows](https://pipevoice.app/blog/dictate-into-claude-code): Dictate prompts into Claude Code, Cursor, and VS Code on Windows with Pipevoice: free, open source, push-to-talk, with an offline option.
+- [Voice Coding on Windows: Dictate Prompts and Commands](https://pipevoice.app/blog/voice-coding-windows): Code by voice on Windows: dictate prompts into Claude Code, Cursor, and your terminal. Free, open-source, push-to-talk, with an offline option.
+- [Dictate Into the Terminal on Windows: Voice-Type the CLI](https://pipevoice.app/blog/dictate-into-terminal-windows): Dictate commands into PowerShell, CMD, and Windows Terminal with Pipevoice, a free voice-typing tool that types real keystrokes (not clipboard paste).
+- [The Best Wispr Flow Alternative for Windows (Free & Open Source)](https://pipevoice.app/blog/wispr-flow-windows-alternative): Looking for a Wispr Flow alternative on Windows? Pipevoice is free, open source, types into any app, and can run fully offline. Compare the features.
+- [A Modern Dragon NaturallySpeaking Alternative for Windows](https://pipevoice.app/blog/dragon-naturallyspeaking-alternative): Want a Dragon NaturallySpeaking alternative? Pipevoice is free, open-source Windows voice typing with Whisper accuracy, an offline path, and AI cleanup.
+- [Windows Voice Access vs Pipevoice: When Built-In Isn't Enough](https://pipevoice.app/blog/windows-voice-access-vs-pipevoice): Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs Pipevoice.
+- [Talon Voice Alternative: Simpler Voice Typing](https://pipevoice.app/blog/talon-voice-alternative-windows): A Talon Voice alternative for Windows: Pipevoice is free, open source, and types into any app with zero scripting. Compare setup, offline, and capability.
+- [Best Free Dictation Software for Windows in 2026 (Tested)](https://pipevoice.app/blog/best-free-dictation-software-windows): The best free dictation software for Windows in 2026, tested and ranked: built-in Voice Typing, Pipevoice, local Whisper, and Talon, with an honest table.
+- [Best Dictation Software for Developers (2026)](https://pipevoice.app/blog/best-dictation-software-developers): The best dictation software for developers in 2026, compared: Pipevoice, Wispr Flow, Talon, superwhisper, and Dragon for coding, terminals, and AI prompts.
+- [Voice Typing for RSI: Cut Keystrokes, Protect Your Wrists](https://pipevoice.app/blog/voice-typing-for-rsi): Voice typing for RSI on Windows: cut keystrokes with free dictation software. Push-to-talk vs toggle, accuracy tuning, and a gradual hands-light plan.
+- [Voice Typing for Non-Native English Speakers and Accents](https://pipevoice.app/blog/voice-typing-non-native-english-speakers): Voice typing for non-native English speakers: set your accent, pick an engine that handles accents well, boost vocabulary, and dictate accurately on Windows.
+
+## Pages
+- [Windows voice typing](https://pipevoice.app/windows-voice-typing)
+- [Pipevoice vs Wispr Flow](https://pipevoice.app/vs/wispr-flow)
+- [Docs / quickstart](https://pipevoice.app/docs)

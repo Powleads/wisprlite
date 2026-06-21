@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Offline Voice Typing for Windows: 100% Private, No Cloud | Pipevoice</title>
+<meta name="description" content="Run fully offline voice typing on Windows with Local Whisper plus Ollama. No cloud, no API key, no account. Free and open source. Here is how to set it up." />
+<link rel="canonical" href="https://pipevoice.app/blog/offline-voice-typing-windows" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Offline Voice Typing for Windows: 100% Private, No Cloud | Pipevoice" />
+<meta property="og:description" content="Run fully offline voice typing on Windows with Local Whisper plus Ollama. No cloud, no API key, no account. Free and open source. Here is how to set it up." />
+<meta property="og:url" content="https://pipevoice.app/blog/offline-voice-typing-windows" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Offline Voice Typing for Windows: 100% Private, No Cloud | Pipevoice" />
+<meta name="twitter:description" content="Run fully offline voice typing on Windows with Local Whisper plus Ollama. No cloud, no API key, no account. Free and open source. Here is how to set it up." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Offline Voice Typing for Windows: 100% Private, No Cloud, No Key", "description": "Run fully offline voice typing on Windows with Local Whisper plus Ollama. No cloud, no API key, no account. Free and open source. Here is how to set it up.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/offline-voice-typing-windows"}, "about": "offline voice typing windows"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Offline Voice Typing for Windows: 100% Private, No Cloud", "item": "https://pipevoice.app/blog/offline-voice-typing-windows"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I do voice typing on Windows with no internet at all?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Choose Local Whisper as your transcription engine in Pipevoice and it runs entirely on your PC. After a one-time model download (around 150MB), it works with no internet connection. Add Ollama for offline AI cleanup and the whole pipeline stays local."}}, {"@type": "Question", "name": "Is local Whisper as accurate as cloud transcription?", "acceptedAnswer": {"@type": "Answer", "text": "Cloud Whisper (via your OpenAI key) is generally the most accurate, and Deepgram is the fastest. Local Whisper is very capable, especially if you raise the model size, but it is slower than cloud and large models want a decent CPU. For many users the default local model is good enough, with the option to size up."}}, {"@type": "Question", "name": "Does offline dictation require an API key?", "acceptedAnswer": {"@type": "Answer", "text": "No. Local Whisper and Ollama both run on your own machine and need no key, no account, and no payment. API keys are only required for the cloud engines (Deepgram or OpenAI Whisper), and those keys are yours, so audio goes only to the provider you picked."}}, {"@type": "Question", "name": "How big is the local Whisper model download?", "acceptedAnswer": {"@type": "Answer", "text": "The default model is around 150MB and downloads once on first use. After that, Local Whisper works fully offline. You can choose a larger model for better accuracy, which is a bigger download and needs more CPU to run."}}, {"@type": "Question", "name": "Does Pipevoice send my audio anywhere in offline mode?", "acceptedAnswer": {"@type": "Answer", "text": "No. On the local path (Local Whisper plus Ollama), nothing leaves your PC: no audio, no text, no telemetry. Pipevoice has no account and runs no servers of its own. Only the optional cloud engines send audio, and only to the provider whose key you supplied."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Offline Voice Typing for Windows: 100% Private, No Cloud</p>
+  <header class="h">
+    <h1>Offline Voice Typing for Windows: 100% Private, No Cloud, No Key</h1>
+    <p class="dek">How to dictate into any Windows app with zero internet, no API key, and nothing leaving your PC, using Local Whisper and Ollama in Pipevoice.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>Yes, you can do voice typing on Windows with zero internet and no API key. In Pipevoice, choosing <strong>Local Whisper</strong> for transcription (and optionally <strong>Ollama</strong> for AI cleanup) keeps every part of the pipeline on your own PC: your audio is transcribed locally, your text is polished locally, and nothing is ever sent to a server.</p>
+<p>Pipevoice is a free, open-source, push-to-talk dictation tool for Windows 10 and 11. You hold a hotkey (<kbd>Ctrl</kbd>+<kbd>\</kbd> by default, or Right <kbd>Ctrl</kbd>), speak, release, and it types real keystrokes into whatever app is focused: a terminal, an editor, your browser, or a chat box. This guide covers the fully offline path and how to get good accuracy on normal hardware.</p>
+
+<h2>Why people want offline dictation</h2>
+<p>There are three common reasons to keep dictation local:</p>
+<ul>
+<li><strong>Privacy.</strong> If you dictate sensitive material (legal notes, medical text, client data, source code under NDA), you may not want audio leaving your machine at all. The offline path guarantees it does not.</li>
+<li><strong>No subscription.</strong> Cloud dictation tools often charge monthly. The local path in Pipevoice costs nothing: no key, no metered usage, no account.</li>
+<li><strong>No internet required.</strong> On a plane, a locked-down corporate laptop, or a flaky connection, cloud transcription simply stops working. Local Whisper does not depend on a network.</li>
+</ul>
+<p>If those reasons matter to you, you are in the right place. If you mainly want raw speed, cloud engines still have an edge, and we cover that trade-off below.</p>
+
+<h2>The fully offline stack: Local Whisper plus Ollama</h2>
+<p>Pipevoice splits dictation into two stages, and both have an offline option:</p>
+<ol>
+<li><strong>Transcription</strong> turns your speech into text. The offline choice here is <strong>Local Whisper</strong> (powered by faster-whisper), which runs entirely on your CPU.</li>
+<li><strong>AI polish</strong> (called "Flow mode") is optional. It cleans filler words, fixes punctuation, and corrects casing. The offline choice here is <strong>Ollama</strong>, a local model runner.</li>
+</ol>
+<p>Pick Local Whisper for transcription and Ollama for polish, and you have a pipeline that needs no key and no connection. Worth noting: the polish stage only ever receives <em>text</em>, never your audio. So even if you later switch polish to a cloud provider, your voice recording itself stays with whichever transcription engine you chose.</p>
+
+<div class="note">The shortest version: <strong>Local Whisper + Ollama = zero cost, no key, nothing leaves your PC.</strong></div>
+
+<h2>How to enable Local Whisper in Pipevoice</h2>
+<p>Once Pipevoice is installed, switching to the offline engine takes a moment:</p>
+<ol>
+<li>Open Pipevoice settings and set the transcription engine to <strong>Local Whisper</strong>.</li>
+<li>The first time you use it, Pipevoice downloads a model (around <strong>150MB</strong>). This is a one-time download; after that it works offline.</li>
+<li>Hold your dictation hotkey, speak, and release. The text is typed into your focused app as real keystrokes.</li>
+</ol>
+<p>If you want polish on top, install Ollama separately, pull a small model, and select Ollama as your Flow provider. (Pipevoice does not bundle Ollama; it talks to your local install.)</p>
+<p>If you have not installed the app yet, grab it here: <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">download Pipevoice for Windows</a>. One honest heads-up: the app is currently unsigned, so Windows SmartScreen shows an "unrecognised app" warning. Click <strong>More info</strong>, then <strong>Run anyway</strong>. Code signing is in progress.</p>
+
+<h2>Choosing a Whisper model size: speed vs accuracy</h2>
+<p>Whisper comes in several model sizes. Smaller models are faster and lighter; larger models are more accurate but want more CPU. The default download is small (the ~150MB model), and you can raise the model size in settings if you want better accuracy and can spare the processing time.</p>
+<p>General guidance for a typical Windows machine:</p>
+<table>
+<thead>
+<tr><th>If your priority is</th><th>Lean toward</th><th>Trade-off</th></tr>
+</thead>
+<tbody>
+<tr><td>Fastest response on a modest CPU</td><td>A smaller Whisper model</td><td>Slightly lower accuracy on hard words</td></tr>
+<tr><td>Best accuracy, decent CPU available</td><td>A larger Whisper model</td><td>Longer wait after you release the key</td></tr>
+<tr><td>Balance of both</td><td>A mid-size model</td><td>Reasonable on most modern laptops</td></tr>
+</tbody>
+</table>
+<p>Local Whisper is a batch engine: it transcribes after you release the hotkey rather than streaming words live. That means there is a short pause before text appears, and bigger models make that pause longer. Try the default first, then size up only if accuracy is not where you want it.</p>
+
+<h2>Adding offline AI cleanup with Ollama</h2>
+<p>Raw transcription includes your "um"s, false starts, and missing commas. Pipevoice's Flow mode tidies that up. With <strong>Ollama</strong> as the provider, the cleanup runs locally:</p>
+<ul>
+<li>Removes filler words and false starts.</li>
+<li>Adds sensible punctuation and capitalisation.</li>
+<li>Keeps everything offline, since Ollama runs on your machine.</li>
+</ul>
+<p>Because polish operates on text only, it never touches your audio. So the offline cleanup step adds no privacy cost: the recording was already transcribed locally, and the text never leaves either.</p>
+
+<h2>What "offline" really guarantees</h2>
+<p>With Local Whisper plus Ollama, the guarantee is simple: <strong>nothing leaves your PC.</strong> No audio, no text, no telemetry. Pipevoice has no account system and runs no servers of its own. There is nothing to sign in to and nothing being phoned home. You can verify this for yourself: the project is open source, with the full code and <a href="/docs">documentation</a> public.</p>
+<p>This is the core difference from most dictation tools. Even privacy-conscious cloud services still send your audio somewhere. The local path in Pipevoice sends nothing at all.</p>
+
+<h2>When cloud engines are still worth it</h2>
+<p>Offline is not always the right call. Pipevoice lets you pick your engine per task, and two cloud options exist for good reasons:</p>
+<table>
+<thead>
+<tr><th>Engine</th><th>Runs</th><th>Best for</th><th>Needs a key?</th></tr>
+</thead>
+<tbody>
+<tr><td>Deepgram</td><td>Cloud (streaming)</td><td>Fastest, words appear live as you speak</td><td>Yes, your own free key (~pennies/day)</td></tr>
+<tr><td>OpenAI Whisper</td><td>Cloud (batch)</td><td>Highest accuracy</td><td>Yes, your own OpenAI key</td></tr>
+<tr><td>Local Whisper</td><td>On your PC</td><td>Full privacy, no internet, no cost</td><td>No</td></tr>
+</tbody>
+</table>
+<p>If you want live, word-by-word feedback, Deepgram streaming is hard to beat. If you want the strongest accuracy and do not mind a batch pass, cloud Whisper leads. Importantly, the cloud engines use <strong>your own API key</strong>, so audio goes only to the provider you chose, not to Pipevoice. You stay in control of where it lands. For a deeper breakdown, see <a href="/blog/speech-to-text-windows">Deepgram vs Whisper vs OpenAI for dictation</a>.</p>
+
+<h2>Hardware tips for good local accuracy</h2>
+<p>Local Whisper runs on a normal CPU, but a few things help:</p>
+<ul>
+<li><strong>Use a decent microphone.</strong> Clean input does more for accuracy than a bigger model. A headset beats a laptop mic across a room.</li>
+<li><strong>Pick the right language and accent.</strong> Pipevoice has an accent and language picker (British, US, Australian, Indian, New Zealand English and more). Matching it to how you speak improves results.</li>
+<li><strong>Use the speech notes field for tricky speech.</strong> If you have a non-native accent, a stutter, or heavy fillers, the free-text speech notes field lets you describe that so the output handles it better.</li>
+<li><strong>Boost your vocabulary.</strong> For jargon, product names, or code identifiers, vocabulary boosting helps the engine get them right.</li>
+<li><strong>Step up the model only if needed.</strong> Start with the default model. If accuracy on hard words is lacking and your CPU can handle it, raise the size.</li>
+</ul>
+<p>You can also set <a href="/windows-voice-typing">per-app profiles</a>, so you might run Local Whisper everywhere for privacy but switch to a faster cloud engine in a specific app where speed matters more.</p>
+
+<h2>The bottom line</h2>
+<p>Pipevoice gives Windows users something most dictation tools do not: a genuinely offline path that is free, keyless, and private, plus the option to bring your own cloud key when you want more speed or accuracy. It is open source, Windows-native, and it types into <em>any</em> app, including the terminal and Claude Code. It is Windows only for now (not Mac or Linux), and the installer is currently unsigned, but the local stack does exactly what it says: your voice stays on your machine.</p>
+<p><a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice</a> and try the offline path. For a side-by-side with a popular cloud tool, see <a href="/vs/wispr-flow">Pipevoice vs Wispr Flow</a>.</p>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>Can I do voice typing on Windows with no internet at all?</summary><p>Yes. Choose Local Whisper as your transcription engine in Pipevoice and it runs entirely on your PC. After a one-time model download (around 150MB), it works with no internet connection. Add Ollama for offline AI cleanup and the whole pipeline stays local.</p></details>
+      <details><summary>Is local Whisper as accurate as cloud transcription?</summary><p>Cloud Whisper (via your OpenAI key) is generally the most accurate, and Deepgram is the fastest. Local Whisper is very capable, especially if you raise the model size, but it is slower than cloud and large models want a decent CPU. For many users the default local model is good enough, with the option to size up.</p></details>
+      <details><summary>Does offline dictation require an API key?</summary><p>No. Local Whisper and Ollama both run on your own machine and need no key, no account, and no payment. API keys are only required for the cloud engines (Deepgram or OpenAI Whisper), and those keys are yours, so audio goes only to the provider you picked.</p></details>
+      <details><summary>How big is the local Whisper model download?</summary><p>The default model is around 150MB and downloads once on first use. After that, Local Whisper works fully offline. You can choose a larger model for better accuracy, which is a bigger download and needs more CPU to run.</p></details>
+      <details><summary>Does Pipevoice send my audio anywhere in offline mode?</summary><p>No. On the local path (Local Whisper plus Ollama), nothing leaves your PC: no audio, no text, no telemetry. Pipevoice has no account and runs no servers of its own. Only the optional cloud engines send audio, and only to the provider whose key you supplied.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/private-voice-typing-no-telemetry">Private Voice Typing: No Account, No Telemetry, No Servers<span>How Pipevoice handles your audio in each mode, and how to run a setup where nothing leaves your PC.</span></a>
+      <a href="/blog/speech-to-text-windows">Speech to Text on Windows: Engines, Accuracy, and Free Setup<span>Compare streaming and offline engines, see which is most accurate, and set up free voice typing that works in any Windows app.</span></a>
+      <a href="/blog/free-voice-typing-software-windows">Free Voice Typing Software for Windows (2026): The Honest Guide<span>What &quot;free&quot; really means in voice typing, where the built-in Windows option falls short, and how to type into any app with your voice for zero cost.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Free Voice Typing Software for Windows (2026): The Honest Guide | Pipevoice</title>
+<meta name="description" content="An honest 2026 guide to free voice typing software for Windows: Win+H limits, free apps compared, and a fully offline open-source option that types anywhere." />
+<link rel="canonical" href="https://pipevoice.app/blog/free-voice-typing-software-windows" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Free Voice Typing Software for Windows (2026): The Honest Guide | Pipevoice" />
+<meta property="og:description" content="An honest 2026 guide to free voice typing software for Windows: Win+H limits, free apps compared, and a fully offline open-source option that types anywhere." />
+<meta property="og:url" content="https://pipevoice.app/blog/free-voice-typing-software-windows" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Voice Typing Software for Windows (2026): The Honest Guide | Pipevoice" />
+<meta name="twitter:description" content="An honest 2026 guide to free voice typing software for Windows: Win+H limits, free apps compared, and a fully offline open-source option that types anywhere." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Free Voice Typing Software for Windows (2026): The Honest Guide", "description": "An honest 2026 guide to free voice typing software for Windows: Win+H limits, free apps compared, and a fully offline open-source option that types anywhere.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/free-voice-typing-software-windows"}, "about": "free voice typing software for windows"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Free Voice Typing Software for Windows (2026): The Honest Guide", "item": "https://pipevoice.app/blog/free-voice-typing-software-windows"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there genuinely free voice typing software for Windows with no subscription?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Windows includes free built-in dictation (Win+H), and Pipevoice is a free, open-source app with no account and no subscription. Its local Whisper engine runs at zero cost with no usage caps. Some cloud engines need your own API key, but the core app and the offline path are free forever."}}, {"@type": "Question", "name": "Does Windows 10 and 11 have voice typing built in?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Press Win+H in most text fields to open the built-in voice typing toolbar on both Windows 10 and 11. It is free and convenient for short notes, but it has limited app support, no choice of recognition engine, and no AI cleanup, so heavier users often outgrow it."}}, {"@type": "Question", "name": "Can free voice typing work offline without an internet connection?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, with the right setup. Pipevoice's Local Whisper engine runs entirely on your PC with no API key, and pairing it with local Ollama for cleanup keeps everything offline. The first run downloads a roughly 150MB model, after which nothing you say leaves your computer."}}, {"@type": "Question", "name": "Why does Windows show an \"unrecognised app\" warning when I install Pipevoice?", "acceptedAnswer": {"@type": "Answer", "text": "Because Pipevoice is currently unsigned, Windows SmartScreen flags it as an unrecognised app. Click \"More info\" then \"Run anyway\" to continue. Code signing is in progress, and you can verify exactly what you are installing in the open-source repository at github.com/Powleads/PipeVoice."}}, {"@type": "Question", "name": "Is Pipevoice free forever or a free trial?", "acceptedAnswer": {"@type": "Answer", "text": "It is free forever, not a trial. The core app, the local offline engine, and the full source code stay free with no expiry and no credit caps. A managed-key Pro option may arrive later for people who want a hosted key, but the core remains free."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Free Voice Typing Software for Windows (2026): The Honest Guide</p>
+  <header class="h">
+    <h1>Free Voice Typing Software for Windows (2026): The Honest Guide</h1>
+    <p class="dek">What &quot;free&quot; really means in voice typing, where the built-in Windows option falls short, and how to type into any app with your voice for zero cost.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>Yes, there is genuinely free voice typing software for Windows. Windows 10 and 11 ship with a built-in dictation tool (<kbd>Win</kbd>+<kbd>H</kbd>), and for anything more flexible, <strong>Pipevoice</strong> is a free, open-source, push-to-talk app that types your speech into any application, including the terminal and your code editor, with an option to run fully offline at zero cost.</p>
+
+<p>The catch is that "free" means several different things in this space. This guide explains the differences honestly, shows where the built-in Windows option runs out of road, and lays out exactly what each free path actually costs you.</p>
+
+<h2>What "free voice typing" actually means</h2>
+<p>The word "free" gets stretched a lot. Before you download anything, it helps to know which of these three you are looking at:</p>
+<ul>
+<li><strong>Truly free:</strong> no payment, no expiry, no usage cap. Built-in Windows dictation and open-source tools like Pipevoice's local engine fall here.</li>
+<li><strong>Free trial:</strong> full features for a fixed window (often 7 to 14 days), then a subscription. Many polished cloud dictation apps work this way.</li>
+<li><strong>Freemium credits:</strong> a small monthly word or minute allowance, then you pay or stop. Common with cloud-only transcription services.</li>
+</ul>
+<p>Pipevoice is free forever for its core. A managed-key Pro option may come later, but the core app, the offline engine, and the source code stay free.</p>
+
+<h2>The built-in option: Windows Voice Typing (Win+H)</h2>
+<p>Windows 10 and 11 both include voice typing. Press <kbd>Win</kbd>+<kbd>H</kbd> in most text fields and a small toolbar appears so you can dictate. It is free, already installed, and fine for short messages or quick notes.</p>
+<p>Where it falls short:</p>
+<ul>
+<li><strong>Limited app support.</strong> It works best in standard text boxes and can be unreliable in terminals, IDEs, and some custom UIs.</li>
+<li><strong>No engine choice.</strong> You get Microsoft's recognizer and nothing else, so accuracy is what it is.</li>
+<li><strong>No AI cleanup.</strong> Filler words, missing punctuation, and casing land as-is.</li>
+<li><strong>No per-app behaviour, no custom hotkey, no vocabulary boosting.</strong></li>
+</ul>
+<p>If <kbd>Win</kbd>+<kbd>H</kbd> is enough for you, use it. If you dictate a lot, into varied apps, or into a code editor, you will quickly hit its ceiling. (For deeper setup and fixes, see <a href="/blog/how-to-dictate-on-windows">how to dictate on Windows</a> and <a href="/blog/how-to-dictate-on-windows">Win+H voice typing not working</a>.)</p>
+
+<h2>Free third-party voice typing apps for Windows compared</h2>
+<p>Here is an honest look at the main options people compare, with platform and licensing notes.</p>
+<table>
+<thead>
+<tr><th>Tool</th><th>Cost</th><th>Platform</th><th>Offline?</th><th>Open source?</th><th>Types into any app?</th></tr>
+</thead>
+<tbody>
+<tr><td>Windows Voice Typing (Win+H)</td><td>Free, built in</td><td>Windows</td><td>No</td><td>No</td><td>Limited</td></tr>
+<tr><td>Pipevoice</td><td>Free</td><td>Windows</td><td>Yes (local Whisper)</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Wispr Flow</td><td>Paid subscription</td><td>Mac-first (Windows app)</td><td>No</td><td>No</td><td>Yes</td></tr>
+<tr><td>Dragon Professional</td><td>Paid (high one-time)</td><td>Windows</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+<tr><td>Talon Voice</td><td>Free</td><td>Windows/Mac/Linux</td><td>Yes</td><td>No</td><td>Yes (steep scripting curve)</td></tr>
+<tr><td>Google Docs Voice Typing</td><td>Free</td><td>Browser</td><td>No</td><td>No</td><td>Google Docs only</td></tr>
+</tbody>
+</table>
+<p>A few honest notes: Wispr Flow is cloud-only with no offline mode and is not open source. Dragon is powerful but heavy and pricey, and its consumer line is largely discontinued. Talon is free and excellent for hands-free coding but has a real scripting learning curve. Meeting tools like Otter.ai and Fireflies transcribe calls; they do not type live into your apps.</p>
+
+<h2>Why open source matters for a free tool</h2>
+<p>"Free" from a closed cloud service usually means free until the credits run out, or free while your data trains someone's model. Open source changes the terms:</p>
+<ul>
+<li><strong>No credit caps</strong> on the local engine. You are not metered.</li>
+<li><strong>No telemetry.</strong> You can read the code and confirm what it does.</li>
+<li><strong>No account, no servers of ours.</strong> Pipevoice has no sign-up and runs no backend.</li>
+</ul>
+<p>Pipevoice's source lives at <a href="https://github.com/Powleads/PipeVoice">github.com/Powleads/PipeVoice</a>, so the privacy claims are verifiable rather than promised.</p>
+
+<h2>How Pipevoice works</h2>
+<p>The model is push-to-talk and deliberately simple: hold a hotkey, speak, release. Pipevoice then types <strong>real keystrokes</strong> into whatever app is focused, whether that is a terminal, an editor, a browser, or a chat box.</p>
+<ul>
+<li>The default hotkey is <kbd>Ctrl</kbd>+<kbd>\</kbd> (you can also use Right <kbd>Ctrl</kbd>).</li>
+<li>A second hotkey copies the result to the clipboard instead of typing it.</li>
+<li>You can switch from push-to-talk to a toggle mode if you prefer hands-free segments.</li>
+</ul>
+<p>Because it emits actual keystrokes, it works in places Win+H struggles, including Claude Code, Cursor, VS Code, and plain terminals.</p>
+
+<h3>Features worth knowing</h3>
+<ul>
+<li><strong>Voice commands:</strong> "new line", "new paragraph", "tab key", "scratch that", "send it".</li>
+<li><strong>Per-app profiles:</strong> a different engine, cleanup, auto-Enter, or output method per application.</li>
+<li><strong>Accent and language picker:</strong> British, US, Australian, Indian, and New Zealand English plus more, with a free-text "speech notes" field for non-native accents, stutters, or heavy fillers.</li>
+<li><strong>Vocabulary boosting</strong> for jargon, local dictation history, and silent auto-updates verified with SHA-256.</li>
+</ul>
+
+<h2>Cloud vs offline: free engine paths and what each costs you</h2>
+<p>Pipevoice lets you pick the transcription engine. This is the part that decides your real cost.</p>
+<table>
+<thead>
+<tr><th>Engine</th><th>Speed / style</th><th>Key needed?</th><th>Cost</th></tr>
+</thead>
+<tbody>
+<tr><td>Deepgram</td><td>Streaming, words appear live, fastest</td><td>Your own free Deepgram key</td><td>~pennies/day</td></tr>
+<tr><td>OpenAI Whisper</td><td>Batch, most accurate</td><td>Your own OpenAI key</td><td>Pay-per-use on your key</td></tr>
+<tr><td>Local Whisper / faster-whisper</td><td>Runs fully offline on your PC</td><td>No key</td><td>Free</td></tr>
+</tbody>
+</table>
+<p>For the local path, the first run downloads a roughly 150MB model. You can raise the model size for more accuracy at the cost of speed.</p>
+<p>There is also an optional AI polish step called <strong>Flow mode</strong> that cleans filler words, punctuation, and casing. It can use OpenAI, Google Gemini (free tier), OpenRouter (free community models), or local Ollama (offline, no key). Flow mode sends <strong>text only, never audio</strong>.</p>
+<div class="note"><strong>The zero-cost, fully private path:</strong> Local Whisper for transcription plus Ollama for polish. No API key, no metering, and nothing leaves your PC. See <a href="/blog/offline-voice-typing-windows">offline voice typing on Windows</a> for the full setup.</div>
+
+<h2>How to install Pipevoice and handle the SmartScreen warning</h2>
+<ol>
+<li>Download the installer: <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Pipevoice-Setup.exe</a>.</li>
+<li>Run it. Windows SmartScreen will show an "unrecognised app" warning because the app is currently unsigned.</li>
+<li>Click <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
+<li>Pick an engine (start with Local Whisper if you want zero setup and zero cost), set your accent, and try the hotkey.</li>
+</ol>
+<p>The SmartScreen warning is expected, not a red flag: code signing is in progress. You can verify what you are installing against the open source at the <a href="https://github.com/Powleads/PipeVoice">project repo</a>.</p>
+
+<h2>Limitations to know before you download</h2>
+<p>To stay honest, here is what Pipevoice does not do:</p>
+<ul>
+<li><strong>Windows only.</strong> There is no Mac or Linux build.</li>
+<li><strong>Currently unsigned,</strong> so you will see the SmartScreen "unrecognised app" prompt until signing lands.</li>
+<li><strong>Cloud engines require your own API key.</strong> Deepgram and OpenAI run on your account, not ours.</li>
+<li><strong>Local Whisper is slower than cloud</strong> and wants a decent CPU for the larger, more accurate models.</li>
+</ul>
+<p>If those trade-offs are fine, the wedge is clear: free, open source, Windows-native, an offline option, it types into any app including the terminal, and you choose your own engine. Compare it directly against the paid alternative on our <a href="/vs/wispr-flow">Pipevoice vs Wispr Flow</a> page, or read the <a href="/docs">docs</a> first.</p>
+
+<p><a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice for Windows</a> and talk faster than you type. For more background, browse the <a href="/blog/best-free-dictation-software-windows">best free dictation software for Windows</a> or start at the <a href="/windows-voice-typing">Windows voice typing overview</a>.</p>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>Is there genuinely free voice typing software for Windows with no subscription?</summary><p>Yes. Windows includes free built-in dictation (Win+H), and Pipevoice is a free, open-source app with no account and no subscription. Its local Whisper engine runs at zero cost with no usage caps. Some cloud engines need your own API key, but the core app and the offline path are free forever.</p></details>
+      <details><summary>Does Windows 10 and 11 have voice typing built in?</summary><p>Yes. Press Win+H in most text fields to open the built-in voice typing toolbar on both Windows 10 and 11. It is free and convenient for short notes, but it has limited app support, no choice of recognition engine, and no AI cleanup, so heavier users often outgrow it.</p></details>
+      <details><summary>Can free voice typing work offline without an internet connection?</summary><p>Yes, with the right setup. Pipevoice&#x27;s Local Whisper engine runs entirely on your PC with no API key, and pairing it with local Ollama for cleanup keeps everything offline. The first run downloads a roughly 150MB model, after which nothing you say leaves your computer.</p></details>
+      <details><summary>Why does Windows show an &quot;unrecognised app&quot; warning when I install Pipevoice?</summary><p>Because Pipevoice is currently unsigned, Windows SmartScreen flags it as an unrecognised app. Click &quot;More info&quot; then &quot;Run anyway&quot; to continue. Code signing is in progress, and you can verify exactly what you are installing in the open-source repository at github.com/Powleads/PipeVoice.</p></details>
+      <details><summary>Is Pipevoice free forever or a free trial?</summary><p>It is free forever, not a trial. The core app, the local offline engine, and the full source code stay free with no expiry and no credit caps. A managed-key Pro option may arrive later for people who want a hosted key, but the core remains free.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/how-to-dictate-on-windows">How to Dictate on Windows: Type Into Any App With Your Voice<span>Two ways to talk to type on Windows: the built-in Win+H tool and a push-to-talk app that types into any window, including your terminal.</span></a>
+      <a href="/blog/offline-voice-typing-windows">Offline Voice Typing for Windows: 100% Private, No Cloud<span>How to dictate into any Windows app with zero internet, no API key, and nothing leaving your PC, using Local Whisper and Ollama in Pipevoice.</span></a>
+      <a href="/blog/best-free-dictation-software-windows">Best Free Dictation Software for Windows in 2026 (Tested)<span>A straight comparison of the genuinely free voice typing tools for Windows 10 and 11, including offline and open-source options.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>

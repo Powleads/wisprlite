@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Voice Coding on Windows: Dictate Prompts and Commands | Pipevoice</title>
+<meta name="description" content="Code by voice on Windows: dictate prompts into Claude Code, Cursor, and your terminal. Free, open-source, push-to-talk, with an offline option." />
+<link rel="canonical" href="https://pipevoice.app/blog/voice-coding-windows" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Voice Coding on Windows: Dictate Prompts and Commands | Pipevoice" />
+<meta property="og:description" content="Code by voice on Windows: dictate prompts into Claude Code, Cursor, and your terminal. Free, open-source, push-to-talk, with an offline option." />
+<meta property="og:url" content="https://pipevoice.app/blog/voice-coding-windows" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Voice Coding on Windows: Dictate Prompts and Commands | Pipevoice" />
+<meta name="twitter:description" content="Code by voice on Windows: dictate prompts into Claude Code, Cursor, and your terminal. Free, open-source, push-to-talk, with an offline option." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Voice Coding on Windows: Dictate Prompts, Comments, and Commands", "description": "Code by voice on Windows: dictate prompts into Claude Code, Cursor, and your terminal. Free, open-source, push-to-talk, with an offline option.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/voice-coding-windows"}, "about": "voice coding windows"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Voice Coding on Windows: Dictate Prompts and Commands", "item": "https://pipevoice.app/blog/voice-coding-windows"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you really code by voice on Windows?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, though the practical workflow in 2026 is dictating the prose around code rather than spelling out punctuation. You speak prompts to AI agents, comments, commit messages, and terminal commands, and a tool like Pipevoice types real keystrokes into whatever app is focused. For full hands-free programming with no keyboard at all, a scripting framework like Talon Voice is the better fit."}}, {"@type": "Question", "name": "Is Pipevoice a replacement for Talon Voice?", "acceptedAnswer": {"@type": "Answer", "text": "They solve different problems. Talon is built for full hands-free coding through custom voice scripts, which is powerful but has a steep learning curve. Pipevoice is push-to-talk prompt dictation: you keep your hands on the keyboard for structured edits and dictate the prose. If you want install-and-go dictation rather than a scripting environment, Pipevoice is simpler; the two can also be used together."}}, {"@type": "Question", "name": "How do I get technical terms transcribed correctly?", "acceptedAnswer": {"@type": "Answer", "text": "Use Pipevoice's vocabulary boosting to add library names, function identifiers, and project jargon so the engine weights them correctly. You can also pick a more accurate engine like OpenAI Whisper, choose the right accent and language, and enable Flow mode to clean up punctuation and casing afterwards. Flow mode sends text only, never audio."}}, {"@type": "Question", "name": "Can I dictate into a terminal and run commands by voice?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pipevoice types real keystrokes into the focused window, including terminals, and you can set a per-app profile that auto-presses Enter so commands run when you finish. You can also say the spoken command \"send it\" to submit. Real keystrokes behave better in terminals than clipboard paste, which can mangle multi-line input."}}, {"@type": "Question", "name": "Is voice coding good for RSI and wrist strain?", "acceptedAnswer": {"@type": "Answer", "text": "It can help by offloading high-volume prose (prompts, comments, commands, messages) from your hands, which reduces keystroke count over a day. Pipevoice is push-to-talk so there is no always-on microphone, and it has a toggle mode if holding a key is uncomfortable. It is one tool among several for managing RSI, not a medical solution, but many developers find it meaningfully reduces typing load."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Voice Coding on Windows: Dictate Prompts and Commands</p>
+  <header class="h">
+    <h1>Voice Coding on Windows: Dictate Prompts, Comments, and Commands</h1>
+    <p class="dek">How developers code by voice on Windows in 2026, from prompt dictation to terminal commands, without paying for a subscription.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>Yes, you can code by voice on Windows in 2026, but the modern way is not spelling out every bracket. You dictate the <em>prose</em> of coding (prompts to an AI agent, comments, commit messages, and terminal commands) and let push-to-talk dictation type real keystrokes into whatever app you are in. Pipevoice is a free, open-source tool that does exactly this: hold <kbd>Ctrl</kbd>+<kbd>\</kbd>, speak, release, and the text appears in your editor, terminal, or Claude Code prompt.</p>
+
+<h2>What voice coding looks like in 2026</h2>
+<p>The old image of voice coding was someone painstakingly saying "open paren, x, comma, y, close paren" to assemble a line of code character by character. That still exists, and for true hands-free programming it is powerful, but it is not how most developers dictate today.</p>
+<p>The shift came with AI coding agents. When you drive Cursor, Claude Code, GitHub Copilot, or a chat model, the input you give is natural language: "refactor this function to return early and add a guard clause for null." That is a sentence, not a syntax tree. Dictating a sentence is fast, accurate, and forgiving in a way that dictating punctuation never was. Add comments, docstrings, commit messages, code review notes, and Slack replies, and a large share of a developer's keyboard time is now prose that speaks well.</p>
+<p>So voice coding in 2026 splits into two jobs: the prose around the code (where dictation shines) and the structured code itself (where you still type, or let the AI generate it). Pipevoice is built for the first job and stays out of your way for the second.</p>
+
+<h2>Two approaches: hands-free frameworks vs prompt dictation</h2>
+<p>There are two genuinely different tools here, and it helps to know which problem you actually have.</p>
+<ul>
+<li><strong>Hands-free frameworks (Talon Voice):</strong> Talon is free and extremely capable. With custom scripts you can navigate, edit, and write code entirely by voice, no keyboard at all. The trade-off is a steep learning curve: you write and maintain your own grammar and commands. It is the right tool if you need full hands-free operation, for example due to injury.</li>
+<li><strong>Prompt dictation (Pipevoice):</strong> You keep your hands on the keyboard for the structured parts and use a hotkey to dictate the prose: prompts, comments, commands, messages. No scripting, no grammar to learn. You install it, pick an engine, and talk.</li>
+</ul>
+<p>If you are looking for a lighter, install-and-go option rather than a scripting environment, see our comparison of a <a href="/blog/talon-voice-alternative-windows">Talon Voice alternative on Windows</a>. Both can coexist; they solve different ends of the same problem.</p>
+
+<h2>Setting up push-to-talk dictation for your editor and terminal</h2>
+<p>Pipevoice types real keystrokes into the focused window, so there is nothing to integrate per app. Whatever has your cursor (VS Code, Cursor, Windows Terminal, a browser chat box, Claude Code in the CLI) receives the text.</p>
+<ol>
+<li><strong>Install it.</strong> <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice for Windows</a>. Because the app is not yet code-signed, Windows SmartScreen may show an "unrecognised app" warning. Click <strong>More info</strong>, then <strong>Run anyway</strong>. Code signing is in progress.</li>
+<li><strong>Pick a transcription engine.</strong> You choose one (more on this below). Deepgram is the fastest, Whisper is the most accurate, and Local Whisper runs fully offline.</li>
+<li><strong>Hold the hotkey and speak.</strong> The default is <kbd>Ctrl</kbd>+<kbd>\</kbd> (you can also use Right <kbd>Ctrl</kbd>). Hold, talk, release, and the text types in. A second hotkey copies the result to your clipboard instead of typing, which is handy for paste-only fields.</li>
+<li><strong>Set per-app profiles.</strong> Give your terminal a profile with auto-Enter on so commands run when you finish, and give your editor a profile that just types. Each profile can use a different engine, cleanup setting, and output mode.</li>
+</ol>
+<p>For a deeper terminal walkthrough, see <a href="/blog/dictate-into-terminal-windows">dictating into the Windows terminal</a>, and for AI agents specifically, <a href="/blog/dictate-into-claude-code">dictating into Claude Code</a>. Because Pipevoice types into any app on your machine, the same hotkey works in the Claude Code CLI, your editor, and your browser alike.</p>
+
+<h2>Voice commands that matter for coding</h2>
+<p>Punctuation and structure are where dictation usually breaks down, so Pipevoice supports spoken commands inside your speech. These get interpreted as actions rather than literal words:</p>
+<ul>
+<li><strong>"new line"</strong> and <strong>"new paragraph"</strong> for breaking up text and multi-line input.</li>
+<li><strong>"tab key"</strong> for indentation or moving between fields.</li>
+<li><strong>"scratch that"</strong> to drop the last thing you said when you misspeak.</li>
+<li><strong>"send it"</strong> to submit, useful at the end of a prompt or command.</li>
+</ul>
+<p>Combined with a terminal profile that auto-presses Enter, you can dictate a command and have it run without touching the keyboard. For longer AI prompts, "new line" lets you lay out structured instructions cleanly before you submit.</p>
+
+<h2>Vocabulary boosting for function names, libraries, and jargon</h2>
+<p>The single biggest frustration with generic dictation is technical terms: library names, function identifiers, and project jargon come out as plausible English words instead. Pipevoice includes <strong>vocabulary boosting</strong>, where you add the terms you use (framework names, internal class names, acronyms) so the engine weights them and transcribes them correctly.</p>
+<p>There is also an optional AI polish step called <strong>Flow mode</strong> that cleans up filler words, punctuation, and casing after transcription. It sends text only, never audio, and you can run it on OpenAI, Google Gemini (free tier), OpenRouter (free community models), or a local Ollama model (offline, no key). For non-native accents, stutters, or heavy fillers, there is also a free-text "speech notes" field and an accent and language picker (British, US, Australian, Indian, and New Zealand English, among others).</p>
+
+<h2>Why developers prefer real keystrokes over clipboard paste</h2>
+<p>Many voice tools dump text onto your clipboard and make you paste it. That breaks flow: you have to switch context, find the field, and <kbd>Ctrl</kbd>+<kbd>V</kbd>, and you clobber whatever was on your clipboard. Pipevoice types real keystrokes directly into the focused window by default, so the text just appears where your cursor is, in the terminal, the editor, or the chat box.</p>
+<p>This matters most in terminals and TUIs, where pasted multi-line text can misbehave, and in apps that intercept paste. Typing keystrokes behaves like you typed them yourself. If you do want paste behaviour for a specific app, you can configure that per profile, so you get the best of both.</p>
+
+<h2>Reducing RSI and keystrokes while staying in flow</h2>
+<p>Every prompt, comment, and command you speak is one you did not type. For developers managing wrist strain or RSI, offloading the high-volume prose to your voice can meaningfully cut keystroke count over a day while keeping your hands free for the precise edits that genuinely need them. You stay in flow because you never leave the app you are working in.</p>
+<div class="note"><p>Push-to-talk means you only transcribe when you mean to, so there is no always-on microphone and no accidental capture. If holding a key is itself uncomfortable, you can switch to toggle mode and tap once to start and once to stop.</p></div>
+<p>For more on this, see our guide to <a href="/blog/voice-typing-for-rsi">voice typing for RSI</a>.</p>
+
+<h2>Offline voice coding for proprietary codebases</h2>
+<p>If your code cannot leave your machine, the cloud engines are off the table, and that rules out most subscription voice tools entirely. Pipevoice has a fully offline path: <strong>Local Whisper</strong> (also known as faster-whisper) for transcription plus <strong>Ollama</strong> for the optional polish step. That combination is zero cost, needs no API key, and sends nothing off your PC. The first time you use Local Whisper it downloads a model of roughly 150MB; you can raise the model size for more accuracy if your CPU can handle it.</p>
+<p>Local Whisper is slower than the cloud engines and wants a decent CPU for the larger models, that is the honest trade-off, but for proprietary or regulated codebases the privacy is the point. Pipevoice has no account, no telemetry, and no servers of ours; cloud engines, if you choose one, send audio only to that provider on your own key.</p>
+
+<h2>How Pipevoice compares</h2>
+<table>
+<thead>
+<tr><th>Tool</th><th>Platform</th><th>Offline option</th><th>Open source</th><th>Price</th><th>Best for</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Pipevoice</strong></td><td>Windows 10/11</td><td>Yes (Local Whisper + Ollama)</td><td>Yes</td><td>Free</td><td>Dictating prompts, comments, and commands into any app</td></tr>
+<tr><td>Talon Voice</td><td>Cross-platform</td><td>Yes</td><td>Free</td><td>Free</td><td>Full hands-free coding (steep scripting curve)</td></tr>
+<tr><td>Wispr Flow</td><td>Mac-first (Windows port)</td><td>No</td><td>No</td><td>Paid subscription</td><td>Polished cloud dictation</td></tr>
+<tr><td>Dragon NaturallySpeaking</td><td>Windows</td><td>Yes</td><td>No</td><td>Paid (one-time licence)</td><td>Heavy-duty dictation (consumer line largely discontinued)</td></tr>
+<tr><td>Windows Voice Access</td><td>Windows</td><td>Partly</td><td>No</td><td>Free (built-in)</td><td>Basic dictation, no engine choice or AI cleanup</td></tr>
+</tbody>
+</table>
+<p>Pipevoice's wedge is the combination: free, open source, Windows-native, an offline option, your choice of engine with your own key, and it types into any app including the terminal and Claude Code. See the full <a href="/vs/wispr-flow">Pipevoice vs Wispr Flow</a> comparison or the <a href="/windows-voice-typing">Windows voice typing overview</a> for more.</p>
+
+<h2>Get started</h2>
+<p>Pipevoice is free forever and the tagline is "Talk faster than you type." A managed-key Pro option may come later, but the core stays free. <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice</a>, pick an engine, and start dictating your next prompt. Full setup details are in the <a href="/docs">docs</a>.</p>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>Can you really code by voice on Windows?</summary><p>Yes, though the practical workflow in 2026 is dictating the prose around code rather than spelling out punctuation. You speak prompts to AI agents, comments, commit messages, and terminal commands, and a tool like Pipevoice types real keystrokes into whatever app is focused. For full hands-free programming with no keyboard at all, a scripting framework like Talon Voice is the better fit.</p></details>
+      <details><summary>Is Pipevoice a replacement for Talon Voice?</summary><p>They solve different problems. Talon is built for full hands-free coding through custom voice scripts, which is powerful but has a steep learning curve. Pipevoice is push-to-talk prompt dictation: you keep your hands on the keyboard for structured edits and dictate the prose. If you want install-and-go dictation rather than a scripting environment, Pipevoice is simpler; the two can also be used together.</p></details>
+      <details><summary>How do I get technical terms transcribed correctly?</summary><p>Use Pipevoice&#x27;s vocabulary boosting to add library names, function identifiers, and project jargon so the engine weights them correctly. You can also pick a more accurate engine like OpenAI Whisper, choose the right accent and language, and enable Flow mode to clean up punctuation and casing afterwards. Flow mode sends text only, never audio.</p></details>
+      <details><summary>Can I dictate into a terminal and run commands by voice?</summary><p>Yes. Pipevoice types real keystrokes into the focused window, including terminals, and you can set a per-app profile that auto-presses Enter so commands run when you finish. You can also say the spoken command &quot;send it&quot; to submit. Real keystrokes behave better in terminals than clipboard paste, which can mangle multi-line input.</p></details>
+      <details><summary>Is voice coding good for RSI and wrist strain?</summary><p>It can help by offloading high-volume prose (prompts, comments, commands, messages) from your hands, which reduces keystroke count over a day. Pipevoice is push-to-talk so there is no always-on microphone, and it has a toggle mode if holding a key is uncomfortable. It is one tool among several for managing RSI, not a medical solution, but many developers find it meaningfully reduces typing load.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/dictate-into-claude-code">Dictate Into Claude Code (and Cursor) by Voice on Windows<span>Push a hotkey, speak your prompt, and let it land as real keystrokes in the Claude Code CLI, Cursor, or any terminal.</span></a>
+      <a href="/blog/dictate-into-terminal-windows">Dictate Into the Terminal on Windows: Voice-Type the CLI<span>Why most dictation tools choke inside PowerShell and Windows Terminal, and how to set up Pipevoice to type real keystrokes (and run commands) by voice.</span></a>
+      <a href="/blog/talon-voice-alternative-windows">Talon Voice Alternative: Simpler Voice Typing<span>If you want to dictate prose and prompts into any Windows app without writing grammar files, Pipevoice is the lighter, no-scripting option.</span></a>
+      <a href="/blog/voice-typing-for-rsi">Voice Typing for RSI: Cut Keystrokes, Protect Your Wrists<span>A practical guide to using free Windows dictation software to take strain off your hands without losing your workflow.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>

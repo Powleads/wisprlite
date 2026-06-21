@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dictate Into the Terminal on Windows: Voice-Type the CLI | Pipevoice</title>
+<meta name="description" content="Dictate commands into PowerShell, CMD, and Windows Terminal with Pipevoice, a free voice-typing tool that types real keystrokes (not clipboard paste)." />
+<link rel="canonical" href="https://pipevoice.app/blog/dictate-into-terminal-windows" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Dictate Into the Terminal on Windows: Voice-Type the CLI | Pipevoice" />
+<meta property="og:description" content="Dictate commands into PowerShell, CMD, and Windows Terminal with Pipevoice, a free voice-typing tool that types real keystrokes (not clipboard paste)." />
+<meta property="og:url" content="https://pipevoice.app/blog/dictate-into-terminal-windows" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Dictate Into the Terminal on Windows: Voice-Type the CLI | Pipevoice" />
+<meta name="twitter:description" content="Dictate commands into PowerShell, CMD, and Windows Terminal with Pipevoice, a free voice-typing tool that types real keystrokes (not clipboard paste)." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Dictate Into the Terminal on Windows: Voice-Typing the Command Line", "description": "Dictate commands into PowerShell, CMD, and Windows Terminal with Pipevoice, a free voice-typing tool that types real keystrokes (not clipboard paste).", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/dictate-into-terminal-windows"}, "about": "dictate into terminal windows"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Dictate Into the Terminal on Windows: Voice-Type the CLI", "item": "https://pipevoice.app/blog/dictate-into-terminal-windows"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I dictate commands into PowerShell or Windows Terminal?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pipevoice types real keystrokes into whatever window has focus, so it works in PowerShell, CMD, and Windows Terminal just as it does in an editor or browser. Hold the hotkey, speak your command, release, and the text appears at the prompt. Say \"send it\" to press Enter and run it."}}, {"@type": "Question", "name": "Why doesn't Windows Voice Typing work in the terminal?", "acceptedAnswer": {"@type": "Answer", "text": "Built-in Windows dictation relies on accessibility hooks and a known set of supported apps, and console windows often do not expose the text fields it expects. As a result it may insert nothing or drop characters in the terminal. Pipevoice avoids this by simulating real keystrokes instead of using those hooks."}}, {"@type": "Question", "name": "Does Pipevoice type real keystrokes or paste text?", "acceptedAnswer": {"@type": "Answer", "text": "By default Pipevoice types real keystrokes, so text lands at your cursor exactly like manual typing and your clipboard is left untouched. If you specifically want clipboard output, a second hotkey copies the result instead of typing it, so the behaviour is your choice each time."}}, {"@type": "Question", "name": "How do I run a command by voice after dictating it?", "acceptedAnswer": {"@type": "Answer", "text": "Say \"send it\" at the end of your dictation and Pipevoice presses Enter for you. If you want a particular terminal to run every command automatically, turn on auto-Enter in that app's per-app profile. Leave auto-Enter off for anything touching production so you can review before executing."}}, {"@type": "Question", "name": "Can I dictate file paths and symbols accurately?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, with some technique. Speak symbols by name (for example \"dash l\" for -l) and use the \"tab key\" voice command to let the shell complete long paths rather than dictating them. Add recurring tool names and odd flags to vocabulary boosting, and use the accent picker and speech-notes field to improve recognition."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Dictate Into the Terminal on Windows: Voice-Type the CLI</p>
+  <header class="h">
+    <h1>Dictate Into the Terminal on Windows: Voice-Typing the Command Line</h1>
+    <p class="dek">Why most dictation tools choke inside PowerShell and Windows Terminal, and how to set up Pipevoice to type real keystrokes (and run commands) by voice.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>To dictate into the terminal on Windows, you need a tool that sends <strong>real keystrokes</strong> into the focused window rather than relying on a clipboard or an accessibility API. Pipevoice does exactly that: hold a hotkey (default <kbd>Ctrl</kbd>+<kbd>\</kbd> or <kbd>Right Ctrl</kbd>), speak, release, and the text is typed straight into PowerShell, CMD, or Windows Terminal as if you had typed it yourself. It is free, open source, and runs on Windows 10 and 11.</p>
+
+<h2>Why most dictation tools fail in the terminal (and how Pipevoice doesn't)</h2>
+<p>The terminal is a hostile target for dictation. Built-in tools like Windows Voice Access and Windows Speech Recognition were designed around accessibility hooks and a known set of apps. A console host like Windows Terminal or the classic CMD window often does not expose the text fields those tools expect, so dictation either does nothing, drops characters, or refuses to insert text at all.</p>
+<p>Pipevoice sidesteps the problem entirely. It does not ask the terminal to cooperate. It simulates the same keystrokes a keyboard would produce and injects them into whatever window has focus. If your keyboard can type into the prompt, so can Pipevoice. That is why the same tool works in a terminal, a code editor, a browser, and a chat box without any per-app integration.</p>
+
+<h2>Real keystrokes vs clipboard injection: why it matters for shells</h2>
+<p>Some dictation utilities "type" by copying text to the clipboard and pasting it. That breaks in a shell for a few concrete reasons:</p>
+<ul>
+<li>Paste shortcuts differ by app. <kbd>Ctrl</kbd>+<kbd>V</kbd> works in Windows Terminal but not in legacy consoles, where you may need a right-click or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>. A paste-based tool cannot guess correctly every time.</li>
+<li>Pasting clobbers your clipboard, which is annoying when you are mid-task and had something else copied.</li>
+<li>Multi-line pastes can auto-execute commands in some shells, which is a security and "oops" hazard.</li>
+</ul>
+<p>Pipevoice types real keystrokes by default, so the text lands at the cursor exactly like manual typing. If you ever do want clipboard behaviour, a second hotkey copies the result to the clipboard instead of typing it, so the choice is yours per use rather than baked in.</p>
+
+<h2>Setting up Pipevoice for PowerShell, CMD, and Windows Terminal</h2>
+<p>Getting running takes a couple of minutes.</p>
+<ol>
+<li>Download and install from <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">the latest release</a>. Pipevoice is currently unsigned, so Windows SmartScreen may show an "unrecognised app" warning. Click <strong>More info</strong> then <strong>Run anyway</strong> (code signing is in progress).</li>
+<li>Pick a transcription engine. Local Whisper / faster-whisper runs fully offline and free (the first run downloads a model of roughly 150MB). Deepgram gives the fastest, live, word-by-word output on your own free API key. OpenAI Whisper is the most accurate batch option on your OpenAI key.</li>
+<li>Open your terminal of choice, place the cursor at the prompt, hold the hotkey, speak your command, and release. The text types in.</li>
+</ol>
+<div class="note">No account, no telemetry, and no servers of ours. With the local engine, nothing leaves your PC. With a cloud engine, audio goes only to the provider you chose, on your own key.</div>
+
+<h2>Voice commands for command-line work: new line, tab key, scratch that</h2>
+<p>Plain transcription is not enough for shell work, because you constantly need structural keys. Pipevoice recognises spoken voice commands so you can produce them without touching the keyboard:</p>
+<ul>
+<li><strong>"new line"</strong> and <strong>"new paragraph"</strong> for line breaks, useful for multi-line scripts or here-strings.</li>
+<li><strong>"tab key"</strong> to trigger shell tab-completion of a path or command.</li>
+<li><strong>"scratch that"</strong> to undo the last dictated chunk when you misspeak.</li>
+</ul>
+<p>For jargon that the engine keeps mangling, such as a CLI name or an unusual flag, Pipevoice supports vocabulary boosting so your specific terms transcribe correctly.</p>
+
+<h2>Auto-Enter and "send it" for running commands hands-free</h2>
+<p>Dictating a command is only half the job. To actually run it you say <strong>"send it"</strong>, which presses <kbd>Enter</kbd> for you. Spoken aloud, that turns a full command-and-run cycle into one continuous action: hold the hotkey, say the command, finish with "send it", release.</p>
+<p>If you want this to happen automatically for a particular terminal, set an auto-Enter rule in that app's profile (covered next) so every dictation runs as soon as you release the hotkey. That is ideal for a fast REPL loop, and easy to leave off where you would rather review before executing.</p>
+
+<h2>Per-app profile tuning for terminal accuracy</h2>
+<p>Pipevoice supports per-app profiles, so your terminal can behave differently from your editor or browser. For each app you can set a different engine, a different level of AI cleanup, whether output is typed or pasted, and whether auto-Enter is on.</p>
+<p>A practical terminal profile looks like this:</p>
+<ul>
+<li><strong>Engine:</strong> Local Whisper for offline infra work, or Deepgram when you want live, low-latency text.</li>
+<li><strong>Cleanup:</strong> minimal. Flow mode AI polish is great for prose, but you usually do not want a model reflowing a command's casing or punctuation. Keep it off or light here.</li>
+<li><strong>Output:</strong> type real keystrokes.</li>
+<li><strong>Auto-Enter:</strong> on for a throwaway scratch shell, off for anything that touches production.</li>
+</ul>
+<p>Meanwhile your writing apps can keep full Flow mode cleanup. The optional AI polish (OpenAI, Google Gemini's free tier, OpenRouter's free community models, or local Ollama) sends text only, never audio.</p>
+
+<h2>Handling flags, paths, and symbols by voice</h2>
+<p>Command lines are dense with symbols, and this is where dictation needs help. Speak symbols by name and they are transcribed as characters. A few honest tips:</p>
+<ul>
+<li>Use <strong>"tab key"</strong> to complete paths rather than dictating long folder names character by character. Let the shell do the spelling.</li>
+<li>For flags, dictate the dash and the letter, for example "dash l" for <code>-l</code>, or spell the long form, "dash dash help" for <code>--help</code>.</li>
+<li>Add recurring tool names, repo names, and odd flags to vocabulary boosting so they stop being misheard.</li>
+<li>If your accent or speech pattern trips the engine on symbols, the accent and language picker (British, US, Australian, Indian, New Zealand English and more) plus the free-text "speech notes" field help the model adapt to non-native accents, stutters, or heavy fillers.</li>
+</ul>
+<p>Dictation will not make you faster at one short symbol-heavy command than typing it. Where it shines is longer commands, repeated boilerplate, and dictating prose into a tool that lives in the terminal, like an AI coding CLI. For that workflow, see <a href="/blog/dictate-into-claude-code">dictating into Claude Code</a> and the broader guide to <a href="/blog/voice-coding-windows">voice coding on Windows</a>.</p>
+
+<h2>Offline dictation for sensitive infrastructure work</h2>
+<p>If you are working on production infrastructure, secrets, or anything under compliance constraints, sending audio to a cloud provider may be a non-starter. Pipevoice has a fully offline path: <strong>Local Whisper</strong> for transcription plus <strong>Ollama</strong> for AI polish. That combination costs nothing, needs no API key, and sends nothing off your machine. Raise the local Whisper model size for more accuracy if your CPU can handle it; the trade is that local transcription is slower than cloud.</p>
+
+<h2>How Pipevoice compares for terminal dictation</h2>
+<table>
+<thead>
+<tr><th>Tool</th><th>Types into the terminal</th><th>Offline option</th><th>Price</th><th>Open source</th></tr>
+</thead>
+<tbody>
+<tr><td>Pipevoice</td><td>Yes, real keystrokes into any app</td><td>Yes (Local Whisper + Ollama)</td><td>Free</td><td>Yes</td></tr>
+<tr><td>Windows Voice Access / Speech Recognition</td><td>Limited app support, often not consoles</td><td>On-device</td><td>Free (built in)</td><td>No</td></tr>
+<tr><td>Wispr Flow</td><td>Mac-first, Windows port, cloud only</td><td>No</td><td>Paid (subscription)</td><td>No</td></tr>
+<tr><td>Dragon NaturallySpeaking</td><td>Yes, but heavy</td><td>On-device</td><td>Paid (one-time licence)</td><td>No</td></tr>
+<tr><td>Talon Voice</td><td>Yes, very powerful</td><td>On-device</td><td>Free tier, paid beta</td><td>No</td></tr>
+</tbody>
+</table>
+<p>Pipevoice's advantage for command-line users is reach: it types into any app, whether that is the terminal, your editor, a browser, or a chat box, rather than only inside one tool. See a fuller breakdown <a href="/vs/wispr-flow">versus Wispr Flow</a>.</p>
+
+<h2>Honest limitations</h2>
+<ul>
+<li>Windows only. There is no Mac or Linux build.</li>
+<li>Currently unsigned, so expect the SmartScreen "unrecognised app" warning until code signing ships.</li>
+<li>Cloud engines (Deepgram, OpenAI) require your own API key. The local path does not.</li>
+<li>Local Whisper is slower than cloud and wants a decent CPU for larger models.</li>
+</ul>
+
+<h2>Get started</h2>
+<p>Pipevoice is free forever for the core tool, with the tagline "Talk faster than you type." <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download the installer</a>, set a terminal profile, and try dictating your next command. To go further, read about <a href="/blog/voice-coding-windows">per-app dictation profiles</a> and the full list of <a href="/blog/how-to-dictate-on-windows">voice commands</a>, or browse the <a href="/docs">docs</a>.</p>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>Can I dictate commands into PowerShell or Windows Terminal?</summary><p>Yes. Pipevoice types real keystrokes into whatever window has focus, so it works in PowerShell, CMD, and Windows Terminal just as it does in an editor or browser. Hold the hotkey, speak your command, release, and the text appears at the prompt. Say &quot;send it&quot; to press Enter and run it.</p></details>
+      <details><summary>Why doesn&#x27;t Windows Voice Typing work in the terminal?</summary><p>Built-in Windows dictation relies on accessibility hooks and a known set of supported apps, and console windows often do not expose the text fields it expects. As a result it may insert nothing or drop characters in the terminal. Pipevoice avoids this by simulating real keystrokes instead of using those hooks.</p></details>
+      <details><summary>Does Pipevoice type real keystrokes or paste text?</summary><p>By default Pipevoice types real keystrokes, so text lands at your cursor exactly like manual typing and your clipboard is left untouched. If you specifically want clipboard output, a second hotkey copies the result instead of typing it, so the behaviour is your choice each time.</p></details>
+      <details><summary>How do I run a command by voice after dictating it?</summary><p>Say &quot;send it&quot; at the end of your dictation and Pipevoice presses Enter for you. If you want a particular terminal to run every command automatically, turn on auto-Enter in that app&#x27;s per-app profile. Leave auto-Enter off for anything touching production so you can review before executing.</p></details>
+      <details><summary>Can I dictate file paths and symbols accurately?</summary><p>Yes, with some technique. Speak symbols by name (for example &quot;dash l&quot; for -l) and use the &quot;tab key&quot; voice command to let the shell complete long paths rather than dictating them. Add recurring tool names and odd flags to vocabulary boosting, and use the accent picker and speech-notes field to improve recognition.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/voice-coding-windows">Voice Coding on Windows: Dictate Prompts and Commands<span>How developers code by voice on Windows in 2026, from prompt dictation to terminal commands, without paying for a subscription.</span></a>
+      <a href="/blog/dictate-into-claude-code">Dictate Into Claude Code (and Cursor) by Voice on Windows<span>Push a hotkey, speak your prompt, and let it land as real keystrokes in the Claude Code CLI, Cursor, or any terminal.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>

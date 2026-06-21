@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How to Dictate on Windows: Type Into Any App With Your Voice | Pipevoice</title>
+<meta name="description" content="Learn how to dictate on Windows 10 and 11. Use built-in Win+H voice typing or a free push-to-talk app that types into any app, including the terminal." />
+<link rel="canonical" href="https://pipevoice.app/blog/how-to-dictate-on-windows" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="How to Dictate on Windows: Type Into Any App With Your Voice | Pipevoice" />
+<meta property="og:description" content="Learn how to dictate on Windows 10 and 11. Use built-in Win+H voice typing or a free push-to-talk app that types into any app, including the terminal." />
+<meta property="og:url" content="https://pipevoice.app/blog/how-to-dictate-on-windows" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="How to Dictate on Windows: Type Into Any App With Your Voice | Pipevoice" />
+<meta name="twitter:description" content="Learn how to dictate on Windows 10 and 11. Use built-in Win+H voice typing or a free push-to-talk app that types into any app, including the terminal." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How to Dictate on Windows: Type Into Any App With Your Voice", "description": "Learn how to dictate on Windows 10 and 11. Use built-in Win+H voice typing or a free push-to-talk app that types into any app, including the terminal.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/how-to-dictate-on-windows"}, "about": "how to dictate on windows"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "How to Dictate on Windows: Type Into Any App With Your Voice", "item": "https://pipevoice.app/blog/how-to-dictate-on-windows"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the keyboard shortcut to dictate on Windows?", "acceptedAnswer": {"@type": "Answer", "text": "For built-in Windows voice typing, press Win+H to open the voice typing bar, then start speaking into any text field. If you use Pipevoice instead, the default push-to-talk hotkey is Ctrl+\\, with Right Ctrl as a popular alternative, and you can switch to a toggle mode where one press starts and another stops dictation."}}, {"@type": "Question", "name": "How do I add punctuation and new lines when dictating?", "acceptedAnswer": {"@type": "Answer", "text": "With Pipevoice you can speak voice commands like \"new line\", \"new paragraph\", and \"tab key\" to format as you go. If you would rather not learn commands, the optional Flow mode can add punctuation and fix casing automatically using OpenAI, Google Gemini, OpenRouter, or local Ollama. Flow mode sends text only, never your audio."}}, {"@type": "Question", "name": "Why isn't my voice typing showing any text?", "acceptedAnswer": {"@type": "Answer", "text": "First click directly into the text field so it has focus, since some apps do not accept dictation. Then check that microphone access is enabled in Windows Settings under Privacy and security, and that the correct input device is selected in Sound settings. With Pipevoice, make sure you are holding the hotkey while speaking, the target app has focus, and an engine is configured (local Whisper downloads its model on first use)."}}, {"@type": "Question", "name": "Can I dictate into apps other than Word and Notepad?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pipevoice types real keystrokes into whatever app is focused, so it works in editors, browsers, chat boxes, and even the terminal. That includes dictating prompts into tools like Claude Code, Cursor, and VS Code, which most dictation tools do not handle. The built-in Win+H tool works in most standard text fields but its app support is more limited."}}, {"@type": "Question", "name": "How accurate is Windows dictation compared to AI engines like Whisper?", "acceptedAnswer": {"@type": "Answer", "text": "Built-in Windows dictation is convenient but offers no engine choice or AI cleanup. With Pipevoice you pick the engine: OpenAI Whisper is the most accurate (batch), Deepgram is the fastest with words appearing live as you speak, and local Whisper runs fully offline for free. You can also boost vocabulary for jargon and set an accent or language to improve recognition."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / How to Dictate on Windows: Type Into Any App With Your Voice</p>
+  <header class="h">
+    <h1>How to Dictate on Windows: Type Into Any App With Your Voice</h1>
+    <p class="dek">Two ways to talk to type on Windows: the built-in Win+H tool and a push-to-talk app that types into any window, including your terminal.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>To dictate on Windows, press <kbd>Win</kbd> + <kbd>H</kbd> to open the built-in voice typing bar, click the microphone, and start speaking into any text field. For more control (push-to-talk, your choice of transcription engine, and an offline option), install a dedicated app like <a href="/">Pipevoice</a>, hold a hotkey, speak, and release to type real keystrokes into whatever app is focused.</p>
+
+<p>This guide covers both routes, step by step, plus how to set a hotkey, dictate punctuation, fix mistakes by voice, and troubleshoot when no text appears.</p>
+
+<h2>The fastest way to start dictating on Windows (Win+H vs a dedicated app)</h2>
+
+<p>There are two practical ways to talk to type on Windows. Pick based on what you need.</p>
+
+<table>
+<thead>
+<tr><th>Choice</th><th>Built-in Win+H</th><th>Pipevoice (push-to-talk app)</th></tr>
+</thead>
+<tbody>
+<tr><td>Cost</td><td>Free, built in</td><td>Free, open source</td></tr>
+<tr><td>How you trigger it</td><td>Toggle the mic bar on/off</td><td>Hold a hotkey, speak, release (or toggle mode)</td></tr>
+<tr><td>Works in any app</td><td>Most standard text fields</td><td>Any focused app, including terminals and chat boxes</td></tr>
+<tr><td>Choose your engine</td><td>No</td><td>Yes: Deepgram, OpenAI Whisper, or local Whisper</td></tr>
+<tr><td>Offline option</td><td>No</td><td>Yes (local Whisper + Ollama)</td></tr>
+<tr><td>AI cleanup of fillers/punctuation</td><td>No</td><td>Yes (optional Flow mode)</td></tr>
+</tbody>
+</table>
+
+<p>If you just want to jot a quick note, <kbd>Win</kbd> + <kbd>H</kbd> is already on your machine. If you dictate a lot, want better accuracy, or need to type into your terminal or an AI coding tool, a dedicated app is worth the few minutes to set up.</p>
+
+<h2>Method 1: Built-in Windows Voice Typing step by step</h2>
+
+<p>Windows 10 and 11 include voice typing at no cost.</p>
+
+<ol>
+<li>Click into the text field where you want your words to appear (a document, browser box, or chat).</li>
+<li>Press <kbd>Win</kbd> + <kbd>H</kbd> to open the voice typing bar.</li>
+<li>The first time, allow microphone access if Windows asks.</li>
+<li>Click the microphone button (or it may start listening automatically) and speak normally.</li>
+<li>Click the microphone again to stop, or say a stop command.</li>
+</ol>
+
+<p>This works well for short bursts of text. The trade-offs: there is no choice of transcription engine, no offline-only mode you control, no AI cleanup of filler words, and app support can be hit and miss. If <kbd>Win</kbd> + <kbd>H</kbd> opens but produces nothing, see our notes on <a href="/blog/how-to-dictate-on-windows">Win+H voice typing not working</a>.</p>
+
+<h2>Method 2: Push-to-talk dictation with Pipevoice (hold, speak, release)</h2>
+
+<p>Pipevoice is a free, open-source, push-to-talk voice typing app for Windows 10 and 11. Instead of toggling a bar, you hold a hotkey, speak, and release. It then types <strong>real keystrokes</strong> into whatever app is focused, so it works in editors, browsers, chat boxes, and the terminal.</p>
+
+<ol>
+<li>Download the installer: <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Pipevoice-Setup.exe</a>.</li>
+<li>Run it. Pipevoice is currently unsigned, so Windows SmartScreen may show an "unrecognised app" warning. Click <strong>More info</strong>, then <strong>Run anyway</strong> (code signing is in progress).</li>
+<li>Open Pipevoice and pick a transcription engine (covered below). The fully offline path is local Whisper, which needs no API key.</li>
+<li>Click into any app where you want to type.</li>
+<li>Hold the hotkey (default <kbd>Ctrl</kbd> + <kbd>\</kbd>), speak, then release. Your words are typed in.</li>
+</ol>
+
+<p>A second hotkey copies the result to the clipboard instead of typing it, which is handy for apps that handle pasted text better. Because Pipevoice types into <em>any</em> focused window, it covers a gap that many tools miss: dictating prompts straight into Claude Code, Cursor, VS Code, or a plain terminal. See the full options in the <a href="/docs">docs</a>.</p>
+
+<div class="note">Want a deeper look at free options? Read our roundup of <a href="/blog/free-voice-typing-software-windows">free voice typing software for Windows</a>.</div>
+
+<h2>Setting your dictation hotkey (Ctrl+\ or Right Ctrl) and toggle mode</h2>
+
+<p>The default Pipevoice hotkey is <kbd>Ctrl</kbd> + <kbd>\</kbd>. If that clashes with something, <kbd>Right Ctrl</kbd> is a popular alternative because it rarely conflicts with app shortcuts and is easy to hold with one finger.</p>
+
+<p>You can also switch from <strong>push-to-talk</strong> (hold while speaking) to <strong>toggle mode</strong> (press once to start, press again to stop). Push-to-talk is great for short, frequent dictation; toggle mode suits longer passages where you do not want to keep a key held down.</p>
+
+<p>Pipevoice also supports <strong>per-app profiles</strong>, so you can use a different engine, cleanup setting, output method, or even auto-Enter on a per-application basis. For example, a terminal profile that pastes and presses Enter, and a writing profile that types with AI polish.</p>
+
+<h2>Dictating punctuation and formatting with voice commands</h2>
+
+<p>You do not have to stop and reach for the keyboard to format text. Pipevoice recognises spoken voice commands such as:</p>
+
+<ul>
+<li><strong>"new line"</strong> to break to the next line</li>
+<li><strong>"new paragraph"</strong> to start a fresh paragraph</li>
+<li><strong>"tab key"</strong> to insert a tab</li>
+<li><strong>"send it"</strong> to submit (useful in chat boxes and the terminal)</li>
+</ul>
+
+<p>If you would rather not memorise commands, the optional AI polish (Flow mode) can add punctuation and fix casing for you. Flow mode can run through OpenAI, Google Gemini (free tier), OpenRouter (free community models), or local Ollama (offline, no key). Importantly, polish sends <strong>text only, never audio</strong>. For a fuller list, see our guide to <a href="/blog/how-to-dictate-on-windows">voice commands for dictation on Windows</a>.</p>
+
+<h2>Fixing mistakes by voice: "scratch that" and editing on the fly</h2>
+
+<p>Mistakes happen. Pipevoice supports <strong>"scratch that"</strong> to remove what you just dictated, so you can correct course without touching the mouse. Combined with push-to-talk, the rhythm becomes: hold, speak a sentence, release, glance, say "scratch that" if needed, and carry on.</p>
+
+<p>Pipevoice also keeps a <strong>local dictation history</strong> on your machine, so you can review or reuse earlier transcripts. For non-native accents, stutters, or heavy fillers, there is a free-text "speech notes" field plus an accent and language picker (British, US, Australian, Indian, New Zealand English, and more) to improve recognition. You can also boost <strong>vocabulary</strong> for jargon and product names.</p>
+
+<h2>Choosing a transcription engine for accuracy vs speed</h2>
+
+<p>The biggest accuracy lever is which engine you use. Pipevoice lets you choose one and bring your own key where needed.</p>
+
+<table>
+<thead>
+<tr><th>Engine</th><th>Strength</th><th>Key needed</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td>Deepgram</td><td>Fastest; streaming, words appear live as you speak</td><td>Your own free Deepgram key</td><td>Roughly pennies per day of use</td></tr>
+<tr><td>OpenAI Whisper</td><td>Most accurate (batch transcription)</td><td>Your own OpenAI key</td><td>Processes after you finish speaking</td></tr>
+<tr><td>Local Whisper / faster-whisper</td><td>Runs fully offline on your PC, free</td><td>None</td><td>First use downloads a ~150MB model; raise model size for more accuracy</td></tr>
+</tbody>
+</table>
+
+<p>For a <strong>fully offline path</strong> with zero cost and no API key, pair <strong>local Whisper</strong> with <strong>Ollama</strong> for polish. Nothing leaves your PC. With the cloud engines, audio is sent only to the provider you chose, on your own key. There is no account, no telemetry, and no servers of ours in the middle. For more on getting the cleanest results, see our <a href="/blog/speech-to-text-windows">dictation accuracy tips</a>.</p>
+
+<h2>Troubleshooting: microphone, permissions, and no text appearing</h2>
+
+<p>If dictation is not working, run through these checks.</p>
+
+<ul>
+<li><strong>Microphone permission:</strong> open Windows Settings, then Privacy and security, then Microphone, and make sure microphone access and desktop app access are on.</li>
+<li><strong>Right input device:</strong> in Settings, Sound, confirm the correct microphone is selected and the input level moves when you speak.</li>
+<li><strong>No text appearing (Win+H):</strong> click directly into the text field first; some apps do not accept dictation. See <a href="/blog/how-to-dictate-on-windows">Win+H voice typing not working</a>.</li>
+<li><strong>No text appearing (Pipevoice):</strong> confirm you are holding the hotkey while speaking, that the target app actually has focus, and that an engine is configured (local Whisper needs its model downloaded on first use).</li>
+<li><strong>SmartScreen blocked the installer:</strong> click <strong>More info</strong>, then <strong>Run anyway</strong>. Pipevoice is unsigned for now, with code signing in progress, and updates are verified with SHA-256.</li>
+</ul>
+
+<h2>Which method should you use?</h2>
+
+<p>For occasional quick notes, <kbd>Win</kbd> + <kbd>H</kbd> is fine and already installed. If you dictate often, want to choose your engine, need an offline-only setup, or want to type into your terminal and AI coding tools, a push-to-talk app is the stronger fit. Pipevoice is free and open source, runs on Windows 10 and 11, and stays out of your way: <em>talk faster than you type.</em></p>
+
+<div class="note">Honest limitations: Pipevoice is Windows only (not Mac or Linux), it is currently unsigned (expect the SmartScreen warning), cloud engines require your own API key, and local Whisper is slower than cloud and prefers a decent CPU for larger models. Curious how it compares to a paid cloud option? See <a href="/vs/wispr-flow">Pipevoice vs Wispr Flow</a>.</div>
+
+<p><a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice for Windows</a> and start dictating into any app today.</p>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>What is the keyboard shortcut to dictate on Windows?</summary><p>For built-in Windows voice typing, press Win+H to open the voice typing bar, then start speaking into any text field. If you use Pipevoice instead, the default push-to-talk hotkey is Ctrl+\, with Right Ctrl as a popular alternative, and you can switch to a toggle mode where one press starts and another stops dictation.</p></details>
+      <details><summary>How do I add punctuation and new lines when dictating?</summary><p>With Pipevoice you can speak voice commands like &quot;new line&quot;, &quot;new paragraph&quot;, and &quot;tab key&quot; to format as you go. If you would rather not learn commands, the optional Flow mode can add punctuation and fix casing automatically using OpenAI, Google Gemini, OpenRouter, or local Ollama. Flow mode sends text only, never your audio.</p></details>
+      <details><summary>Why isn&#x27;t my voice typing showing any text?</summary><p>First click directly into the text field so it has focus, since some apps do not accept dictation. Then check that microphone access is enabled in Windows Settings under Privacy and security, and that the correct input device is selected in Sound settings. With Pipevoice, make sure you are holding the hotkey while speaking, the target app has focus, and an engine is configured (local Whisper downloads its model on first use).</p></details>
+      <details><summary>Can I dictate into apps other than Word and Notepad?</summary><p>Yes. Pipevoice types real keystrokes into whatever app is focused, so it works in editors, browsers, chat boxes, and even the terminal. That includes dictating prompts into tools like Claude Code, Cursor, and VS Code, which most dictation tools do not handle. The built-in Win+H tool works in most standard text fields but its app support is more limited.</p></details>
+      <details><summary>How accurate is Windows dictation compared to AI engines like Whisper?</summary><p>Built-in Windows dictation is convenient but offers no engine choice or AI cleanup. With Pipevoice you pick the engine: OpenAI Whisper is the most accurate (batch), Deepgram is the fastest with words appearing live as you speak, and local Whisper runs fully offline for free. You can also boost vocabulary for jargon and set an accent or language to improve recognition.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/free-voice-typing-software-windows">Free Voice Typing Software for Windows (2026): The Honest Guide<span>What &quot;free&quot; really means in voice typing, where the built-in Windows option falls short, and how to type into any app with your voice for zero cost.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>

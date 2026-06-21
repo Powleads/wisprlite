@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Speech to Text on Windows: Engines, Accuracy, and Free Setup | Pipevoice</title>
+<meta name="description" content="A practical guide to speech to text on Windows: how engines work, Deepgram vs Whisper vs local accuracy, and a free offline setup with Pipevoice." />
+<link rel="canonical" href="https://pipevoice.app/blog/speech-to-text-windows" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Speech to Text on Windows: Engines, Accuracy, and Free Setup | Pipevoice" />
+<meta property="og:description" content="A practical guide to speech to text on Windows: how engines work, Deepgram vs Whisper vs local accuracy, and a free offline setup with Pipevoice." />
+<meta property="og:url" content="https://pipevoice.app/blog/speech-to-text-windows" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Speech to Text on Windows: Engines, Accuracy, and Free Setup | Pipevoice" />
+<meta name="twitter:description" content="A practical guide to speech to text on Windows: how engines work, Deepgram vs Whisper vs local accuracy, and a free offline setup with Pipevoice." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Speech to Text on Windows: Engines, Accuracy, and the Best Free Setup", "description": "A practical guide to speech to text on Windows: how engines work, Deepgram vs Whisper vs local accuracy, and a free offline setup with Pipevoice.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/speech-to-text-windows"}, "about": "speech to text windows"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Speech to Text on Windows: Engines, Accuracy, and Free Setup", "item": "https://pipevoice.app/blog/speech-to-text-windows"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the most accurate speech-to-text engine for Windows?", "acceptedAnswer": {"@type": "Answer", "text": "In Pipevoice's lineup, OpenAI Whisper is the most accurate because it processes your whole clip as a batch and uses the full sentence as context. Local Whisper can approach it if you raise the model size, at the cost of speed and CPU. Deepgram is slightly behind on raw accuracy but wins on live, low-latency dictation."}}, {"@type": "Question", "name": "What is the difference between streaming and batch transcription?", "acceptedAnswer": {"@type": "Answer", "text": "Streaming engines transcribe as you speak, so words appear almost immediately and firm up with more context, which feels live. Batch engines wait until you finish, then process the whole clip at once, trading a short delay for accuracy. Pipevoice uses Deepgram for streaming and Whisper (cloud or local) for batch."}}, {"@type": "Question", "name": "Can I run speech to text on Windows without sending audio to the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pipevoice's fully offline path uses Local Whisper for transcription and local Ollama for optional cleanup. That combination needs no API key, costs nothing, and sends nothing off your PC. The optional polish step only ever sends text, never audio."}}, {"@type": "Question", "name": "Do I need a powerful CPU for local speech to text?", "acceptedAnswer": {"@type": "Answer", "text": "Not for the basics. Local Whisper's default model is about 150MB and runs on ordinary hardware. If you raise the model size for higher accuracy, it becomes slower and wants a more capable CPU, so for live dictation on a modest machine a cloud engine like Deepgram is smoother."}}, {"@type": "Question", "name": "Is Deepgram or Whisper better for live dictation?", "acceptedAnswer": {"@type": "Answer", "text": "Deepgram is better for live dictation because it streams text as you speak, so you can self-correct mid-sentence and stay in flow. Whisper is batch, so you get a slightly more accurate result a beat after you release the key. Pick Deepgram for chat and prompts, Whisper for prose that must be right."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Speech to Text on Windows: Engines, Accuracy, and Free Setup</p>
+  <header class="h">
+    <h1>Speech to Text on Windows: Engines, Accuracy, and the Best Free Setup</h1>
+    <p class="dek">Compare streaming and offline engines, see which is most accurate, and set up free voice typing that works in any Windows app.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>The best speech to text setup on Windows depends on what you care about most: for live, low-latency dictation use a streaming engine like Deepgram, for the highest accuracy use OpenAI Whisper, and for a fully offline, free option use Local Whisper. With <a href="/">Pipevoice</a>, a free and open-source voice typing tool for Windows 10 and 11, you pick the engine and it types real keystrokes into whatever app is focused.</p>
+
+<p>This guide explains how the engines differ, which wins for which job, and how to get a working free setup in a few minutes. If you just want to start, you can <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">download Pipevoice</a> and hold <kbd>Ctrl</kbd>+<kbd>\</kbd> to talk.</p>
+
+<h2>Speech to text vs voice typing vs voice control: what's the difference</h2>
+<p>These terms overlap, but they are not the same thing.</p>
+<ul>
+<li><strong>Speech to text (STT)</strong> is the underlying technology: an engine that turns audio of your voice into a string of text. Deepgram, Whisper, and the Windows built-in recognizer are all STT engines.</li>
+<li><strong>Voice typing</strong> wraps STT in something useful: you speak, and the words land as text inside the app you are actually using, whether that is a terminal, an editor, or a chat box.</li>
+<li><strong>Voice control</strong> is about commanding your computer hands-free (moving the cursor, clicking, running commands). Tools like Windows Voice Access lean this way.</li>
+</ul>
+<p>Pipevoice is voice typing. You hold a hotkey, speak, release, and it types real keystrokes into the focused app. A second hotkey copies the result to your clipboard instead of typing. It also handles a few spoken commands like "new line", "new paragraph", "tab key", "scratch that", and "send it", but commanding your whole OS hands-free is not its goal.</p>
+
+<h2>How modern speech-to-text engines work (streaming vs batch)</h2>
+<p>There are two ways an engine can hand you text, and the difference shapes how dictation feels.</p>
+<p><strong>Streaming (real-time)</strong> engines transcribe as you speak. Audio is sent in small chunks and partial words appear almost immediately, then firm up as more context arrives. This is what makes dictation feel live.</p>
+<p><strong>Batch (after-the-fact)</strong> engines wait until you finish speaking, then process the whole clip at once. You get the result a moment after you release the key. Batch models can use the full sentence as context, which often helps accuracy, at the cost of that short wait.</p>
+<div class="note"><p>Rule of thumb: streaming optimizes for latency, batch optimizes for accuracy. Pipevoice lets you choose, so you can match the engine to the task instead of compromising.</p></div>
+
+<h2>The three engines you can use with Pipevoice</h2>
+<p>Pipevoice does not lock you into one provider. You pick one of three engines, and you bring your own key for the cloud options so the cost stays yours and stays tiny.</p>
+<ul>
+<li><strong>Deepgram (streaming)</strong>: words appear live as you speak, and it is the fastest option. Needs your own free Deepgram API key. Running costs are roughly pennies per day for normal dictation.</li>
+<li><strong>OpenAI Whisper (batch)</strong>: the most accurate of the three. It processes your clip after you release the key. Needs your own OpenAI key.</li>
+<li><strong>Local Whisper / faster-whisper (offline)</strong>: runs fully on your PC, free, with no API key. The first use downloads a model of about 150MB. You can raise the model size for more accuracy, at the cost of speed and CPU.</li>
+</ul>
+
+<h2>Accuracy compared: which engine wins for what use case</h2>
+<p>No single engine is best at everything. Here is how the three line up across the things that actually matter for daily use.</p>
+<table>
+<thead>
+<tr><th>Engine</th><th>Mode</th><th>Latency</th><th>Accuracy</th><th>Offline?</th><th>Cost</th><th>Key needed?</th></tr>
+</thead>
+<tbody>
+<tr><td>Deepgram</td><td>Streaming</td><td>Lowest (live)</td><td>High</td><td>No</td><td>~pennies/day</td><td>Free Deepgram key</td></tr>
+<tr><td>OpenAI Whisper</td><td>Batch</td><td>Short wait after release</td><td>Highest</td><td>No</td><td>Pay-as-you-go on your key</td><td>OpenAI key</td></tr>
+<tr><td>Local Whisper</td><td>Batch (offline)</td><td>Depends on CPU and model size</td><td>Good, scales with model</td><td>Yes</td><td>Free</td><td>None</td></tr>
+</tbody>
+</table>
+<p>For a deeper breakdown see <a href="/blog/speech-to-text-windows">Deepgram vs Whisper vs OpenAI for dictation</a>. The short version: pick Deepgram when you want words to appear as you talk, pick OpenAI Whisper when the text has to be right the first time, and pick Local Whisper when nothing should leave your machine.</p>
+
+<h2>Real-time vs after-the-fact transcription and why latency matters</h2>
+<p>Latency is the gap between finishing a thought and seeing it on screen. It sounds minor until you do it all day.</p>
+<p>With a streaming engine, the words track your voice, so you can self-correct mid-sentence and stay in flow. This suits chat, prompts, and fast back-and-forth, for example dictating into Claude Code, Cursor, a terminal, or a browser chat box.</p>
+<p>With batch transcription you get a clean result a beat after you release the key. That short pause is a fair trade when you are drafting prose or writing something that needs to be accurate, because the model considers the whole sentence at once.</p>
+
+<h2>Running speech to text fully offline on your PC</h2>
+<p>If you would rather not send audio anywhere, Pipevoice has a fully offline path: <strong>Local Whisper for transcription plus Ollama for the optional cleanup</strong>. That combination has zero cost, needs no key, and sends nothing off your PC.</p>
+<p>Pipevoice has no account, no telemetry, and no servers of ours. The cloud engines send audio only to the provider you chose, on your key. The local path sends nothing at all. There is also an optional AI polish step (called Flow mode) that tidies filler words, punctuation, and casing. Polish sends text only, never audio, and you can run it through OpenAI, Google Gemini's free tier, OpenRouter's free community models, or local Ollama for a no-key offline option.</p>
+<p>For the full walkthrough, see <a href="/blog/offline-voice-typing-windows">offline voice typing on Windows</a> and the <a href="/windows-voice-typing">Windows voice typing</a> overview.</p>
+
+<h2>Boosting accuracy with vocabulary, accents, and speech notes</h2>
+<p>The engine is only half the story. How you configure it matters just as much, especially for technical words and non-standard speech.</p>
+<ul>
+<li><strong>Vocabulary boosting</strong>: feed in jargon, product names, and acronyms so the engine stops guessing wrong on the words you use most.</li>
+<li><strong>Accent and language picker</strong>: choose British, US, Australian, Indian, New Zealand English, and more, so the model expects how you actually sound.</li>
+<li><strong>Speech notes</strong>: a free-text field where you describe your speech, for example a non-native accent, a stutter, or heavy fillers. This helps the cleanup step interpret you correctly.</li>
+</ul>
+<p>More tactics live in <a href="/blog/speech-to-text-windows">dictation accuracy tips</a>.</p>
+
+<h2>Picking the right setup for coding, writing, or accessibility</h2>
+<p>Pipevoice supports per-app profiles, so each app can use a different engine, cleanup level, output mode, and auto-Enter setting. A few sensible starting points:</p>
+<ul>
+<li><strong>Coding and prompts</strong>: Deepgram for live feedback, vocabulary boosting for your stack's terms, auto-Enter on in chat tools so "send it" actually sends. Because it types into any app, it works inside the terminal, VS Code, Cursor, and Claude Code, not just one CLI.</li>
+<li><strong>Writing</strong>: OpenAI Whisper for accuracy, with Flow mode cleaning up punctuation and filler so your draft reads cleanly.</li>
+<li><strong>Accessibility and RSI</strong>: toggle mode (instead of push-to-talk) so you are not holding a key, plus local dictation history to recover anything you missed.</li>
+<li><strong>Privacy-first</strong>: Local Whisper plus Ollama, fully offline.</li>
+</ul>
+
+<h2>How Pipevoice compares to other options</h2>
+<p>Pipevoice's distinguishing traits are that it is free, open source, Windows-native, and lets you pick from three transcription engines. Here is how those traits stack up against other common ways to dictate on Windows. Check each vendor's site for current pricing.</p>
+<table>
+<thead>
+<tr><th>Tool</th><th>Platform</th><th>Offline?</th><th>Open source?</th><th>Engine choice?</th><th>Price</th></tr>
+</thead>
+<tbody>
+<tr><td>Pipevoice</td><td>Windows</td><td>Yes</td><td>Yes</td><td>Yes (3 engines)</td><td>Free</td></tr>
+<tr><td>Wispr Flow</td><td>Mac and Windows</td><td>No</td><td>No</td><td>No</td><td>Paid (subscription)</td></tr>
+<tr><td>Dragon Professional</td><td>Windows</td><td>Yes</td><td>No</td><td>No</td><td>Paid (one-time licence)</td></tr>
+<tr><td>Windows Voice Access</td><td>Windows</td><td>Yes</td><td>No</td><td>No</td><td>Free (built in)</td></tr>
+<tr><td>Talon Voice</td><td>Cross-platform</td><td>Yes</td><td>No</td><td>Limited</td><td>Free tier plus paid beta</td></tr>
+</tbody>
+</table>
+<p>See the head-to-head on the <a href="/vs/wispr-flow">Wispr Flow comparison</a> page, or browse <a href="/blog/free-voice-typing-software-windows">free voice typing software for Windows</a>.</p>
+
+<h2>Honest limitations</h2>
+<p>To be straight with you: Pipevoice is Windows only, not Mac or Linux. It is currently unsigned, so Windows SmartScreen shows an "unrecognised app" warning on first run. Click <strong>More info</strong>, then <strong>Run anyway</strong> (code signing is in progress). The cloud engines need your own API key, and Local Whisper is slower than the cloud and wants a decent CPU for the larger, more accurate models.</p>
+
+<h2>Get started</h2>
+<p>Pipevoice is free forever, open source, and installs in a couple of minutes. A managed-key Pro tier may arrive later, but the core stays free. <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice for Windows</a>, hold <kbd>Ctrl</kbd>+<kbd>\</kbd> (or Right <kbd>Ctrl</kbd>), and talk faster than you type. The <a href="/docs">docs</a> cover engine setup and profiles.</p>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>What is the most accurate speech-to-text engine for Windows?</summary><p>In Pipevoice&#x27;s lineup, OpenAI Whisper is the most accurate because it processes your whole clip as a batch and uses the full sentence as context. Local Whisper can approach it if you raise the model size, at the cost of speed and CPU. Deepgram is slightly behind on raw accuracy but wins on live, low-latency dictation.</p></details>
+      <details><summary>What is the difference between streaming and batch transcription?</summary><p>Streaming engines transcribe as you speak, so words appear almost immediately and firm up with more context, which feels live. Batch engines wait until you finish, then process the whole clip at once, trading a short delay for accuracy. Pipevoice uses Deepgram for streaming and Whisper (cloud or local) for batch.</p></details>
+      <details><summary>Can I run speech to text on Windows without sending audio to the cloud?</summary><p>Yes. Pipevoice&#x27;s fully offline path uses Local Whisper for transcription and local Ollama for optional cleanup. That combination needs no API key, costs nothing, and sends nothing off your PC. The optional polish step only ever sends text, never audio.</p></details>
+      <details><summary>Do I need a powerful CPU for local speech to text?</summary><p>Not for the basics. Local Whisper&#x27;s default model is about 150MB and runs on ordinary hardware. If you raise the model size for higher accuracy, it becomes slower and wants a more capable CPU, so for live dictation on a modest machine a cloud engine like Deepgram is smoother.</p></details>
+      <details><summary>Is Deepgram or Whisper better for live dictation?</summary><p>Deepgram is better for live dictation because it streams text as you speak, so you can self-correct mid-sentence and stay in flow. Whisper is batch, so you get a slightly more accurate result a beat after you release the key. Pick Deepgram for chat and prompts, Whisper for prose that must be right.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/offline-voice-typing-windows">Offline Voice Typing for Windows: 100% Private, No Cloud<span>How to dictate into any Windows app with zero internet, no API key, and nothing leaving your PC, using Local Whisper and Ollama in Pipevoice.</span></a>
+      <a href="/blog/free-voice-typing-software-windows">Free Voice Typing Software for Windows (2026): The Honest Guide<span>What &quot;free&quot; really means in voice typing, where the built-in Windows option falls short, and how to type into any app with your voice for zero cost.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>

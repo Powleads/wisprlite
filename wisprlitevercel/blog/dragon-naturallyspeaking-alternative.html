@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Modern Dragon NaturallySpeaking Alternative for Windows | Pipevoice</title>
+<meta name="description" content="Want a Dragon NaturallySpeaking alternative? Pipevoice is free, open-source Windows voice typing with Whisper accuracy, an offline path, and AI cleanup." />
+<link rel="canonical" href="https://pipevoice.app/blog/dragon-naturallyspeaking-alternative" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="A Modern Dragon NaturallySpeaking Alternative for Windows | Pipevoice" />
+<meta property="og:description" content="Want a Dragon NaturallySpeaking alternative? Pipevoice is free, open-source Windows voice typing with Whisper accuracy, an offline path, and AI cleanup." />
+<meta property="og:url" content="https://pipevoice.app/blog/dragon-naturallyspeaking-alternative" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="A Modern Dragon NaturallySpeaking Alternative for Windows | Pipevoice" />
+<meta name="twitter:description" content="Want a Dragon NaturallySpeaking alternative? Pipevoice is free, open-source Windows voice typing with Whisper accuracy, an offline path, and AI cleanup." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "A Modern Dragon NaturallySpeaking Alternative for Windows", "description": "Want a Dragon NaturallySpeaking alternative? Pipevoice is free, open-source Windows voice typing with Whisper accuracy, an offline path, and AI cleanup.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/dragon-naturallyspeaking-alternative"}, "about": "dragon naturallyspeaking alternative"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "A Modern Dragon NaturallySpeaking Alternative for Windows", "item": "https://pipevoice.app/blog/dragon-naturallyspeaking-alternative"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Dragon NaturallySpeaking discontinued?", "acceptedAnswer": {"@type": "Answer", "text": "The consumer-facing Dragon NaturallySpeaking line is largely discontinued, which is one reason casual users look for alternatives. Professional and specialist editions (such as medical and legal) still exist, but for everyday dictation many people now prefer a lighter, cheaper tool."}}, {"@type": "Question", "name": "What is the best free alternative to Dragon NaturallySpeaking?", "acceptedAnswer": {"@type": "Answer", "text": "Pipevoice is a strong free, open-source alternative for Windows 10 and 11. It gives you Whisper-grade accuracy, an optional fully offline path, AI cleanup of filler and punctuation, and types real keystrokes into any app, all without Dragon's $200 to $700 license or voice-profile training."}}, {"@type": "Question", "name": "Is Whisper as accurate as Dragon?", "acceptedAnswer": {"@type": "Answer", "text": "For general dictation, Whisper-grade transcription is very accurate, and Pipevoice lets you choose OpenAI Whisper (batch) for maximum accuracy or local Whisper for an offline option. Dragon can still have an edge in narrow specialist domains thanks to its medical and legal vocabularies and per-user trained profiles."}}, {"@type": "Question", "name": "Do I need to train Pipevoice like Dragon's voice profiles?", "acceptedAnswer": {"@type": "Answer", "text": "No. Pipevoice requires no voice-profile training. Instead of training the tool to your voice, you pick your accent in the language picker and can add a short note describing a non-native accent, a stutter, or heavy fillers so the cleanup step handles them well."}}, {"@type": "Question", "name": "Can a free tool replace Dragon for everyday dictation?", "acceptedAnswer": {"@type": "Answer", "text": "For most everyday dictation, yes. Pipevoice covers fast, accurate transcription, AI cleanup, voice commands, per-app profiles, and an offline mode at no cost. Dragon still wins if you rely on deep voice-command macros or specialist medical and legal vocabularies."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / A Modern Dragon NaturallySpeaking Alternative for Windows</p>
+  <header class="h">
+    <h1>A Modern Dragon NaturallySpeaking Alternative for Windows</h1>
+    <p class="dek">Pipevoice is a free, open-source way to get Whisper-grade dictation on Windows 10 and 11 without a $200 to $700 Dragon license or profile training.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>The best free Dragon NaturallySpeaking alternative for everyday Windows dictation is <strong>Pipevoice</strong>: a free, open-source, push-to-talk voice typing tool that delivers Whisper-grade accuracy, types real keystrokes into any app, and runs fully offline if you want it to, all without a $200 to $700 license or hours of voice-profile training.</p>
+
+<p>Dragon defined PC dictation for two decades, but its price, weight, and shrinking consumer lineup have left a lot of people looking for something lighter. This guide compares Pipevoice and Dragon honestly: where Pipevoice wins, where Dragon still earns its keep, and how to switch.</p>
+
+<h2>Why people are leaving Dragon</h2>
+<p>Three things push users away from Dragon NaturallySpeaking:</p>
+<ul>
+<li><strong>Price.</strong> Dragon licenses typically run from roughly $200 to $700 depending on the edition. That is a serious outlay for what many people use as a simple "talk instead of type" tool.</li>
+<li><strong>Weight.</strong> Dragon is a heavy install built around per-user voice profiles. It expects you to invest time training it before you get the best accuracy.</li>
+<li><strong>A discontinued consumer line.</strong> The consumer-facing Dragon products are largely discontinued, which leaves casual users wondering what to buy and whether it will keep getting updates.</li>
+</ul>
+<p>If you mostly want fast, accurate dictation into your editor, browser, terminal, or chat box, paying hundreds of dollars and training a profile starts to feel like overkill.</p>
+
+<h2>What Dragon still does well, and who genuinely needs it</h2>
+<p>Dragon is not a bad product. It is a deep one. If your work depends on the things below, Dragon (or its professional editions) may still be the right call:</p>
+<ul>
+<li><strong>Deep voice-command macros.</strong> Dragon lets power users build elaborate spoken commands and automations for hands-free control of applications.</li>
+<li><strong>Specialised vocabularies.</strong> Medical and legal editions ship with domain dictionaries tuned for clinical notes and legal documents.</li>
+<li><strong>A trained profile.</strong> Over time, a personal profile can adapt closely to a single speaker's voice and habits.</li>
+</ul>
+<p>If you dictate clinical letters all day or rely on dozens of custom voice macros, keep Dragon on your shortlist. For most other people, a lighter tool covers the job.</p>
+
+<h2>Pipevoice vs Dragon: cost, accuracy, and footprint compared</h2>
+<p>Here is a direct comparison on the things that usually decide the switch.</p>
+<table>
+<thead>
+<tr><th>&nbsp;</th><th>Pipevoice</th><th>Dragon NaturallySpeaking / Professional</th></tr>
+</thead>
+<tbody>
+<tr><td>Price</td><td>Free, open source</td><td>~$200 to $700 license</td></tr>
+<tr><td>Platform</td><td>Windows 10 / 11</td><td>Windows</td></tr>
+<tr><td>Profile training</td><td>None required</td><td>Per-user voice profile</td></tr>
+<tr><td>Accuracy engine</td><td>Your choice: Deepgram, OpenAI Whisper, or local Whisper</td><td>Dragon's own engine</td></tr>
+<tr><td>Offline option</td><td>Yes (Local Whisper + Ollama)</td><td>Runs locally</td></tr>
+<tr><td>AI cleanup of filler and punctuation</td><td>Yes (optional Flow mode)</td><td>No</td></tr>
+<tr><td>Types into any app, including terminals</td><td>Yes</td><td>Broad app support</td></tr>
+<tr><td>Bring your own API key</td><td>Yes (cloud engines)</td><td>N/A</td></tr>
+<tr><td>Deep voice-command macros</td><td>Basic commands only</td><td>Extensive</td></tr>
+<tr><td>Medical / legal vocabularies</td><td>No</td><td>Yes (specialised editions)</td></tr>
+</tbody>
+</table>
+
+<h2>Whisper-grade accuracy without the $200 to $700 license</h2>
+<p>Pipevoice does not lock you into one transcription engine. You pick the one that fits your priorities:</p>
+<ul>
+<li><strong>Deepgram (streaming).</strong> Words appear live as you speak. This is the fastest option. It needs your own free Deepgram API key and costs around pennies a day in typical use.</li>
+<li><strong>OpenAI Whisper (batch).</strong> The most accurate option. It uses your own OpenAI key and transcribes after you release the key.</li>
+<li><strong>Local Whisper / faster-whisper.</strong> Runs fully offline on your PC, free, with no API key. The first use downloads a model of about 150MB. Raise the model size for more accuracy if your CPU can handle it.</li>
+</ul>
+<p>The workflow is simple. Hold the hotkey (default <kbd>Ctrl</kbd> + <kbd>\</kbd>, or <kbd>Right Ctrl</kbd>), speak, then release. Pipevoice types real keystrokes into whatever app is focused. A second hotkey copies the result to your clipboard instead of typing, which is handy for fields that misbehave.</p>
+
+<div class="note"><strong>Fully offline path:</strong> pair Local Whisper with local Ollama for AI cleanup and you get zero cost, no API key, and nothing leaving your PC. That is a privacy posture Dragon users will appreciate, with no license fee attached.</div>
+
+<h2>AI cleanup and polish Dragon never offered</h2>
+<p>Dragon transcribes what you say. Pipevoice can also clean it up. The optional "Flow mode" removes filler words, fixes punctuation, and corrects casing before the text lands. You choose the polish provider: OpenAI, Google Gemini (free tier), OpenRouter (free community models), or local Ollama (offline, no key).</p>
+<p>Importantly, polish sends <strong>text only</strong>, never your audio. So you can run transcription on one engine and cleanup on another, and the cleanup step never sees your voice. The result is dictation that reads like edited writing rather than a raw transcript, which is something traditional Dragon dictation does not do for you.</p>
+
+<h2>Where Pipevoice is lighter: no profile training, no bloat</h2>
+<p>There is no voice profile to build. You install Pipevoice, pick an engine, and start talking. Instead of training the tool to your voice, you tell it about your voice: there is an accent and language picker (British, US, Australian, Indian, and New Zealand English, plus more) and a free-text "speech notes" field where you can describe a non-native accent, a stutter, or heavy fillers so the cleanup step handles them better.</p>
+<p>Other lightweight touches that Dragon's heft does not include by default:</p>
+<ul>
+<li><strong>Per-app profiles:</strong> use a different engine, cleanup setting, auto-Enter behaviour, or output mode per application.</li>
+<li><strong>Voice commands:</strong> "new line", "new paragraph", "tab key", "scratch that", and "send it".</li>
+<li><strong>Local dictation history</strong> stored on your machine.</li>
+<li><strong>Push-to-talk or toggle mode</strong>, type or paste output, and vocabulary boosting for jargon.</li>
+<li><strong>Silent auto-updates</strong> verified with SHA-256.</li>
+</ul>
+
+<h2>Honest gaps: macros and specialist vocabularies</h2>
+<p>Pipevoice is not a Dragon clone, and we will not pretend it is. Two areas where Dragon is genuinely stronger:</p>
+<ul>
+<li><strong>Deep voice-command macros.</strong> Pipevoice ships useful editing commands, but it does not match Dragon's extensive scriptable command system for hands-free application control.</li>
+<li><strong>Medical and legal vocabularies.</strong> Pipevoice has vocabulary boosting for jargon, but it does not include the tuned clinical or legal dictionaries that Dragon's specialist editions provide.</li>
+</ul>
+<p>A couple of practical caveats too: Pipevoice is Windows only (no Mac or Linux), and the app is currently unsigned, so Windows SmartScreen may show an "unrecognised app" warning. Click <strong>More info</strong>, then <strong>Run anyway</strong> (code signing is in progress). Cloud engines need your own API key, and Local Whisper is slower than cloud and wants a decent CPU for the larger models.</p>
+
+<h2>How to switch from Dragon to a free engine-choice workflow</h2>
+<ol>
+<li><strong>Download Pipevoice</strong> from the official release and install it on Windows 10 or 11. (<a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice-Setup.exe</a>.)</li>
+<li><strong>Pick an engine.</strong> Want offline and free with no key? Choose Local Whisper. Want the fastest live typing? Add a free Deepgram key. Want maximum accuracy? Use your OpenAI Whisper key.</li>
+<li><strong>Set your accent</strong> in the language picker, and add a line in speech notes if you have a strong accent, a stutter, or heavy fillers.</li>
+<li><strong>Turn on Flow mode</strong> if you want filler and punctuation cleanup, then choose a polish provider (Gemini's free tier or local Ollama are good no-cost starting points).</li>
+<li><strong>Hold <kbd>Ctrl</kbd> + <kbd>\</kbd>, speak, release.</strong> Your words type straight into your editor, browser, terminal, or chat box.</li>
+<li><strong>Add per-app profiles</strong> for the apps you live in, like Claude Code, Cursor, VS Code, or your terminal, so each one uses the right engine and output behaviour.</li>
+</ol>
+<p>Because Pipevoice types real keystrokes into any focused window, it works in places Dragon's app integrations or built-in Windows tools struggle with, including the terminal and AI coding assistants. For more on getting clean output, see our <a href="/blog/speech-to-text-windows">dictation accuracy tips</a>, and if you came here because of repetitive strain, read <a href="/blog/voice-typing-for-rsi">voice typing for RSI</a>.</p>
+
+<p>Comparing other options? See our roundup of the <a href="/blog/best-free-dictation-software-windows">best free dictation software for Windows</a>, our take on a <a href="/blog/wispr-flow-windows-alternative">Wispr Flow Windows alternative</a>, the <a href="/vs/wispr-flow">Pipevoice vs Wispr Flow</a> comparison, or just start at <a href="/windows-voice-typing">Windows voice typing</a>. Full setup details live in the <a href="/docs">docs</a>.</p>
+
+<p>Pipevoice is free forever, with no account and no telemetry. A managed-key Pro may arrive later, but the core stays free. If Dragon's price and weight were the only things keeping you from talking instead of typing, this is your off-ramp.</p>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>Is Dragon NaturallySpeaking discontinued?</summary><p>The consumer-facing Dragon NaturallySpeaking line is largely discontinued, which is one reason casual users look for alternatives. Professional and specialist editions (such as medical and legal) still exist, but for everyday dictation many people now prefer a lighter, cheaper tool.</p></details>
+      <details><summary>What is the best free alternative to Dragon NaturallySpeaking?</summary><p>Pipevoice is a strong free, open-source alternative for Windows 10 and 11. It gives you Whisper-grade accuracy, an optional fully offline path, AI cleanup of filler and punctuation, and types real keystrokes into any app, all without Dragon&#x27;s $200 to $700 license or voice-profile training.</p></details>
+      <details><summary>Is Whisper as accurate as Dragon?</summary><p>For general dictation, Whisper-grade transcription is very accurate, and Pipevoice lets you choose OpenAI Whisper (batch) for maximum accuracy or local Whisper for an offline option. Dragon can still have an edge in narrow specialist domains thanks to its medical and legal vocabularies and per-user trained profiles.</p></details>
+      <details><summary>Do I need to train Pipevoice like Dragon&#x27;s voice profiles?</summary><p>No. Pipevoice requires no voice-profile training. Instead of training the tool to your voice, you pick your accent in the language picker and can add a short note describing a non-native accent, a stutter, or heavy fillers so the cleanup step handles them well.</p></details>
+      <details><summary>Can a free tool replace Dragon for everyday dictation?</summary><p>For most everyday dictation, yes. Pipevoice covers fast, accurate transcription, AI cleanup, voice commands, per-app profiles, and an offline mode at no cost. Dragon still wins if you rely on deep voice-command macros or specialist medical and legal vocabularies.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/wispr-flow-windows-alternative">The Best Wispr Flow Alternative for Windows (Free &amp; Open Source)<span>Pipevoice is a free, open-source, Windows-native voice typing tool with an offline mode and your choice of transcription engine.</span></a>
+      <a href="/blog/best-free-dictation-software-windows">Best Free Dictation Software for Windows in 2026 (Tested)<span>A straight comparison of the genuinely free voice typing tools for Windows 10 and 11, including offline and open-source options.</span></a>
+      <a href="/blog/voice-typing-for-rsi">Voice Typing for RSI: Cut Keystrokes, Protect Your Wrists<span>A practical guide to using free Windows dictation software to take strain off your hands without losing your workflow.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>

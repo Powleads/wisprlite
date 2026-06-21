@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dictate Into Claude Code (and Cursor) by Voice on Windows | Pipevoice</title>
+<meta name="description" content="Dictate prompts into Claude Code, Cursor, and VS Code on Windows with Pipevoice: free, open source, push-to-talk, with an offline option." />
+<link rel="canonical" href="https://pipevoice.app/blog/dictate-into-claude-code" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Dictate Into Claude Code (and Cursor) by Voice on Windows | Pipevoice" />
+<meta property="og:description" content="Dictate prompts into Claude Code, Cursor, and VS Code on Windows with Pipevoice: free, open source, push-to-talk, with an offline option." />
+<meta property="og:url" content="https://pipevoice.app/blog/dictate-into-claude-code" />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Dictate Into Claude Code (and Cursor) by Voice on Windows | Pipevoice" />
+<meta name="twitter:description" content="Dictate prompts into Claude Code, Cursor, and VS Code on Windows with Pipevoice: free, open source, push-to-talk, with an offline option." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How to Dictate Into Claude Code (and Cursor) by Voice on Windows", "description": "Dictate prompts into Claude Code, Cursor, and VS Code on Windows with Pipevoice: free, open source, push-to-talk, with an offline option.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/dictate-into-claude-code"}, "about": "voice dictation claude code"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Dictate Into Claude Code (and Cursor) by Voice on Windows", "item": "https://pipevoice.app/blog/dictate-into-claude-code"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I dictate into the Claude Code terminal, not just the web app?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pipevoice types real keystrokes into whatever app is focused, including the Claude Code CLI running in your terminal. Hold the hotkey, speak your prompt, release, and the text appears in the terminal as if you typed it. End with \"send it\" to press Enter hands-free."}}, {"@type": "Question", "name": "How is Pipevoice different from Claude Code's built-in /voice?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code's /voice only types inside the Claude Code CLI. Pipevoice works system-wide, so the same hotkey dictates into Cursor, VS Code, browsers, and any terminal. It also lets you choose your transcription engine, run fully offline, and set per-app profiles, none of which /voice offers."}}, {"@type": "Question", "name": "Does voice dictation work inside Cursor and VS Code?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Because Pipevoice emits keystrokes into the focused app, you can click into Cursor's composer or the VS Code chat panel, hold the hotkey, and dictate. The same workflow also covers commit messages, pull request descriptions, and browser chat boxes."}}, {"@type": "Question", "name": "Can I auto-send a dictated prompt without pressing Enter?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, in two ways. Say \"send it\" at the end of your dictation to press Enter, or turn on auto-Enter in a per-app profile so every dictation in that app submits automatically. For Claude Code, auto-Enter makes the prompt loop fully hands-free."}}, {"@type": "Question", "name": "Can I dictate code prompts offline for privacy?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pair local Whisper for transcription with Ollama for the optional Flow mode polish, and nothing leaves your PC: no account, no telemetry, no cloud calls. The trade-off is that local Whisper is slower than the cloud engines and wants a decent CPU for larger, more accurate models."}}]}</script>
+<style>
+:root{
+  --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
+  --border:rgba(53,90,102,.45); --border-soft:rgba(120,130,150,.16);
+  --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.5);
+  --good:#98c379; --warn:#e5c07b;
+  --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--text);
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--border-soft)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14.5px;flex-wrap:wrap}
+.nav-links a{color:var(--muted)} .nav-links a:hover{color:var(--text);text-decoration:none}
+.crumb{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:30px 0 0}
+.crumb a{color:var(--muted)} .crumb a:hover{color:var(--accent)}
+header.h{padding:14px 0 10px}
+h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.02em;font-weight:800;line-height:1.15}
+.dek{color:var(--muted);margin-top:12px;font-size:17px;line-height:1.6}
+.meta{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+article{padding:8px 0 10px}
+article h2{font-size:25px;margin:40px 0 8px;letter-spacing:-.01em;scroll-margin-top:20px;font-weight:700}
+article h3{font-size:18px;margin:26px 0 4px;font-weight:600}
+article p{color:var(--text);opacity:.92;margin:12px 0;font-size:16.5px}
+article ul,article ol{color:var(--text);opacity:.92;margin:12px 0 12px 24px} article li{margin:7px 0}
+article a{color:var(--accent)} article strong{color:var(--text);opacity:1}
+blockquote{border-left:3px solid var(--accent-line);background:var(--accent-soft);
+  margin:18px 0;padding:12px 18px;border-radius:0 var(--r) var(--r) 0;color:var(--text)}
+code,kbd{font-family:var(--mono);font-size:13.5px;background:var(--deep);border:1px solid var(--border-soft);
+  border-radius:6px;padding:2px 7px;color:var(--text)}
+kbd{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{color:var(--text);font-weight:600;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{color:var(--text);opacity:.9}
+.note{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 18px;border-radius:var(--r);margin:18px 0}
+.note b{color:var(--text)}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 24px;margin:36px 0;text-align:center}
+.cta h3{font-size:21px;font-weight:700;margin-bottom:6px}
+.cta p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1a0c0d;font-weight:700;
+  border-radius:var(--r);padding:13px 22px}
+.btn:hover{filter:brightness(1.06);text-decoration:none}
+.fine{color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:12px}
+.faq{margin:36px 0 0}
+.faq h2{margin-bottom:6px}
+details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 18px;margin-bottom:10px;background:var(--card)}
+summary{cursor:pointer;padding:15px 0;font-weight:600;list-style:none;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"\2013"}
+details p{color:var(--muted);padding:0 0 16px;font-size:15px}
+.related{margin:42px 0 0;border-top:1px solid var(--border-soft);padding-top:26px}
+.related h2{font-size:18px;margin-bottom:12px}
+.related a{display:block;padding:10px 0;color:var(--text);border-bottom:1px solid var(--border-soft);font-size:15.5px}
+.related a:hover{color:var(--accent);text-decoration:none}
+.related a span{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+footer{border-top:1px solid var(--border-soft);margin-top:54px;padding:28px 0 44px;color:var(--muted);font-size:13.5px;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+.bloglist{margin:30px 0 0}
+.bloglist .card{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:.15s}
+.bloglist .card:hover{border-color:var(--accent-line);transform:translateY(-2px);text-decoration:none}
+.bloglist .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.bloglist h2{font-size:19px;font-weight:700;color:var(--text);margin:6px 0 4px}
+.bloglist p{color:var(--muted);font-size:14.5px}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/windows-voice-typing">Windows voice typing</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Dictate Into Claude Code (and Cursor) by Voice on Windows</p>
+  <header class="h">
+    <h1>How to Dictate Into Claude Code (and Cursor) by Voice on Windows</h1>
+    <p class="dek">Push a hotkey, speak your prompt, and let it land as real keystrokes in the Claude Code CLI, Cursor, or any terminal.</p>
+    <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
+  </header>
+  <article>
+<p>To dictate into Claude Code on Windows, install <strong>Pipevoice</strong>, a free push-to-talk voice typing tool, then hold <kbd>Ctrl</kbd>+<kbd>\</kbd>, speak your prompt, and release. Pipevoice types real keystrokes straight into the Claude Code CLI, your terminal, Cursor, or any focused app, so you are not limited to a single editor's built-in dictation.</p>
+
+<h2>Why dictating prompts beats typing them into AI coding tools</h2>
+<p>Prompts for AI coding tools are long. You are not typing <code>git status</code>, you are describing intent: "refactor this handler to stream the response, keep the existing error shape, and add a test for the empty case." That is a sentence, and sentences are faster to say than to type.</p>
+<p>Dictation also keeps you in flow. You can keep your eyes on the diff while you talk through the next instruction, instead of breaking concentration to hunt for keys. For anyone with RSI, or anyone who simply thinks out loud, speaking the prompt is less friction. And because spoken prompts tend to be more complete (you naturally add the constraints you would skip while typing), the model often needs fewer follow-up corrections.</p>
+
+<h2>Claude Code's built-in /voice vs a system-wide dictation tool</h2>
+<p>Claude Code has a <code>/voice</code> command, but it only types inside the Claude Code CLI. The moment you want to dictate into Cursor, a VS Code chat box, a browser, or a plain terminal, it cannot help you. A system-wide tool solves the whole desk, not one window.</p>
+<p>Pipevoice sits at the operating system level and types into whatever app is focused. The same hotkey works in the Claude Code terminal, in Cursor's composer, in a commit message, in a GitHub issue, and in Slack. You learn one workflow and use it everywhere.</p>
+
+<table>
+<thead>
+<tr><th>Feature</th><th>Claude Code /voice</th><th>Pipevoice</th></tr>
+</thead>
+<tbody>
+<tr><td>Works in Claude Code CLI</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Works in Cursor / VS Code / browser / any app</td><td>No</td><td>Yes</td></tr>
+<tr><td>Choose your transcription engine</td><td>No</td><td>Yes (Deepgram, OpenAI Whisper, local Whisper)</td></tr>
+<tr><td>Offline option</td><td>No</td><td>Yes (local Whisper + Ollama)</td></tr>
+<tr><td>Per-app profiles</td><td>No</td><td>Yes</td></tr>
+<tr><td>Cost</td><td>Bundled</td><td>Free, open source</td></tr>
+</tbody>
+</table>
+
+<h2>Setting up Pipevoice to type into the Claude Code CLI and terminal</h2>
+<p>Getting running takes a couple of minutes.</p>
+<ol>
+<li>Download the installer: <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Pipevoice-Setup.exe</a>.</li>
+<li>Run it. Pipevoice is currently unsigned, so Windows SmartScreen may show an "unrecognised app" warning. Click <strong>More info</strong>, then <strong>Run anyway</strong>. (Code signing is in progress.)</li>
+<li>Pick a transcription engine. For fast streaming where words appear live as you speak, choose <strong>Deepgram</strong> (bring your own free API key, roughly pennies a day). For maximum accuracy, choose <strong>OpenAI Whisper</strong> with your OpenAI key. For zero cost and full offline use, choose <strong>local Whisper / faster-whisper</strong> (first run downloads a roughly 150MB model).</li>
+<li>Open your terminal with Claude Code running, hold <kbd>Ctrl</kbd>+<kbd>\</kbd> (or <kbd>Right Ctrl</kbd>), speak your prompt, and release. The text types into the CLI as if you had typed it.</li>
+</ol>
+<div class="note">If you would rather not type directly, a second hotkey copies the transcription to your clipboard instead, so you can paste it wherever you want.</div>
+
+<h2>Dictating into Cursor, VS Code, and any chat box with one hotkey</h2>
+<p>Because Pipevoice emits real keystrokes into the focused app, the same hotkey works everywhere. Click into Cursor's composer and dictate a multi-line instruction. Click into the VS Code chat panel and describe the change. Click into a browser chat box and ask a question. There is nothing app-specific to configure for the basics: focus the field, hold the key, talk.</p>
+<p>This is the core advantage over editor-locked dictation. One muscle memory covers <code>git commit</code> messages, pull request descriptions, Jira tickets, and your AI prompts alike.</p>
+
+<h2>Using "send it" and auto-Enter to fire prompts hands-free</h2>
+<p>Pipevoice understands voice commands inside your speech: say <strong>"new line"</strong>, <strong>"new paragraph"</strong>, <strong>"tab key"</strong>, or <strong>"scratch that"</strong> to fix a slip. To fire a prompt without touching the keyboard, end with <strong>"send it"</strong>, which presses Enter for you.</p>
+<p>If you want every dictation in a given app to submit automatically, turn on auto-Enter for that app in a per-app profile (covered next). That makes the Claude Code loop fully hands-free: hold the key, say the prompt, release, and it sends.</p>
+
+<h2>Per-app profiles: different engine and cleanup for your editor vs terminal</h2>
+<p>Your terminal and your editor want different behaviour, and Pipevoice lets you set that per app. A <strong>per-app profile</strong> can change the transcription engine, the AI cleanup, whether auto-Enter is on, and whether output is typed or pasted.</p>
+<p>A practical setup looks like this:</p>
+<ul>
+<li><strong>Claude Code terminal:</strong> auto-Enter on, so prompts submit the moment you finish.</li>
+<li><strong>Cursor / VS Code composer:</strong> auto-Enter off, so you can review and edit a long instruction before sending.</li>
+<li><strong>Code-heavy contexts:</strong> use vocabulary boosting so jargon and library names transcribe correctly.</li>
+</ul>
+<p>For more on this, see <a href="/blog/voice-coding-windows">per-app dictation profiles</a> and <a href="/blog/dictate-into-terminal-windows">dictating into the terminal on Windows</a>.</p>
+
+<h2>Keeping prompts clean with Flow mode polish</h2>
+<p>Spoken prompts come with filler words and missing punctuation. Pipevoice's optional <strong>Flow mode</strong> cleans filler, fixes punctuation, and corrects casing before the text lands. You choose the polish provider: OpenAI, Google Gemini (free tier), OpenRouter (free community models), or local <strong>Ollama</strong> for offline cleanup. Importantly, polish sends <strong>text only, never audio</strong>.</p>
+<p>For non-native speakers, there is an accent and language picker (British, US, Australian, Indian, and New Zealand English, and more) plus a free-text "speech notes" field where you can describe your accent, a stutter, or heavy fillers so the cleanup handles them better.</p>
+
+<h2>Offline option: dictate prompts with nothing leaving your machine</h2>
+<p>If your code is sensitive, you can run the whole pipeline locally. Pair <strong>local Whisper</strong> for transcription with <strong>Ollama</strong> for Flow mode polish, and nothing leaves your PC: no account, no telemetry, no servers of ours. The trade-off is honest: local Whisper is slower than the cloud engines and wants a decent CPU for the larger, more accurate models.</p>
+<p>If you do use a cloud engine instead, audio goes only to the provider you chose, on your own key. Either way there is no Pipevoice account to create.</p>
+
+<h2>How Pipevoice compares to other voice tools</h2>
+<p>Most dictation tools fall into one of a few camps: paid cloud apps, expensive desktop suites, the built-in Windows option, or power-user scripting tools. Pipevoice stakes out a specific corner of that map.</p>
+<table>
+<thead>
+<tr><th>Attribute</th><th>Pipevoice</th></tr>
+</thead>
+<tbody>
+<tr><td>Platform</td><td>Windows 10/11 (not Mac or Linux)</td></tr>
+<tr><td>Price</td><td>Free, open source</td></tr>
+<tr><td>Offline path</td><td>Yes (local Whisper + Ollama)</td></tr>
+<tr><td>Bring your own engine and key</td><td>Yes (Deepgram, OpenAI Whisper, local Whisper)</td></tr>
+<tr><td>Types into any app, including the terminal and Claude Code</td><td>Yes</td></tr>
+<tr><td>Account required</td><td>No</td></tr>
+</tbody>
+</table>
+<p>The wedge is simple: Pipevoice is free, open source, Windows-native, has a true offline path, lets you bring your own engine and key, and types into <strong>any</strong> app including the terminal and Claude Code. See the full <a href="/vs/wispr-flow">comparison with Wispr Flow</a> or read about <a href="/blog/voice-coding-windows">voice coding on Windows</a>.</p>
+
+<div class="note"><strong>Ready to try it?</strong> Download <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Pipevoice for Windows</a>, hold <kbd>Ctrl</kbd>+<kbd>\</kbd>, and talk your next prompt straight into Claude Code. It is free forever. Browse the <a href="/docs">docs</a> or the <a href="/windows-voice-typing">Windows voice typing</a> overview to go deeper.</div>
+  </article>
+  <div class="cta">
+    <h3>Try Pipevoice free</h3>
+    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
+    <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
+  </div>
+  <section class="faq">
+    <h2>FAQ</h2>
+      <details><summary>Can I dictate into the Claude Code terminal, not just the web app?</summary><p>Yes. Pipevoice types real keystrokes into whatever app is focused, including the Claude Code CLI running in your terminal. Hold the hotkey, speak your prompt, release, and the text appears in the terminal as if you typed it. End with &quot;send it&quot; to press Enter hands-free.</p></details>
+      <details><summary>How is Pipevoice different from Claude Code&#x27;s built-in /voice?</summary><p>Claude Code&#x27;s /voice only types inside the Claude Code CLI. Pipevoice works system-wide, so the same hotkey dictates into Cursor, VS Code, browsers, and any terminal. It also lets you choose your transcription engine, run fully offline, and set per-app profiles, none of which /voice offers.</p></details>
+      <details><summary>Does voice dictation work inside Cursor and VS Code?</summary><p>Yes. Because Pipevoice emits keystrokes into the focused app, you can click into Cursor&#x27;s composer or the VS Code chat panel, hold the hotkey, and dictate. The same workflow also covers commit messages, pull request descriptions, and browser chat boxes.</p></details>
+      <details><summary>Can I auto-send a dictated prompt without pressing Enter?</summary><p>Yes, in two ways. Say &quot;send it&quot; at the end of your dictation to press Enter, or turn on auto-Enter in a per-app profile so every dictation in that app submits automatically. For Claude Code, auto-Enter makes the prompt loop fully hands-free.</p></details>
+      <details><summary>Can I dictate code prompts offline for privacy?</summary><p>Yes. Pair local Whisper for transcription with Ollama for the optional Flow mode polish, and nothing leaves your PC: no account, no telemetry, no cloud calls. The trade-off is that local Whisper is slower than the cloud engines and wants a decent CPU for larger, more accurate models.</p></details>
+  </section>
+  <section class="related">
+    <h2>Keep reading</h2>
+      <a href="/blog/voice-coding-windows">Voice Coding on Windows: Dictate Prompts and Commands<span>How developers code by voice on Windows in 2026, from prompt dictation to terminal commands, without paying for a subscription.</span></a>
+      <a href="/blog/wispr-flow-windows-alternative">The Best Wispr Flow Alternative for Windows (Free &amp; Open Source)<span>Pipevoice is a free, open-source, Windows-native voice typing tool with an offline mode and your choice of transcription engine.</span></a>
+      <a href="/blog/dictate-into-terminal-windows">Dictate Into the Terminal on Windows: Voice-Type the CLI<span>Why most dictation tools choke inside PowerShell and Windows Terminal, and how to set up Pipevoice to type real keystrokes (and run commands) by voice.</span></a>
+  </section>
+  <footer>
+    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
+  </footer>
+</div>
+</body>
+</html>
