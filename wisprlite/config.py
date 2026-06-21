@@ -83,6 +83,7 @@ class Config:
     deepgram_finish_timeout: float = 6.0  # seconds to wait for Deepgram's final words
     paste_speed: str = "normal"       # fast | normal | slow — clipboard-paste timing
     last_version: str = ""            # app version last run, to detect a fresh update
+    profiles: list = field(default_factory=list)  # per-app behaviour overrides
 
     @classmethod
     def load(cls) -> "Config":

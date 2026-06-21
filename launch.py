@@ -11,6 +11,8 @@ elif "--history" in sys.argv:
     from wisprlite.history import main
 elif "--about" in sys.argv:
     from wisprlite.about import main
+elif "--profiles" in sys.argv:
+    from wisprlite.profiles import main
 else:
     from wisprlite.app import main
 
