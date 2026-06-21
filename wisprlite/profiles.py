@@ -63,6 +63,9 @@ def main() -> None:
 
     cfg = config.Config.load()
     cards = []
+    from . import foreground
+    running = foreground.list_windows()
+    app_values = [w["exe"] + ("  —  " + w["title"][:34] if w.get("title") else "") for w in running]
 
     root = tk.Tk()
     root.title("Pipevoice app profiles")
@@ -101,7 +104,7 @@ def main() -> None:
     head.pack(fill="x")
     tk.Label(head, text="App profiles", bg=BG, fg=ACCENT, font=("Segoe UI", 16, "bold")).pack(anchor="w")
     tk.Label(head, text="Give an app its own behaviour. Terminal: raw + Enter. Chat: polished + auto-send.\n"
-                        "Editor: no AI cleanup. Matched by the app's exe name (Task Manager, Details tab).",
+                        "Editor: no AI cleanup. Pick a running app from the dropdown, or type its exe name.",
              bg=BG, fg=MUTED, font=("Segoe UI", 9), justify="left").pack(anchor="w", pady=(5, 0))
 
     footer = tk.Frame(root, bg=BG, padx=22, pady=12)
@@ -129,10 +132,9 @@ def main() -> None:
 
         r1 = tk.Frame(c, bg=CARD)
         r1.pack(fill="x")
-        tk.Label(r1, text="App (exe):", bg=CARD, fg=FG, font=("Segoe UI", 9)).pack(side="left")
+        tk.Label(r1, text="App:", bg=CARD, fg=FG, font=("Segoe UI", 9)).pack(side="left")
         exe_var = tk.StringVar(value=exe)
-        ttk.Entry(r1, textvariable=exe_var, width=22).pack(side="left", padx=(8, 0))
-        tk.Label(r1, text="e.g. code.exe", bg=CARD, fg=MUTED, font=("Segoe UI", 8)).pack(side="left", padx=(8, 0))
+        ttk.Combobox(r1, textvariable=exe_var, values=app_values, width=34).pack(side="left", padx=(8, 0))
         ttk.Button(r1, text="Remove", command=lambda: (c.destroy(), card in cards and cards.remove(card))).pack(side="right")
 
         r2 = tk.Frame(c, bg=CARD)
@@ -166,7 +168,7 @@ def main() -> None:
     def save():
         out = []
         for card in cards:
-            exe = card["exe"].get().strip().lower()
+            exe = card["exe"].get().split("—")[0].strip().lower()
             if not exe:
                 continue
             ov = {

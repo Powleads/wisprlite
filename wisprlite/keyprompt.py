@@ -153,6 +153,8 @@ def _dialog(cfg) -> None:
                          padx=16, pady=7, font=("Segoe UI", 9, "bold"))
     save_btn.pack(side="right")
     entry.bind("<Return>", save)
+    # Closing via the window's X is also a dismissal: remember it like "Skip".
+    root.protocol("WM_DELETE_WINDOW", skip)
 
     root.update_idletasks()
     w, h = root.winfo_width(), root.winfo_height()

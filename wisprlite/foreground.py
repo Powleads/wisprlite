@@ -57,6 +57,44 @@ def detect() -> dict:
         return {}
 
 
+def list_windows() -> list:
+    """Visible top-level windows for an app picker: [{'exe','title'}], deduped by
+    exe and sorted. Returns [] off Windows (the picker still allows typing)."""
+    import os
+
+    fake = os.getenv("PV_FAKE_WINDOWS")  # test seam for headless rendering
+    if fake:
+        return [{"exe": e.strip(), "title": e.strip().split(".")[0].title()}
+                for e in fake.split(",") if e.strip()]
+    found = {}
+    try:
+        u = ctypes.windll.user32
+
+        @ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+        def _cb(hwnd, lparam):
+            try:
+                if not u.IsWindowVisible(hwnd):
+                    return True
+                n = u.GetWindowTextLengthW(hwnd)
+                if n == 0:
+                    return True  # skip title-less windows (usually not real apps)
+                tbuf = ctypes.create_unicode_buffer(n + 1)
+                u.GetWindowTextW(hwnd, tbuf, n + 1)
+                pid = wintypes.DWORD()
+                u.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+                exe = _exe_for_pid(pid.value)
+                if exe and exe != "explorer.exe" and exe not in found:
+                    found[exe] = tbuf.value or ""
+            except Exception:
+                pass
+            return True
+
+        u.EnumWindows(_cb, 0)
+    except Exception:
+        return []
+    return [{"exe": e, "title": t} for e, t in sorted(found.items())]
+
+
 def is_no_text_target(ctx: dict) -> bool:
     """True only when we POSITIVELY know there is no text target (desktop / shell /
     nothing). Returns False when unknown, so we never wrongly divert a real app's
