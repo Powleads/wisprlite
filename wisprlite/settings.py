@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import threading
 
-from . import about, autostart, cleanup, config, winui
+from . import about, autostart, cleanup, config, history, winui
 
 ENGINES = [("deepgram", "Deepgram — fastest, live"),
            ("openai", "OpenAI Whisper — accurate, slight wait"),
@@ -253,9 +253,11 @@ def main(first_run: bool = False) -> None:
     body_wrap.pack(side="top", fill="both", expand=True)
 
     tab_settings = tk.Frame(body_wrap, bg=BG)
+    tab_history = tk.Frame(body_wrap, bg=BG)
     tab_guide = tk.Frame(body_wrap, bg=BG)
     tab_about = tk.Frame(body_wrap, bg=BG)
-    _tabs = [("Settings", tab_settings), ("Guide", tab_guide), ("About", tab_about)]
+    _tabs = [("Settings", tab_settings), ("History", tab_history),
+             ("Guide", tab_guide), ("About", tab_about)]
     _tab_w = {}
 
     def _show_tab(name):
@@ -288,6 +290,7 @@ def main(first_run: bool = False) -> None:
     _canvas.create_window((0, 0), window=frm, anchor="nw")
     frm.bind("<Configure>", lambda e: _canvas.configure(scrollregion=_canvas.bbox("all")))
     _wheel(_canvas)
+    history.build(tab_history, root, _wheel)
     _build_guide(tab_guide, _wheel)
     about.build(tab_about, root, _wheel)
     _show_tab("Settings")
