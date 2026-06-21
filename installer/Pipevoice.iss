@@ -4,7 +4,7 @@
 ; Produces installer\Output\Pipevoice-Setup.exe — a per-user install (no admin).
 
 #define AppName "Pipevoice"
-#define AppVersion "2.24.0"
+#define AppVersion "2.25.0"
 #define AppExe "Pipevoice.exe"
 
 [Setup]
@@ -21,6 +21,8 @@ OutputBaseFilename={#AppName}-Setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+WizardImageFile=wizard-image.bmp
+WizardSmallImageFile=wizard-small.bmp
 CloseApplications=yes
 RestartApplications=yes
 SetupIconFile=..\assets\wisprlite.ico

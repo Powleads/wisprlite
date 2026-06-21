@@ -72,7 +72,8 @@ def build(container, root, wheel=None) -> None:
 
     head = tk.Frame(container, bg=BG, padx=28, pady=24)
     head.pack(fill="x")
-    tk.Label(head, text="Pipevoice", bg=BG, fg=ACCENT, font=("Segoe UI", 21, "bold")).pack(anchor="w")
+    from . import branding
+    branding.lockup_label(head, BG).pack(anchor="w")
     tk.Label(head, text=f"Version {__version__}", bg=BG, fg=MUTED,
              font=("Consolas", 10)).pack(anchor="w", pady=(3, 16))
 

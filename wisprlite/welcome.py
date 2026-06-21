@@ -53,8 +53,8 @@ def show_welcome() -> bool:
     wrap.pack()
 
     # --- header ---
-    tk.Label(wrap, text="Pipevoice", bg=BG, fg=ACCENT,
-             font=("Segoe UI", 23, "bold")).pack(anchor="w")
+    from . import branding
+    branding.lockup_label(wrap, BG).pack(anchor="w", pady=(0, 6))
     tk.Label(wrap, text="Talk faster than you type.", bg=BG, fg=FG,
              font=("Segoe UI", 13)).pack(anchor="w", pady=(2, 0))
     tk.Label(wrap, text="Push-to-talk voice typing for Windows — your words land in any app.",

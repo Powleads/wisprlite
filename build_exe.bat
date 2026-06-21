@@ -8,6 +8,7 @@ if not exist "assets\wisprlite.ico" python assets\make_icon.py
 pyinstaller --noconfirm --clean --noconsole --onedir --noupx --name Pipevoice ^
     --icon assets\wisprlite.ico ^
     --add-data "assets\wisprlite.ico;assets" ^
+    --add-data "assets\pipevoice-lockup.png;assets" ^
     --collect-all deepgram ^
     --collect-all faster_whisper ^
     --collect-all ctranslate2 ^
