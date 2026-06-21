@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wispr Flow alternative for Windows, free and private | Pipevoice</title>
+<meta name="description" content="The free, open-source, Windows-native alternative to Wispr Flow. Push-to-talk voice typing into any app, 3 transcription engines plus 4 AI-polish providers, free Gemini, and a 100% offline option. No subscription, no telemetry." />
+<link rel="canonical" href="https://pipevoice.app/vs/wispr-flow" />
+<meta name="robots" content="index,follow" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pipevoice.app/vs/wispr-flow" />
+<meta property="og:title" content="Wispr Flow alternative for Windows, free and private | Pipevoice" />
+<meta property="og:description" content="The free, open-source, Windows-native alternative to Wispr Flow. Push-to-talk voice typing into any app, 3 transcription engines plus 4 AI-polish providers, free Gemini, and a 100% offline option. No subscription, no telemetry." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Wispr Flow alternative for Windows, free and private | Pipevoice" />
+<meta name="twitter:description" content="The free, open-source, Windows-native alternative to Wispr Flow. Push-to-talk voice typing into any app, 3 transcription engines plus 4 AI-polish providers, free Gemini, and a 100% offline option. No subscription, no telemetry." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b1e24'/%3E%3Crect x='26' y='15' width='12' height='23' rx='6' fill='%23e06c75'/%3E%3Cpath d='M21 32a11 11 0 0 0 22 0' stroke='%23e06c75' stroke-width='3' fill='none'/%3E%3Cline x1='32' y1='43' x2='32' y2='50' stroke='%23e06c75' stroke-width='3'/%3E%3Cline x1='24' y1='50' x2='40' y2='50' stroke='%23e06c75' stroke-width='3'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --canvas:#282c34; --deep:#131313; --card:#1b1e24; --popover:#20242c;
+    --border:rgba(53,90,102,.55); --border-soft:rgba(53,90,102,.28);
+    --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.55);
+    --glow:0 0 22px rgba(224,108,117,.32);
+    --good:#98c379; --warn:#e5c07b;
+    --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+    --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{background:var(--canvas);color:var(--text);
+    font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  /* ambient glow behind hero */
+  .aura{position:absolute;top:-160px;left:50%;transform:translateX(-50%);
+    width:900px;height:560px;pointer-events:none;z-index:0;
+    background:radial-gradient(closest-side,rgba(224,108,117,.16),transparent 70%)}
+  @media(max-width:640px){.aura{width:100%;left:0;transform:none}}
+
+  /* nav */
+  nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:20px 0;
+    border-bottom:1px solid var(--border-soft)}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.01em}
+  .logo svg{width:30px;height:30px}
+  .nav-links{display:flex;gap:26px;align-items:center;color:var(--muted);font-size:14.5px}
+  .nav-links a:hover{color:var(--text)}
+  .nav-links .gh{color:var(--text)}
+  @media(max-width:640px){.nav-links a:not(.gh){display:none}}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;border-radius:var(--r);
+    font-weight:600;cursor:pointer;transition:.15s;border:1px solid transparent;font-size:15px}
+  .btn-primary{background:var(--accent);color:#1a0c0d;padding:13px 24px;box-shadow:var(--glow)}
+  .btn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .btn-ghost{border-color:var(--border);color:var(--text);padding:13px 22px}
+  .btn-ghost:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+  .btn-sm{padding:9px 16px;font-size:14px}
+
+  /* hero */
+  .hero{position:relative;z-index:1;padding:74px 0 26px;text-align:center}
+  .kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);
+    color:var(--muted);border-radius:999px;padding:6px 14px;font-size:13px;margin-bottom:26px}
+  .kicker .d{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good)}
+  h1{font-size:clamp(42px,7vw,72px);line-height:1.02;letter-spacing:-.03em;font-weight:800}
+  h1 .c{color:var(--accent)}
+  .sub{color:var(--muted);font-size:clamp(17px,2.3vw,20px);max-width:620px;margin:22px auto 34px}
+  .sub b{color:var(--text);font-weight:600}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .fine{color:var(--muted);font-size:13px;margin-top:15px;font-family:var(--mono)}
+
+  /* faux terminal */
+  .stage{position:relative;z-index:1;margin:54px auto 0;max-width:760px}
+  .win{background:var(--deep);border:1px solid var(--border);border-radius:var(--r);
+    box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;text-align:left}
+  .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--border-soft)}
+  .bar i{width:11px;height:11px;border-radius:50%;display:block}
+  .bar .t{margin-left:10px;color:var(--muted);font-size:12.5px;font-family:var(--mono)}
+  .body{padding:22px 20px;font-family:var(--mono);font-size:14.5px;line-height:1.7}
+  .body .p{color:var(--good)}
+  .body .dim{color:var(--muted)}
+  .cur{display:inline-block;width:8px;height:17px;background:var(--accent);vertical-align:-3px;margin-left:3px;animation:bk 1.05s steps(1) infinite}
+  @keyframes bk{50%{opacity:0}}
+  .pill{display:inline-flex;align-items:center;gap:10px;margin:18px auto 0;
+    background:var(--card);border:1px solid var(--accent-line);border-radius:999px;
+    padding:8px 15px;font-size:13.5px;font-family:var(--mono);box-shadow:var(--glow)}
+  .pill .lv{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:ps 1.2s infinite}
+  @keyframes ps{0%,100%{opacity:1}50%{opacity:.3}}
+  .meter{letter-spacing:1px;color:var(--accent)}
+
+  /* pillars strip */
+  .strip{padding:34px 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);margin-top:56px}
+  .pillars{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .pillars .p{display:flex;align-items:center;gap:9px;color:var(--text);font-size:14.5px}
+  .pillars .p svg{width:17px;height:17px;color:var(--good);flex:none}
+  .pillars .sep{color:var(--border);align-self:center}
+  @media(max-width:640px){.pillars .sep{display:none}}
+
+  /* sections */
+  section{position:relative;z-index:1;padding:70px 0}
+  .eyebrow{color:var(--accent);font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;text-align:center}
+  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;text-align:center;font-weight:800;margin-top:10px}
+  .lead{color:var(--muted);text-align:center;max-width:580px;margin:14px auto 0;font-size:16px}
+
+  /* comparison */
+  .cmp-wrap{margin-top:44px;overflow-x:auto;border:1px solid var(--border-soft);border-radius:14px}
+  table.cmp{width:100%;border-collapse:collapse;min-width:560px;font-size:14.5px}
+  table.cmp th,table.cmp td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--border-soft)}
+  table.cmp thead th{font-weight:700;color:var(--text);font-size:14px}
+  table.cmp thead th.us{color:var(--accent)}
+  table.cmp tbody th{font-weight:500;color:var(--muted);white-space:nowrap}
+  table.cmp td{color:var(--muted)}
+  table.cmp td.us{color:var(--text);background:var(--accent-soft);font-weight:600}
+  table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+  .yes{color:var(--good);font-weight:700}
+  .no{color:var(--muted)}
+  .cmp-note{text-align:center;color:var(--muted);font-size:12.5px;margin-top:14px;font-family:var(--mono)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px}
+  @media(max-width:780px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r);padding:24px;transition:.15s}
+  .card:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+  .card .h{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+  .card .h svg{width:18px;height:18px;flex:none}
+  .card h3{font-size:16.5px;font-weight:600}
+  .card p{color:var(--muted);font-size:14.5px}
+
+  /* spotlight (AI coding) */
+  .spot{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:42px 32px;margin-top:18px;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}
+  @media(max-width:820px){.spot{grid-template-columns:1fr;padding:32px 24px}}
+  .spot.rev{grid-template-columns:.9fr 1.1fr}
+  @media(max-width:820px){.spot.rev{grid-template-columns:1fr}}
+  .spot h2{text-align:left;margin-top:6px}
+  .spot .eyebrow{text-align:left}
+  .spot p{color:var(--muted);margin-top:14px;font-size:15.5px}
+  .spot .mini{background:var(--deep);border:1px solid var(--border-soft);border-radius:var(--r);overflow:hidden}
+  .spot .mini .bar{padding:9px 12px}
+  .spot .mini .body{font-size:13px;padding:16px}
+  .spot .ok{color:var(--good)} .spot .ar{color:var(--accent)}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px}
+  @media(max-width:780px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r);padding:24px}
+  .step .n{font-family:var(--mono);font-size:13px;color:var(--accent);border:1px solid var(--accent-line);
+    width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .step h3{font-size:16px;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:14.5px}
+
+  /* email capture */
+  .signup{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:40px 28px;text-align:center;margin-top:20px}
+  .signup h2{font-size:clamp(24px,3.4vw,32px)}
+  .signup form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .signup input,.signup select{background:var(--deep);border:1px solid var(--border);border-radius:var(--r);
+    color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit}
+  .signup input[type=email]{width:280px;max-width:80vw}
+  .signup select{cursor:pointer}
+  .signup input:focus,.signup select:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}
+  .signup .ok{margin-top:22px;color:var(--good);font-family:var(--mono);font-size:15px}
+  .signup .err{margin-top:14px;color:var(--accent);font-size:14px;min-height:1px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .signup .fine{margin-top:14px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+  .faq{max-width:760px;margin:42px auto 0}
+  details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 20px;margin-bottom:10px;background:var(--card)}
+  summary{cursor:pointer;padding:16px 0;font-weight:600;list-style:none;font-size:15.5px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+  details[open] summary::after{content:"\2013"}
+  details p{color:var(--muted);padding:0 0 18px;font-size:14.5px}
+  details a{color:var(--accent)}
+
+  /* footer */
+  footer{border-top:1px solid var(--border-soft);margin-top:10px;padding:34px 0 40px;color:var(--muted);font-size:13.5px;font-family:var(--mono)}
+  .foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer a:hover{color:var(--accent)}
+  .made{margin-top:20px;padding-top:18px;border-top:1px solid var(--border-soft);
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted)}
+  .made a{color:var(--text)} .made a:hover{color:var(--accent)}
+  .made .se{color:var(--accent)}
+
+  /* download capture modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;
+    padding:20px;z-index:60}
+  .modal.show{display:flex}
+  .modal .box{background:var(--card);border:1px solid var(--border);border-radius:16px;max-width:440px;width:100%;
+    padding:32px 28px;text-align:center;box-shadow:0 30px 90px rgba(0,0,0,.65);position:relative}
+  .modal .x{position:absolute;top:12px;right:14px;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;background:none;border:none}
+  .modal .x:hover{color:var(--text)}
+  .modal .dl-dot{display:inline-flex;align-items:center;gap:8px;color:var(--good);font-family:var(--mono);font-size:13px;margin-bottom:14px}
+  .modal .dl-dot span{width:8px;height:8px;border-radius:50%;background:var(--good);animation:ps 1.2s infinite}
+  .modal h3{font-size:21px;letter-spacing:-.01em}
+  .modal p{color:var(--muted);font-size:14.5px;margin-top:8px}
+  .modal form{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .modal input,.modal select{background:var(--deep);border:1px solid var(--border);border-radius:var(--r);
+    color:var(--text);padding:12px 14px;font-size:15px;font-family:inherit;width:100%}
+  .modal input:focus,.modal select:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}
+  .modal .skip{margin-top:12px;color:var(--muted);font-size:13px;cursor:pointer;background:none;border:none;font-family:var(--mono)}
+  .modal .skip:hover{color:var(--text)}
+  .modal .ok{color:var(--good);font-family:var(--mono);font-size:15px;margin-top:8px}
+  .modal .err{color:var(--accent);font-size:13.5px;min-height:1px}
+
+  /* connectors / your-stack section */
+
+  /* connectors centerpiece: privacy ladder */
+  #stack .spot{align-items:start}
+  .ladder{display:flex;flex-direction:column;gap:0}
+  .rung{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--border-soft)}
+  .rung:last-child{border-bottom:none}
+  .rung b{display:block;font-size:15.5px;letter-spacing:-.01em;color:var(--text)}
+  .rung .rs{display:block;color:var(--muted);font-size:14px;margin-top:3px;line-height:1.5}
+  .rung .dot{flex:none;width:11px;height:11px;border-radius:50%;margin-top:6px;position:relative}
+  .rung .dot::before{content:"";position:absolute;left:50%;top:18px;transform:translateX(-50%);width:1px;height:30px;background:var(--border-soft)}
+  .rung:last-child .dot::before{display:none}
+  .rung .dot.cloud{background:var(--warn);box-shadow:0 0 9px rgba(229,192,123,.45)}
+  .rung .dot.free{background:var(--good);box-shadow:0 0 9px rgba(152,195,121,.45)}
+  .rung .dot.offline{background:var(--accent);box-shadow:var(--glow)}
+
+  /* connectors centerpiece: named roster */
+  .roster{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:34px}
+  @media(max-width:780px){.roster{grid-template-columns:1fr;gap:26px}}
+  .rhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding-bottom:12px;margin-bottom:8px;border-bottom:1px solid var(--border-soft)}
+  .rlabel{font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+  .rsub{color:var(--muted);font-size:13px}
+  .rrow{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:13px 0;border-bottom:1px solid var(--border-soft)}
+  .rcol .rrow:last-child{border-bottom:none}
+  .rname{font-weight:600;font-size:15px;letter-spacing:-.01em;color:var(--text);min-width:128px}
+  .rdesc{color:var(--muted);font-size:13.5px;flex:1 1 140px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;width:100%;margin-top:6px}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--border-soft);line-height:1.3;white-space:nowrap}
+  .chip.good{color:var(--good);border-color:rgba(152,195,121,.4);background:rgba(152,195,121,.08)}
+  .chip.warn{color:var(--warn);border-color:rgba(229,192,123,.4);background:rgba(229,192,123,.08)}
+  .chip.muted{color:var(--muted);background:rgba(154,161,173,.07)}
+
+  /* content rewrite */
+/* none needed: new cards reuse .card/.h/h3/p; new FAQ entries reuse details/summary. The .grid is repeat(3,1fr) and collapses to 1fr under 780px, so 8 cards (2 full rows + 2) stay mobile-safe. */
+</style>
+<script type="application/ld+json">[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Pipevoice","operatingSystem":"Windows 10, Windows 11","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free, open-source push-to-talk voice typing for Windows.","downloadUrl":"https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe","url":"https://pipevoice.app/"},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is there a Wispr Flow for Windows?","acceptedAnswer":{"@type":"Answer","text":"Wispr Flow is Mac-first. Pipevoice is the Windows-native alternative: push-to-talk voice typing that types into any app, free and open source, with an option to run fully offline so your voice never leaves your PC."}},{"@type":"Question","name":"Is Pipevoice really free?","acceptedAnswer":{"@type":"Answer","text":"Yes, free forever. Run the fully offline path (local Whisper plus Ollama) at zero cost, polish for free with Google Gemini, or bring your own OpenAI or Deepgram key and pay the provider directly, cents a day. There is no Pipevoice subscription."}},{"@type":"Question","name":"Can I keep my voice private?","acceptedAnswer":{"@type":"Answer","text":"Yes. Pick the local engine and nothing leaves your machine. Cloud engines send audio only to the provider you chose, using your own key. Pipevoice has no servers and no telemetry, and the source is public so you can verify it."}},{"@type":"Question","name":"Does it have AI cleanup like Wispr Flow?","acceptedAnswer":{"@type":"Answer","text":"Yes. Optional Flow mode tidies filler words, punctuation and casing using OpenAI, free Google Gemini, OpenRouter, or a local Ollama model. You can also dictate voice commands like new line and send it."}}]}]</script>
+</head>
+<body>
+<div class="aura"></div>
+<div class="wrap">
+
+  <nav>
+    <a class="logo" href="/">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#1b1e24" stroke="rgba(53,90,102,.55)"/>
+        <rect x="26" y="15" width="12" height="23" rx="6" fill="#e06c75"/>
+        <path d="M21 32a11 11 0 0 0 22 0" stroke="#e06c75" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <line x1="32" y1="43" x2="32" y2="50" stroke="#e06c75" stroke-width="3" stroke-linecap="round"/>
+        <line x1="24" y1="50" x2="40" y2="50" stroke="#e06c75" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      Pipevoice
+    </a>
+    <div class="nav-links">
+      <a href="/#why">Why</a>
+      <a href="/#features">Features</a>
+      <a href="/#how">Setup</a>
+      <a class="gh" href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <span class="kicker"><span class="d"></span> Windows 10 &amp; 11 · free forever · open source</span>
+    <h1>The free, private<br /><span class="c">Wispr Flow</span> alternative<br />for Windows.</h1>
+    <p class="sub">Wispr Flow is slick, but it is Mac-first, cloud-only, and up to $144 a year. Pipevoice is
+      Windows-native, runs <b>100% offline</b> if you want, types into <b>any</b> app, and is <b>free forever</b>, open source.</p>
+    <div class="cta">
+      <a class="btn btn-primary" data-download href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+      <a class="btn btn-ghost" href="/">See all features</a>
+    </div>
+    <p class="fine">free · open source · bring your own key, or run fully offline</p>
+  </header>
+
+  <section id="compare">
+    <p class="eyebrow">Side by side</p>
+    <h2>Pipevoice vs Wispr Flow</h2>
+    <p class="lead">An honest comparison from public pricing and reviews, 2026.</p>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th scope="col"></th><th scope="col" class="us">Pipevoice</th><th scope="col">Wispr&nbsp;Flow</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Price</th><td class="us">Free forever</td><td>$15/mo&nbsp;·&nbsp;$144/yr</td></tr>
+          <tr><th scope="row">Platform</th><td class="us"><span class="yes">Windows-native</span></td><td>Mac-first</td></tr>
+          <tr><th scope="row">Your voice</th><td class="us">Stays on your PC (offline option)</td><td>Uploaded to the cloud</td></tr>
+          <tr><th scope="row">Works fully offline</th><td class="us"><span class="yes">Yes</span> · local Whisper + Ollama</td><td><span class="no">No</span></td></tr>
+          <tr><th scope="row">Transcription engines</th><td class="us">3 (Deepgram, OpenAI, local)</td><td>Cloud only</td></tr>
+          <tr><th scope="row">AI polish providers</th><td class="us">4 (incl. free Gemini, local Ollama)</td><td>Built-in</td></tr>
+          <tr><th scope="row">Voice commands</th><td class="us"><span class="yes">Yes</span></td><td>Yes</td></tr>
+          <tr><th scope="row">Types into any app</th><td class="us"><span class="yes">Yes</span></td><td>Yes</td></tr>
+          <tr><th scope="row">Account required</th><td class="us"><span class="yes">No</span></td><td>Yes</td></tr>
+          <tr><th scope="row">Open source</th><td class="us"><span class="yes">Yes</span></td><td><span class="no">No</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cmp-note">Bring your own key (cents a day) or run fully offline, free.</p>
+  </section>
+
+  <section>
+    <div class="spot">
+      <div>
+        <p class="eyebrow">The honest take</p>
+        <h2>When to pick each.</h2>
+        <p><b>Pick Wispr Flow</b> if you are on a Mac, want a paid product with a support team, and are comfortable with your audio going to the cloud.</p>
+        <p><b>Pick Pipevoice</b> if you are on Windows, want it free, care about privacy or need a fully offline option, and like that it is open source so you can read every line.</p>
+      </div>
+      <div class="mini">
+        <div class="bar"><i style="background:#e06c75;width:9px;height:9px;border-radius:50%"></i><i style="background:#e5c07b;width:9px;height:9px;border-radius:50%"></i><i style="background:#98c379;width:9px;height:9px;border-radius:50%"></i><span class="t">offline mode · airplane on</span></div>
+        <div class="body mono">
+          <span class="dim">transcribe</span>&nbsp;&nbsp;<span class="ok">Local Whisper</span> <span class="dim">· no key</span><br/>
+          <span class="dim">polish</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="ok">Ollama</span> <span class="dim">· llama3.2</span><br/><br/>
+          <span class="ar">⏻</span> <span class="dim">network calls this session:</span> <span class="ok">0</span><span class="cur"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Good to know</p>
+    <h2>Questions</h2>
+    <div class="faq">
+      <details><summary>Is there a Wispr Flow for Windows?</summary>
+        <p>Wispr Flow is Mac-first. Pipevoice is the Windows-native alternative: push-to-talk voice typing that types into any app, free and open source, with an option to run fully offline so your voice never leaves your PC.</p></details>
+      <details><summary>Is Pipevoice really free?</summary>
+        <p>Yes, free forever. Run the fully offline path (local Whisper plus Ollama) at zero cost, polish for free with Google Gemini, or bring your own OpenAI or Deepgram key and pay the provider directly, cents a day. There is no Pipevoice subscription.</p></details>
+      <details><summary>Can I keep my voice private?</summary>
+        <p>Yes. Pick the local engine and nothing leaves your machine. Cloud engines send audio only to the provider you chose, using your own key. Pipevoice has no servers and no telemetry, and the source is public so you can verify it.</p></details>
+      <details><summary>Does it have AI cleanup like Wispr Flow?</summary>
+        <p>Yes. Optional Flow mode tidies filler words, punctuation and casing using OpenAI, free Google Gemini, OpenRouter, or a local Ollama model. You can also dictate voice commands like new line and send it.</p></details>
+    </div>
+  </section>
+  <div class="signup" style="background:transparent;border:none;padding:54px 0 20px;text-align:center">
+    <h2>Talk faster than you type, for free.</h2>
+    <div class="cta" style="margin-top:24px;justify-content:center;display:flex">
+      <a class="btn btn-primary" data-download href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    </div>
+    <p class="fine">free · open source · Windows 10 &amp; 11</p>
+  </div>
+
+  <footer>
+    <div class="foot-row">
+      <span>Pipevoice: free, private voice typing for Windows.</span>
+      <span><a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy">Privacy</a> &nbsp;·&nbsp; <a href="https://github.com/Powleads/PipeVoice">github.com/Powleads/PipeVoice ↗</a></span>
+    </div>
+    <div class="made">
+      Built by the team behind <a class="se" href="https://engine.signalsprint.io">SignalEngine</a>, agentic AI outbound for founders &amp; agencies.
+      <a href="https://engine.signalsprint.io">Take a look ↗</a>
+    </div>
+  </footer>
+
+</div>
+<script>/* first-party, cookieless pageview beacon -> /api/track (disclosed in /privacy) */
+(function(){try{var q=new URLSearchParams(location.search),b={p:location.pathname,r:document.referrer};["utm_source","utm_medium","utm_campaign"].forEach(function(k){var v=q.get(k);if(v)b[k]=v;});fetch("/api/track",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});}catch(e){}})();
+</script>
+</body>
+</html>
