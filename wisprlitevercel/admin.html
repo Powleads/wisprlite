@@ -33,7 +33,7 @@
     color:var(--text);padding:13px 15px;font-size:15px;font-family:var(--mono)}
   input:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}
   .btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--r);font-weight:600;cursor:pointer;
-    border:1px solid transparent;font-size:14.5px;font-family:inherit;padding:12px 20px;margin-top:14px}
+    border:1px solid transparent;background:transparent;color:var(--text);font-size:14.5px;font-family:inherit;padding:12px 20px;margin-top:14px}
   .btn-primary{background:var(--accent);color:#1a0c0d;box-shadow:var(--glow);width:100%;justify-content:center}
   .btn-primary:hover{filter:brightness(1.06)}
   .btn-ghost{border-color:var(--border);color:var(--text);padding:8px 14px;font-size:13px;margin:0}
@@ -49,7 +49,8 @@
 
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
   @media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}}
-  .kpi{background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:20px}
+  .kpi{background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:20px;transition:border-color .15s}
+  .kpi:hover{border-color:var(--border)}
   .kpi .lab{color:var(--muted);font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
   .kpi .num{font-size:34px;font-weight:800;letter-spacing:-.03em;margin-top:8px;line-height:1}
   .kpi .sub{color:var(--muted);font-size:12.5px;margin-top:6px}
@@ -67,12 +68,14 @@
     background:rgba(152,195,121,.08);border-radius:999px;padding:1px 7px;margin-left:8px;text-transform:uppercase;letter-spacing:.04em}
 
   /* bar chart */
-  .chart{display:flex;align-items:flex-end;gap:8px;height:140px;margin-top:6px}
-  .chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}
-  .chart .bar{width:100%;max-width:46px;background:var(--accent-soft);border:1px solid var(--accent-line);
-    border-radius:6px 6px 0 0;min-height:3px;position:relative}
-  .chart .bar .v{position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:11px;font-family:var(--mono);color:var(--text)}
-  .chart .d{font-size:10.5px;color:var(--muted);font-family:var(--mono)}
+  .chart{display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:24px}
+  .chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+  .chart .bar{width:100%;max-width:56px;background:linear-gradient(180deg,rgba(224,108,117,.42),rgba(224,108,117,.10));
+    border:1px solid var(--accent-line);border-radius:7px 7px 0 0;min-height:4px;position:relative;transition:filter .15s}
+  .chart .col:hover .bar{filter:brightness(1.25)}
+  .chart .bar .v{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:11.5px;font-family:var(--mono);color:var(--text)}
+  .chart .d{font-size:10.5px;color:var(--muted);font-family:var(--mono);text-align:center;line-height:1.55}
+  .chart .d .u{display:block;color:var(--accent);opacity:.75;font-size:9px}
   .note{color:var(--muted);font-size:12.5px;font-family:var(--mono);background:var(--popover);
     border:1px solid var(--border-soft);border-radius:var(--r);padding:12px 14px}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -161,8 +164,9 @@
     var days = vis.last7 || [];
     var max = Math.max(1, Math.max.apply(null, days.map(function(d){return d.views;})));
     var bars = days.map(function(d){
-      var h = Math.round((d.views/max)*100);
-      return '<div class="col"><div class="bar" style="height:'+h+'%"><span class="v">'+(d.views||0)+'</span></div><span class="d">'+dayLabel(d.date)+'</span></div>';
+      var h = Math.max(4, Math.round((d.views/max)*88));
+      return '<div class="col"><div class="bar" style="height:'+h+'%"><span class="v">'+(d.views||0)+'</span></div>'+
+        '<span class="d">'+dayLabel(d.date)+'<span class="u">'+num(d.uniques||0)+' uniq</span></span></div>';
     }).join("");
 
     var paths = (vis.topPaths||[]).map(function(p){
