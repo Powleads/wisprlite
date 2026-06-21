@@ -193,11 +193,15 @@ def download_and_run(info: dict) -> bool:
                 pass
             return False
     # Let the installer (not us) close + replace + relaunch the running exe.
+    # FORCECLOSEAPPLICATIONS is essential: the tray app and any open settings
+    # window don't answer Windows' Restart Manager (Tk/pystray ignore the close
+    # request), so without forcing, the install can't unlock python311.dll /
+    # Pipevoice.exe and stalls. Forcing closes them; RESTARTAPPLICATIONS relaunches.
     try:
         flags = getattr(subprocess, "DETACHED_PROCESS", 0) | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
         subprocess.Popen(
             [dest, "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART",
-             "/CLOSEAPPLICATIONS", "/RESTARTAPPLICATIONS"],
+             "/CLOSEAPPLICATIONS", "/FORCECLOSEAPPLICATIONS", "/RESTARTAPPLICATIONS"],
             creationflags=flags,
             close_fds=True,
         )
