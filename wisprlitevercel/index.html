@@ -642,5 +642,8 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
   })();
 </script>
+<script>/* first-party, cookieless pageview beacon -> /api/track (disclosed in /privacy) */
+(function(){try{fetch("/api/track",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({p:location.pathname,r:document.referrer})});}catch(e){}})();
+</script>
 </body>
 </html>

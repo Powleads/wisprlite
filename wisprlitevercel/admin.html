@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pipevoice — Admin</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b1e24'/%3E%3Crect x='26' y='15' width='12' height='23' rx='6' fill='%23e06c75'/%3E%3Cpath d='M21 32a11 11 0 0 0 22 0' stroke='%23e06c75' stroke-width='3' fill='none'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --canvas:#282c34; --deep:#131313; --card:#1b1e24; --popover:#20242c;
+    --border:rgba(53,90,102,.55); --border-soft:rgba(53,90,102,.28);
+    --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.55);
+    --glow:0 0 22px rgba(224,108,117,.32); --good:#98c379; --warn:#e5c07b;
+    --text:#e6e8eb; --muted:#9aa1ad; --r:10px; --mono:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--canvas);color:var(--text);font-family:"Geist",system-ui,"Segoe UI",sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:980px;margin:0 auto;padding:30px 22px 60px}
+  .mono{font-family:var(--mono)}
+
+  /* login */
+  .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .gate .box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:34px 30px;max-width:380px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+  .gate h1{font-size:22px;letter-spacing:-.02em} .gate h1 .c{color:var(--accent)}
+  .gate p{color:var(--muted);font-size:13.5px;margin:8px 0 18px}
+  input[type=password]{width:100%;background:var(--deep);border:1px solid var(--border);border-radius:var(--r);
+    color:var(--text);padding:13px 15px;font-size:15px;font-family:var(--mono)}
+  input:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--r);font-weight:600;cursor:pointer;
+    border:1px solid transparent;font-size:14.5px;font-family:inherit;padding:12px 20px;margin-top:14px}
+  .btn-primary{background:var(--accent);color:#1a0c0d;box-shadow:var(--glow);width:100%;justify-content:center}
+  .btn-primary:hover{filter:brightness(1.06)}
+  .btn-ghost{border-color:var(--border);color:var(--text);padding:8px 14px;font-size:13px;margin:0}
+  .btn-ghost:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+  .err{color:var(--accent);font-size:13px;margin-top:12px;min-height:1px}
+
+  /* dashboard */
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    padding-bottom:18px;border-bottom:1px solid var(--border-soft);margin-bottom:24px}
+  header.top h1{font-size:20px;letter-spacing:-.02em} header.top h1 .c{color:var(--accent)}
+  header.top .meta{color:var(--muted);font-size:12px;font-family:var(--mono)}
+  .toolbar{display:flex;gap:8px;align-items:center}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+  @media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:20px}
+  .kpi .lab{color:var(--muted);font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
+  .kpi .num{font-size:34px;font-weight:800;letter-spacing:-.03em;margin-top:8px;line-height:1}
+  .kpi .sub{color:var(--muted);font-size:12.5px;margin-top:6px}
+  .kpi.accent .num{color:var(--accent)}
+
+  .panel{background:var(--card);border:1px solid var(--border-soft);border-radius:14px;padding:22px;margin-top:14px}
+  .panel h2{font-size:15px;letter-spacing:-.01em;margin-bottom:4px}
+  .panel .h2sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;font-family:var(--mono)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border-soft)}
+  th{color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  td.n{text-align:right;font-family:var(--mono)} tr:last-child td{border-bottom:none}
+  .tag{font-family:var(--mono);color:var(--text)}
+  .badge{font-family:var(--mono);font-size:10.5px;color:var(--good);border:1px solid rgba(152,195,121,.4);
+    background:rgba(152,195,121,.08);border-radius:999px;padding:1px 7px;margin-left:8px;text-transform:uppercase;letter-spacing:.04em}
+
+  /* bar chart */
+  .chart{display:flex;align-items:flex-end;gap:8px;height:140px;margin-top:6px}
+  .chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}
+  .chart .bar{width:100%;max-width:46px;background:var(--accent-soft);border:1px solid var(--accent-line);
+    border-radius:6px 6px 0 0;min-height:3px;position:relative}
+  .chart .bar .v{position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:11px;font-family:var(--mono);color:var(--text)}
+  .chart .d{font-size:10.5px;color:var(--muted);font-family:var(--mono)}
+  .note{color:var(--muted);font-size:12.5px;font-family:var(--mono);background:var(--popover);
+    border:1px solid var(--border-soft);border-radius:var(--r);padding:12px 14px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+  .pe{color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="gate" class="gate">
+  <div class="box">
+    <h1>Pipe<span class="c">voice</span> admin</h1>
+    <p>Enter the admin password.</p>
+    <form id="login">
+      <input id="token" type="password" placeholder="admin password" autocomplete="current-password" autofocus />
+      <button class="btn btn-primary" type="submit">Open dashboard</button>
+      <p class="err" id="loginErr"></p>
+    </form>
+  </div>
+</div>
+
+<div id="app" class="wrap" style="display:none">
+  <header class="top">
+    <h1>Pipe<span class="c">voice</span> admin</h1>
+    <div class="toolbar">
+      <span class="meta" id="genAt"></span>
+      <button class="btn btn-ghost" id="refresh">Refresh</button>
+      <button class="btn btn-ghost" id="logout">Log out</button>
+    </div>
+  </header>
+  <div id="content"></div>
+</div>
+
+<script>
+(function () {
+  var KEY = "pv_admin_token";
+  var gate = document.getElementById("gate");
+  var app = document.getElementById("app");
+  var content = document.getElementById("content");
+
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+  function num(n){ return (n == null ? "—" : Number(n).toLocaleString()); }
+  function fmtDate(s){ try { return new Date(s).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); } catch(e){ return s; } }
+  function dayLabel(s){ try { return new Date(s+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"}); } catch(e){ return s; } }
+
+  async function load(token) {
+    var r = await fetch("/api/admin", { headers: { "x-admin-token": token } });
+    if (r.status === 401) throw new Error("Wrong password.");
+    if (r.status === 503) throw new Error("ADMIN_TOKEN is not set in Vercel env yet.");
+    if (!r.ok) throw new Error("Server error (" + r.status + ").");
+    return r.json();
+  }
+
+  function kpiRow(d) {
+    var subs = d.subscribers || {}, vis = d.visitors || {}, dl = d.downloads || {};
+    return '<div class="kpis">' +
+      kpi("Total downloads", dl.error ? "—" : num(dl.total), dl.latest ? ("latest " + esc(dl.latest)) : "GitHub Releases", true) +
+      kpi("Subscribers", subs.configured === false ? "—" : (subs.error ? "—" : num(subs.total)), subs.icp != null ? (num(subs.icp) + " in ICP segment") : "Resend list", false) +
+      kpi("Unique visitors", vis.configured ? num(vis.uniqueAll) : "—", vis.configured ? "all time (cookieless)" : "not configured", false) +
+      kpi("Page views", vis.configured ? num(vis.totalViews) : "—", vis.configured ? "all time" : "add Upstash keys", false) +
+      '</div>';
+  }
+  function kpi(lab, n, sub, accent){
+    return '<div class="kpi'+(accent?" accent":"")+'"><div class="lab">'+esc(lab)+'</div>'+
+      '<div class="num">'+n+'</div><div class="sub">'+esc(sub)+'</div></div>';
+  }
+
+  function downloadsPanel(dl){
+    if (dl.error) return panel("Downloads", "GitHub Releases", '<div class="note">Could not load: '+esc(dl.error)+'</div>');
+    var rows = (dl.byVersion||[]).map(function(v){
+      return '<tr><td class="tag">'+esc(v.tag)+(v.latest?'<span class="badge">latest</span>':'')+'</td>'+
+        '<td>'+(v.publishedAt?fmtDate(v.publishedAt):"—")+'</td>'+
+        '<td class="n">'+num(v.downloads)+'</td></tr>';
+    }).join("");
+    if (!rows) rows = '<tr><td colspan="3" class="note" style="border:none">No releases yet.</td></tr>';
+    return panel("Downloads by version", "installer downloads from GitHub Releases",
+      '<table><thead><tr><th>Version</th><th>Released</th><th class="n">Downloads</th></tr></thead><tbody>'+rows+'</tbody></table>');
+  }
+
+  function visitorsPanel(vis){
+    if (vis.configured === false)
+      return panel("Visitors", "first-party, cookieless",
+        '<div class="note">Visitor analytics is off. Create a free Upstash Redis database and add <span class="pe">UPSTASH_REDIS_REST_URL</span> and <span class="pe">UPSTASH_REDIS_REST_TOKEN</span> to the Vercel project, then redeploy.</div>');
+    if (vis.error) return panel("Visitors", "first-party, cookieless", '<div class="note">Could not load: '+esc(vis.error)+'</div>');
+
+    var days = vis.last7 || [];
+    var max = Math.max(1, Math.max.apply(null, days.map(function(d){return d.views;})));
+    var bars = days.map(function(d){
+      var h = Math.round((d.views/max)*100);
+      return '<div class="col"><div class="bar" style="height:'+h+'%"><span class="v">'+(d.views||0)+'</span></div><span class="d">'+dayLabel(d.date)+'</span></div>';
+    }).join("");
+
+    var paths = (vis.topPaths||[]).map(function(p){
+      return '<tr><td class="tag">'+esc(p.path)+'</td><td class="n">'+num(p.views)+'</td></tr>'; }).join("")
+      || '<tr><td colspan="2" class="note" style="border:none">No views yet.</td></tr>';
+    var refs = (vis.topRefs||[]).map(function(p){
+      return '<tr><td class="tag">'+esc(p.host)+'</td><td class="n">'+num(p.views)+'</td></tr>'; }).join("")
+      || '<tr><td colspan="2" class="note" style="border:none">No external referrers yet.</td></tr>';
+
+    return panel("Page views — last 7 days", "views per day · cookieless, no IP stored",
+      '<div class="chart">'+bars+'</div>' +
+      '<div class="two" style="margin-top:22px">' +
+        '<div><h2 style="font-size:13px;margin-bottom:10px">Top pages</h2><table><tbody>'+paths+'</tbody></table></div>' +
+        '<div><h2 style="font-size:13px;margin-bottom:10px">Top referrers</h2><table><tbody>'+refs+'</tbody></table></div>' +
+      '</div>');
+  }
+
+  function subscribersPanel(subs){
+    if (subs.configured === false)
+      return panel("Subscribers", "Resend", '<div class="note">Resend env not set (RESEND_API_KEY / RESEND_AUDIENCE_ID).</div>');
+    if (subs.error) return panel("Subscribers", "Resend", '<div class="note">Could not load: '+esc(subs.error)+'</div>');
+    return panel("Subscribers", "Resend mailing list",
+      '<table><tbody>' +
+      '<tr><td>Total list</td><td class="n">'+num(subs.total)+'</td></tr>' +
+      (subs.icp!=null ? '<tr><td>Founder / agency / sales (ICP)</td><td class="n">'+num(subs.icp)+'</td></tr>' : '') +
+      '</tbody></table>');
+  }
+
+  function panel(title, sub, inner){
+    return '<div class="panel"><h2>'+esc(title)+'</h2><div class="h2sub">'+esc(sub)+'</div>'+inner+'</div>';
+  }
+
+  function render(d){
+    document.getElementById("genAt").textContent = d.generatedAt ? ("updated " + new Date(d.generatedAt).toLocaleString()) : "";
+    content.innerHTML = kpiRow(d) + downloadsPanel(d.downloads||{}) + visitorsPanel(d.visitors||{}) + subscribersPanel(d.subscribers||{});
+  }
+
+  async function show(token){
+    try{
+      var d = await load(token);
+      sessionStorage.setItem(KEY, token);
+      gate.style.display = "none";
+      app.style.display = "block";
+      render(d);
+    }catch(e){
+      sessionStorage.removeItem(KEY);
+      gate.style.display = "flex";
+      app.style.display = "none";
+      document.getElementById("loginErr").textContent = e.message || "Failed to load.";
+    }
+  }
+
+  document.getElementById("login").addEventListener("submit", function(e){
+    e.preventDefault();
+    document.getElementById("loginErr").textContent = "";
+    var t = document.getElementById("token").value.trim();
+    if (t) show(t);
+  });
+  document.getElementById("refresh").addEventListener("click", function(){
+    var t = sessionStorage.getItem(KEY); if (t) show(t);
+  });
+  document.getElementById("logout").addEventListener("click", function(){
+    sessionStorage.removeItem(KEY); location.reload();
+  });
+
+  var saved = sessionStorage.getItem(KEY);
+  if (saved) show(saved);
+})();
+</script>
+</body>
+</html>

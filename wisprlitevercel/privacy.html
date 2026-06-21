@@ -89,7 +89,7 @@
 
   <main class="legal">
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: 20 June 2026</p>
+    <p class="updated">Last updated: 21 June 2026</p>
     <p class="intro">Pipevoice is a free, open-source, push-to-talk voice-typing app for Windows. This policy explains exactly what happens to your data when you use the app and the website at pipevoice.app. The short version: Pipevoice is local-first, the desktop app talks to no server of ours, and we receive none of your data from the app.</p>
 
     <div class="tldr">
@@ -98,7 +98,7 @@
         <li>Your microphone audio and transcribed text are kept <strong>in memory only</strong>, for one utterance at a time, and are never written to disk by the app.</li>
         <li>If you choose a cloud transcription or AI cleanup engine, your audio or text goes to <strong>the provider you picked, using your own API key</strong>. It does not pass through any server we control.</li>
         <li>If you use the fully local engines (Local Whisper, Ollama), <strong>nothing leaves your PC at all</strong>.</li>
-        <li>The website is different: if you submit your email there, it reaches our email provider (Resend) through a serverless function we operate, and the site loads fonts from Google's CDN. Details below.</li>
+        <li>The website is different: if you submit your email there, it reaches our email provider (Resend) through a serverless function we operate, the site loads fonts from Google's CDN, and we keep simple cookieless, aggregate visitor counts (no IP address stored). Details below.</li>
         <li>We never sell your data. There are no ads.</li>
       </ul>
     </div>
@@ -208,10 +208,12 @@
     <ul>
       <li>The site and its signup function are hosted on <strong>Vercel</strong>.</li>
       <li>The website links out to <strong>GitHub</strong> (source code and the app download) and to <strong>SignalEngine</strong> (a footer link). These are plain links and downloads. We do not send your data to them.</li>
+      <li>Aggregate, anonymous visitor counts are stored in <strong>Upstash</strong> (a hosted Redis service). No personal data and no IP addresses are stored there.</li>
     </ul>
 
-    <h3>Cookies and tracking on the website</h3>
-    <p>The website sets no cookies and uses no localStorage, sessionStorage, or IndexedDB. There are no analytics, no tag managers, no tracking pixels, and no third-party tracker scripts. The only outside services the site uses are Google Fonts (for fonts) and Resend (for the optional email signup), both named above.</p>
+    <h3>Analytics and cookies on the website</h3>
+    <p>The website sets no cookies and uses no localStorage, sessionStorage, or IndexedDB. We use no third-party analytics, no tag managers, no tracking pixels, and no third-party tracker scripts.</p>
+    <p>We do keep simple, first-party, aggregate analytics so we can see how many people visit. When a page loads, your browser sends the path you viewed and the referring website to our own <code>/api/track</code> endpoint. To estimate how many distinct people visit without identifying anyone, we take a one-way hash that mixes your IP address, browser user-agent, and the current date with a secret, and feed only that hash into an aggregate counter (a HyperLogLog). That counter stores no identifiers and cannot be reversed. Your IP address itself is never stored, and because the hash includes the date it changes every day, so it cannot be used to follow you over time or across days. These aggregate counts are held in our own Redis datastore (Upstash). We collect no names and nothing that identifies you.</p>
 
     <h2>Your Rights and How to Delete Your Data</h2>
     <ul>
@@ -244,5 +246,8 @@
     </div>
   </footer>
 </div>
+<script>/* first-party, cookieless pageview beacon -> /api/track (disclosed below) */
+(function(){try{fetch("/api/track",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({p:location.pathname,r:document.referrer})});}catch(e){}})();
+</script>
 </body>
 </html>
