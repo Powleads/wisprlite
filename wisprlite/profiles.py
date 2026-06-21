@@ -65,6 +65,21 @@ def _value_for(label, table):
     return {l: k for k, l in table}.get(label, table[0][0])
 
 
+def _searchable(combo, all_values):
+    """Type-to-filter a combobox: narrows the dropdown to matches as you type."""
+    def on_key(event):
+        if event.keysym in ("Up", "Down", "Return", "Escape", "Tab", "Left", "Right",
+                             "Shift_L", "Shift_R", "Control_L", "Control_R"):
+            return
+        typed = combo.get().strip().lower()
+        if not typed:
+            combo["values"] = all_values
+        else:
+            matches = [v for v in all_values if typed in v.lower()]
+            combo["values"] = matches or all_values
+    combo.bind("<KeyRelease>", on_key)
+
+
 def main() -> None:
     try:
         import tkinter as tk
@@ -121,7 +136,7 @@ def main() -> None:
     head.pack(fill="x")
     tk.Label(head, text="App profiles", bg=BG, fg=ACCENT, font=("Segoe UI", 16, "bold")).pack(anchor="w")
     tk.Label(head, text="Give an app its own behaviour. Terminal: raw + Enter. Chat: polished + auto-send.\n"
-                        "Editor: no AI cleanup. Pick from the dropdown (running + common apps), or type any exe name.",
+                        "Editor: no AI cleanup. Start typing in the App box to search, or type any exe name.",
              bg=BG, fg=MUTED, font=("Segoe UI", 9), justify="left").pack(anchor="w", pady=(5, 0))
 
     footer = tk.Frame(root, bg=BG, padx=22, pady=12)
@@ -129,7 +144,7 @@ def main() -> None:
 
     bodyf = tk.Frame(root, bg=BG)
     bodyf.pack(fill="both", expand=True)
-    canvas = tk.Canvas(bodyf, bg=BG, highlightthickness=0, width=560, height=350)
+    canvas = tk.Canvas(bodyf, bg=BG, highlightthickness=0, width=640, height=360)
     vbar = ttk.Scrollbar(bodyf, orient="vertical", command=canvas.yview)
     canvas.configure(yscrollcommand=vbar.set)
     vbar.pack(side="right", fill="y")
@@ -143,34 +158,45 @@ def main() -> None:
 
     def add_card(exe="", overrides=None):
         overrides = overrides or {}
-        c = tk.Frame(holder, bg=CARD, padx=14, pady=12)
-        c.pack(fill="x", padx=16, pady=6)
+        wrap = tk.Frame(holder, bg=BG)
+        wrap.pack(fill="x", padx=18, pady=(0, 12))
+        c = tk.Frame(wrap, bg=CARD)
+        c.pack(fill="x")
+        inner = tk.Frame(c, bg=CARD, padx=18, pady=16)
+        inner.pack(fill="x")
         card = {}
 
-        r1 = tk.Frame(c, bg=CARD)
-        r1.pack(fill="x")
-        tk.Label(r1, text="App:", bg=CARD, fg=FG, font=("Segoe UI", 9)).pack(side="left")
+        tk.Label(inner, text="APP", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
+        pick = tk.Frame(inner, bg=CARD)
+        pick.pack(fill="x", pady=(5, 0))
         exe_var = tk.StringVar(value=exe)
-        ttk.Combobox(r1, textvariable=exe_var, values=app_values, width=34).pack(side="left", padx=(8, 0))
-        ttk.Button(r1, text="Remove", command=lambda: (c.destroy(), card in cards and cards.remove(card))).pack(side="right")
+        cb = ttk.Combobox(pick, textvariable=exe_var, values=app_values, width=40)
+        cb.pack(side="left")
+        _searchable(cb, app_values)
+        ttk.Button(pick, text="Remove",
+                   command=lambda: (wrap.destroy(), card in cards and cards.remove(card))).pack(side="right")
 
-        r2 = tk.Frame(c, bg=CARD)
-        r2.pack(fill="x", pady=(9, 0))
-        tk.Label(r2, text="Engine", bg=CARD, fg=MUTED, font=("Segoe UI", 9)).pack(side="left")
+        ctl = tk.Frame(inner, bg=CARD)
+        ctl.pack(fill="x", pady=(16, 0))
+        eng_col = tk.Frame(ctl, bg=CARD)
+        eng_col.pack(side="left", padx=(0, 26))
+        tk.Label(eng_col, text="ENGINE", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
         engine_var = tk.StringVar(value=dict(P_ENGINES).get(overrides.get("engine", ""), P_ENGINES[0][1]))
-        ttk.Combobox(r2, textvariable=engine_var, values=[l for _, l in P_ENGINES],
-                     state="readonly", width=13).pack(side="left", padx=(6, 18))
-        tk.Label(r2, text="Output", bg=CARD, fg=MUTED, font=("Segoe UI", 9)).pack(side="left")
+        ttk.Combobox(eng_col, textvariable=engine_var, values=[l for _, l in P_ENGINES],
+                     state="readonly", width=14).pack(anchor="w", pady=(5, 0))
+        out_col = tk.Frame(ctl, bg=CARD)
+        out_col.pack(side="left")
+        tk.Label(out_col, text="OUTPUT", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
         output_var = tk.StringVar(value=dict(P_OUTPUTS).get(overrides.get("output_mode", cfg.output_mode), P_OUTPUTS[0][1]))
-        ttk.Combobox(r2, textvariable=output_var, values=[l for _, l in P_OUTPUTS],
-                     state="readonly", width=11).pack(side="left", padx=(6, 0))
+        ttk.Combobox(out_col, textvariable=output_var, values=[l for _, l in P_OUTPUTS],
+                     state="readonly", width=12).pack(anchor="w", pady=(5, 0))
 
-        r3 = tk.Frame(c, bg=CARD)
-        r3.pack(fill="x", pady=(9, 0))
+        chk = tk.Frame(inner, bg=CARD)
+        chk.pack(fill="x", pady=(16, 0))
         cleanup_var = tk.BooleanVar(value=bool(overrides.get("ai_cleanup", cfg.ai_cleanup)))
         autoenter_var = tk.BooleanVar(value=bool(overrides.get("auto_enter", cfg.auto_enter)))
-        ttk.Checkbutton(r3, text="AI cleanup", variable=cleanup_var).pack(side="left")
-        ttk.Checkbutton(r3, text="Auto-Enter", variable=autoenter_var).pack(side="left", padx=(18, 0))
+        ttk.Checkbutton(chk, text="AI cleanup", variable=cleanup_var).pack(side="left")
+        ttk.Checkbutton(chk, text="Auto-Enter", variable=autoenter_var).pack(side="left", padx=(22, 0))
 
         card.update(exe=exe_var, engine=engine_var, output=output_var,
                     cleanup=cleanup_var, autoenter=autoenter_var)
@@ -209,10 +235,10 @@ def main() -> None:
     ttk.Button(footer, text="Cancel", command=root.destroy).pack(side="right", padx=(0, 8))
 
     root.update_idletasks()
-    w = max(620, root.winfo_reqwidth())
-    h = min(640, max(420, root.winfo_reqheight()))
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
-    root.geometry(f"{w}x{h}+{(sw - w) // 2}+{(sh - h) // 3}")
+    w = max(700, root.winfo_reqwidth())
+    h = min(max(460, root.winfo_reqheight() + 16), sh - 150)
+    root.geometry(f"{w}x{h}+{max(0, (sw - w) // 2)}+{max(16, (sh - h) // 5)}")
     winui.dark_titlebar(root)
     root.mainloop()
 

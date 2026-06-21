@@ -17,6 +17,14 @@ _SHELL_CLASSES = {
     "Windows.UI.Core.CoreWindow", "MultitaskingViewFrame", "XamlExplorerHostIslandWindow",
 }
 
+# system/background processes that shouldn't appear in the app picker
+_NOISE_EXES = {
+    "explorer.exe", "textinputhost.exe", "applicationframehost.exe", "searchhost.exe",
+    "searchapp.exe", "startmenuexperiencehost.exe", "shellexperiencehost.exe",
+    "systemsettings.exe", "lockapp.exe", "widgets.exe", "widgetboard.exe",
+    "dwm.exe", "sihost.exe", "pipevoice.exe", "python.exe", "pythonw.exe",
+}
+
 
 def _exe_for_pid(pid: int) -> str:
     try:
@@ -83,7 +91,7 @@ def list_windows() -> list:
                 pid = wintypes.DWORD()
                 u.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
                 exe = _exe_for_pid(pid.value)
-                if exe and exe != "explorer.exe" and exe not in found:
+                if exe and exe not in _NOISE_EXES and exe not in found:
                     found[exe] = tbuf.value or ""
             except Exception:
                 pass
