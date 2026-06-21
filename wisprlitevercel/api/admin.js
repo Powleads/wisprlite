@@ -101,6 +101,9 @@ async function getVisitors() {
     ["PFCOUNT", "uv:all"],
     ["HGETALL", "pv:paths"],
     ["HGETALL", "pv:refs"],
+    ["HGETALL", "utm:source"],
+    ["HGETALL", "utm:medium"],
+    ["HGETALL", "utm:campaign"],
   ];
   for (const d of days) {
     cmds.push(["GET", `pv:day:${d}`]);
@@ -119,15 +122,18 @@ async function getVisitors() {
   const uniqueAll = Number(val(1) || 0);
   const topPaths = pairs(val(2)).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([path, views]) => ({ path, views }));
   const topRefs = pairs(val(3)).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([host, views]) => ({ host, views }));
+  const topSources = pairs(val(4)).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([source, views]) => ({ source, views }));
+  const topMediums = pairs(val(5)).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([medium, views]) => ({ medium, views }));
+  const topCampaigns = pairs(val(6)).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([campaign, views]) => ({ campaign, views }));
 
   const last7 = [];
-  let idx = 4;
+  let idx = 7;
   for (const d of days) {
     const views = Number(val(idx++) || 0);
     const uniques = Number(val(idx++) || 0);
     last7.push({ date: d, views, uniques });
   }
-  return { configured: true, totalViews, uniqueAll, last7, topPaths, topRefs };
+  return { configured: true, totalViews, uniqueAll, last7, topPaths, topRefs, topSources, topMediums, topCampaigns };
 }
 
 function pairs(h) {

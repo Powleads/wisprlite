@@ -64,6 +64,14 @@ export default async function handler(req, res) {
   ];
   if (refHost) cmds.push(["HINCRBY", "pv:refs", refHost, 1]);
 
+  // First-party campaign attribution: aggregate counts of utm_* tags in the
+  // link the visitor followed. No PII; same first-party endpoint, no pixels.
+  const clean = (s) => String(s || "").toLowerCase().trim().replace(/[\r\n]/g, "").slice(0, 80);
+  const src = clean(body.utm_source), med = clean(body.utm_medium), camp = clean(body.utm_campaign);
+  if (src) cmds.push(["HINCRBY", "utm:source", src, 1]);
+  if (med) cmds.push(["HINCRBY", "utm:medium", med, 1]);
+  if (camp) cmds.push(["HINCRBY", "utm:campaign", camp, 1]);
+
   try {
     await fetch(`${url}/pipeline`, {
       method: "POST",

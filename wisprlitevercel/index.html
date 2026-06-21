@@ -643,7 +643,7 @@
   })();
 </script>
 <script>/* first-party, cookieless pageview beacon -> /api/track (disclosed in /privacy) */
-(function(){try{fetch("/api/track",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({p:location.pathname,r:document.referrer})});}catch(e){}})();
+(function(){try{var q=new URLSearchParams(location.search),b={p:location.pathname,r:document.referrer};["utm_source","utm_medium","utm_campaign"].forEach(function(k){var v=q.get(k);if(v)b[k]=v;});fetch("/api/track",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});}catch(e){}})();
 </script>
 </body>
 </html>

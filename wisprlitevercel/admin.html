@@ -80,6 +80,8 @@
     border:1px solid var(--border-soft);border-radius:var(--r);padding:12px 14px}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:720px){.two{grid-template-columns:1fr}}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:720px){.three{grid-template-columns:1fr;gap:8px}}
   .pe{color:var(--accent)}
 </style>
 </head>
@@ -199,9 +201,27 @@
     return '<div class="panel"><h2>'+esc(title)+'</h2><div class="h2sub">'+esc(sub)+'</div>'+inner+'</div>';
   }
 
+  function campaignsPanel(vis){
+    if (vis.configured === false || vis.error) return "";
+    var s = vis.topSources||[], m = vis.topMediums||[], c = vis.topCampaigns||[];
+    if (!s.length && !m.length && !c.length)
+      return panel("Campaign attribution", "first-party UTM tags · no pixels",
+        '<div class="note">No campaign data yet. Tag your links like <span class="pe">pipevoice.app/?utm_source=twitter&amp;utm_medium=social&amp;utm_campaign=launch</span> and traffic will break down here by source, medium, and campaign.</div>');
+    function tbl(rows, label){
+      return rows.map(function(x){ return '<tr><td class="tag">'+esc(x[label])+'</td><td class="n">'+num(x.views)+'</td></tr>'; }).join("")
+        || '<tr><td colspan="2" class="note" style="border:none">none yet</td></tr>';
+    }
+    return panel("Campaign attribution", "where campaign traffic comes from · first-party UTM tags, no pixels",
+      '<div class="three">' +
+        '<div><h2 style="font-size:13px;margin-bottom:10px">Sources</h2><table><tbody>'+tbl(s,"source")+'</tbody></table></div>' +
+        '<div><h2 style="font-size:13px;margin-bottom:10px">Mediums</h2><table><tbody>'+tbl(m,"medium")+'</tbody></table></div>' +
+        '<div><h2 style="font-size:13px;margin-bottom:10px">Campaigns</h2><table><tbody>'+tbl(c,"campaign")+'</tbody></table></div>' +
+      '</div>');
+  }
+
   function render(d){
     document.getElementById("genAt").textContent = d.generatedAt ? ("updated " + new Date(d.generatedAt).toLocaleString()) : "";
-    content.innerHTML = kpiRow(d) + downloadsPanel(d.downloads||{}) + visitorsPanel(d.visitors||{}) + subscribersPanel(d.subscribers||{});
+    content.innerHTML = kpiRow(d) + downloadsPanel(d.downloads||{}) + visitorsPanel(d.visitors||{}) + campaignsPanel(d.visitors||{}) + subscribersPanel(d.subscribers||{});
   }
 
   async function show(token){
