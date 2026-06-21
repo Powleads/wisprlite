@@ -8,6 +8,8 @@ mutate saved settings; app.py applies them for one utterance only.
 
 from __future__ import annotations
 
+import os
+
 from . import config
 
 KEYS = ("engine", "ai_cleanup", "auto_enter", "output_mode")
@@ -49,13 +51,14 @@ P_ENGINES = [("", "(app default)"), ("deepgram", "Deepgram"), ("openai", "OpenAI
 P_OUTPUTS = [("type", "Type"), ("paste", "Paste"), ("clipboard", "Clipboard")]
 
 # Common apps so popular targets appear even when they aren't currently running.
+# Full product names so a natural search ("visual studio code") matches.
 COMMON_APPS = [
-    ("code.exe", "VS Code"), ("cursor.exe", "Cursor"), ("chrome.exe", "Chrome"),
-    ("msedge.exe", "Edge"), ("firefox.exe", "Firefox"),
+    ("code.exe", "Visual Studio Code"), ("cursor.exe", "Cursor"), ("chrome.exe", "Google Chrome"),
+    ("msedge.exe", "Microsoft Edge"), ("firefox.exe", "Mozilla Firefox"),
     ("windowsterminal.exe", "Windows Terminal"), ("powershell.exe", "PowerShell"),
     ("cmd.exe", "Command Prompt"), ("slack.exe", "Slack"), ("discord.exe", "Discord"),
-    ("ms-teams.exe", "Teams"), ("notepad.exe", "Notepad"), ("notepad++.exe", "Notepad++"),
-    ("winword.exe", "Word"), ("outlook.exe", "Outlook"), ("obsidian.exe", "Obsidian"),
+    ("ms-teams.exe", "Microsoft Teams"), ("notepad.exe", "Notepad"), ("notepad++.exe", "Notepad++"),
+    ("winword.exe", "Microsoft Word"), ("outlook.exe", "Microsoft Outlook"), ("obsidian.exe", "Obsidian"),
     ("idea64.exe", "IntelliJ IDEA"), ("explorer.exe", "File Explorer"),
     ("telegram.exe", "Telegram"), ("whatsapp.exe", "WhatsApp"),
 ]
@@ -120,6 +123,9 @@ def main() -> None:
     style.configure("Accent.TButton", background=ACCENT, foreground="#1a0c0d",
                     font=("Segoe UI", 9, "bold"), padding=7, borderwidth=0)
     style.map("Accent.TButton", background=[("active", "#e8838b")])
+    # Lighter than the card so in-card buttons (Browse) read as buttons, not text.
+    style.configure("Pick.TButton", background="#2a2f3d", foreground=FG, padding=6, borderwidth=0)
+    style.map("Pick.TButton", background=[("active", "#333a4a")])
     style.configure("TCheckbutton", background=CARD, foreground=FG)
     style.map("TCheckbutton", background=[("active", CARD)])
     style.configure("TCombobox", fieldbackground=CARD, background=CARD, foreground=FG, arrowcolor=FG)
@@ -136,7 +142,7 @@ def main() -> None:
     head.pack(fill="x")
     tk.Label(head, text="App profiles", bg=BG, fg=ACCENT, font=("Segoe UI", 16, "bold")).pack(anchor="w")
     tk.Label(head, text="Give an app its own behaviour. Terminal: raw + Enter. Chat: polished + auto-send.\n"
-                        "Editor: no AI cleanup. Start typing in the App box to search, or type any exe name.",
+                        "Editor: no AI cleanup. Search your open apps, or Browse to pick any program.",
              bg=BG, fg=MUTED, font=("Segoe UI", 9), justify="left").pack(anchor="w", pady=(5, 0))
 
     footer = tk.Frame(root, bg=BG, padx=22, pady=12)
@@ -167,12 +173,31 @@ def main() -> None:
         card = {}
 
         tk.Label(inner, text="APP", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
+        tk.Label(inner, text="Type to search your open apps, or Browse to pick any program (.exe).",
+                 bg=CARD, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w", pady=(2, 0))
         pick = tk.Frame(inner, bg=CARD)
-        pick.pack(fill="x", pady=(5, 0))
+        pick.pack(fill="x", pady=(6, 0))
         exe_var = tk.StringVar(value=exe)
-        cb = ttk.Combobox(pick, textvariable=exe_var, values=app_values, width=40)
+        cb = ttk.Combobox(pick, textvariable=exe_var, values=app_values, width=32)
         cb.pack(side="left")
         _searchable(cb, app_values)
+
+        def browse(var=exe_var):
+            # Native file picker, so the user can grab any installed program by
+            # navigating to its .exe instead of guessing the process name.
+            from tkinter import filedialog
+            la = os.environ.get("LOCALAPPDATA")
+            cands = [os.path.join(la, "Programs")] if la else []
+            cands += [la, os.environ.get("ProgramFiles"), os.environ.get("ProgramW6432")]
+            initial = next((c for c in cands if c and os.path.isdir(c)), os.path.expanduser("~"))
+            path = filedialog.askopenfilename(
+                parent=root, title="Pick a program",
+                initialdir=initial,
+                filetypes=[("Programs", "*.exe"), ("All files", "*.*")])
+            if path:
+                var.set(os.path.basename(path))
+
+        ttk.Button(pick, text="Browse…", style="Pick.TButton", command=browse).pack(side="left", padx=(8, 0))
         ttk.Button(pick, text="Remove",
                    command=lambda: (wrap.destroy(), card in cards and cards.remove(card))).pack(side="right")
 
