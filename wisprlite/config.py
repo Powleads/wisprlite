@@ -80,6 +80,8 @@ class Config:
     voice_commands: bool = True       # spoken commands: "new line", "scratch that", "send it"
     history_enabled: bool = True      # keep a local dictation history (history.jsonl)
     history_size: int = 50            # entries shown in the history viewer
+    deepgram_finish_timeout: float = 6.0  # seconds to wait for Deepgram's final words
+    paste_speed: str = "normal"       # fast | normal | slow — clipboard-paste timing
 
     @classmethod
     def load(cls) -> "Config":

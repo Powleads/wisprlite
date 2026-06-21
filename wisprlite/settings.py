@@ -18,6 +18,7 @@ ENGINES = [("deepgram", "Deepgram — fastest, live"),
            ("local", "Local Whisper — private & free, slower")]
 MODES = [("ptt", "Push-to-talk (hold)"), ("toggle", "Toggle (tap on/off)")]
 OUTPUTS = [("type", "Type keystrokes"), ("paste", "Clipboard + Ctrl+V")]
+PASTE_SPEEDS = [("fast", "Fast"), ("normal", "Normal"), ("slow", "Slow")]
 CLEANUP_PROVIDERS = [("openai", "OpenAI"), ("gemini", "Google Gemini (free tier)"),
                      ("openrouter", "OpenRouter (free models)"), ("ollama", "Local — Ollama (offline)")]
 LOCAL_SIZES = ["tiny.en", "base.en", "small.en", "medium.en",
@@ -275,7 +276,9 @@ def main(first_run: bool = False) -> None:
     cleanup_var = tk.StringVar(value=dict(CLEANUP_PROVIDERS).get(cfg.cleanup_provider, CLEANUP_PROVIDERS[0][1]))
     cleanup_model_var = tk.StringVar(value=cfg.cleanup_model)
     auto_enter_var = tk.BooleanVar(value=cfg.auto_enter)
-    vocab_var = tk.StringVar(value=cfg.vocabulary)
+    min_seconds_var = tk.StringVar(value=str(cfg.min_seconds))
+    dg_timeout_var = tk.StringVar(value=str(cfg.deepgram_finish_timeout))
+    paste_speed_var = tk.StringVar(value=dict(PASTE_SPEEDS).get(cfg.paste_speed, PASTE_SPEEDS[1][1]))
     fixes_var = tk.StringVar(value=", ".join(f"{k}={v}" for k, v in cfg.replacements.items()))
     speech_notes_var = tk.StringVar(value=cfg.speech_notes)
     overlay_var = tk.BooleanVar(value=cfg.overlay)
@@ -402,7 +405,35 @@ def main(first_run: bool = False) -> None:
     ttk.Checkbutton(frm, text="Spoken commands (\"new line\", \"scratch that\", \"send it\")",
                     variable=voice_commands_var).grid(row=row, column=0, columnspan=3,
                                                       sticky="w", padx=14, pady=3); row += 1
-    label("Vocabulary", "names/jargon, comma-sep"); entry(vocab_var); row += 1
+    label("Vocabulary", "names & jargon — better recognition"); row += 1
+    vocab_box = tk.Frame(frm, bg=BG)
+    vocab_box.grid(row=row, column=0, columnspan=3, sticky="w", padx=14, pady=(0, 6))
+    vocab_list = tk.Listbox(vocab_box, height=4, width=30, bg=CARD, fg=FG,
+                            selectbackground=ACCENT, selectforeground="#1a0c0d",
+                            highlightthickness=1, highlightbackground="#2a2e3d",
+                            relief="flat", activestyle="none", exportselection=False,
+                            font=("Segoe UI", 9))
+    vocab_list.grid(row=0, column=0, rowspan=2, sticky="w")
+    for _t in [t.strip() for t in (cfg.vocabulary or "").split(",") if t.strip()]:
+        vocab_list.insert("end", _t)
+    vocab_add_var = tk.StringVar()
+    _vadd = ttk.Entry(vocab_box, textvariable=vocab_add_var, width=20)
+    _vadd.grid(row=0, column=1, padx=(8, 0), sticky="nw")
+
+    def _vocab_add(*_a):
+        t = vocab_add_var.get().strip().strip(",")
+        if t and t not in vocab_list.get(0, "end"):
+            vocab_list.insert("end", t)
+        vocab_add_var.set("")
+
+    def _vocab_remove():
+        for i in reversed(vocab_list.curselection()):
+            vocab_list.delete(i)
+
+    _vadd.bind("<Return>", _vocab_add)
+    ttk.Button(vocab_box, text="Add", command=_vocab_add, width=7).grid(row=0, column=2, padx=(6, 0), sticky="nw")
+    ttk.Button(vocab_box, text="Remove", command=_vocab_remove, width=7).grid(row=1, column=1, padx=(8, 0), pady=(4, 0), sticky="nw")
+    row += 1
     label("Word fixes", "wrong=right, comma-sep"); entry(fixes_var); row += 1
     label("Speech notes", "accent / stutter / fillers — guides AI cleanup"); entry(speech_notes_var); row += 1
 
@@ -418,6 +449,14 @@ def main(first_run: bool = False) -> None:
         row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
     ttk.Checkbutton(frm, text="Keep a local dictation history", variable=history_var).grid(
         row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
+
+    # --- Advanced ---
+    header("Advanced")
+    ttk.Label(frm, text="Most people never need these.",
+              style="Muted.TLabel").grid(row=row, column=0, columnspan=3, sticky="w", padx=14); row += 1
+    label("Min seconds", "ignore taps shorter than this"); entry(min_seconds_var, width=8); row += 1
+    label("Deepgram wait", "seconds to wait for final words"); entry(dg_timeout_var, width=8); row += 1
+    label("Paste speed", "slower is more reliable in some apps"); combo(paste_speed_var, [l for _, l in PASTE_SPEEDS], width=12); row += 1
 
     # --- Save / Cancel (live in the fixed footer) ---
     def value_for(var, table):
@@ -444,7 +483,16 @@ def main(first_run: bool = False) -> None:
         cfg.cleanup_provider = value_for(cleanup_var, CLEANUP_PROVIDERS)
         cfg.cleanup_model = cleanup_model_var.get().strip()
         cfg.auto_enter = bool(auto_enter_var.get())
-        cfg.vocabulary = vocab_var.get().strip()
+        cfg.vocabulary = ", ".join(vocab_list.get(0, "end"))
+        try:
+            cfg.min_seconds = max(0.05, min(2.0, float(min_seconds_var.get())))
+        except ValueError:
+            pass
+        try:
+            cfg.deepgram_finish_timeout = max(1.0, min(30.0, float(dg_timeout_var.get())))
+        except ValueError:
+            pass
+        cfg.paste_speed = value_for(paste_speed_var, PASTE_SPEEDS)
         cfg.speech_notes = speech_notes_var.get().strip()
         fixes = {}
         for part in fixes_var.get().split(","):

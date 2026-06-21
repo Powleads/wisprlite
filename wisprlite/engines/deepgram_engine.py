@@ -36,6 +36,7 @@ class _DeepgramSession(Session):
         self._finals: list[str] = []
         self._done = threading.Event()
         self._error: Optional[str] = None
+        self._finish_timeout = getattr(engine, "finish_timeout", 6.0)
 
         listen = engine.client.listen
         if hasattr(listen, "websocket"):
@@ -103,7 +104,7 @@ class _DeepgramSession(Session):
             self.conn.finish()
         except Exception:
             pass
-        self._done.wait(timeout=6)
+        self._done.wait(timeout=self._finish_timeout)
         if self._error:
             raise RuntimeError(self._error)
         return " ".join(self._finals).strip()
@@ -120,13 +121,14 @@ class DeepgramEngine(Engine):
     streaming = True
 
     def __init__(self, api_key: str, model: str = "nova-2", language: str = "en-US",
-                 keywords: Optional[list] = None) -> None:
+                 keywords: Optional[list] = None, finish_timeout: float = 6.0) -> None:
         from deepgram import DeepgramClient
 
         self.client = DeepgramClient(api_key)
         self.model = model
         self.language = language
         self.keywords = keywords or None
+        self.finish_timeout = finish_timeout
 
     def start_session(self, on_partial: Optional[OnPartial] = None) -> Session:
         return _DeepgramSession(self, on_partial)

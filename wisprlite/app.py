@@ -77,6 +77,7 @@ class App:
                 model=self.cfg.deepgram_model,
                 language=self.cfg.language or "en-US",
                 keywords=kw,
+                finish_timeout=self.cfg.deepgram_finish_timeout,
             )
         if name == "local":
             from .engines.local_engine import LocalEngine
@@ -189,7 +190,8 @@ class App:
                 self.overlay.set_state("done", "Copied to clipboard" if text else "↵")
             else:
                 self.overlay.set_state("done", text or "↵")
-                type_text(text, self.cfg.output_mode, press_enter=press_enter)
+                type_text(text, self.cfg.output_mode, press_enter=press_enter,
+                          paste_speed=self.cfg.paste_speed)
             if self.cfg.history_enabled and text:
                 try:
                     from . import history
@@ -366,7 +368,8 @@ class App:
         self.cfg = new  # hotkey/mode/output read live via lambdas
 
         engine_keys = ("engine", "openai_model", "deepgram_model",
-                       "local_model_size", "language", "device", "vocabulary")
+                       "local_model_size", "language", "device", "vocabulary",
+                       "deepgram_finish_timeout")
         if any(getattr(old, k) != getattr(new, k) for k in engine_keys):
             self._engine = None
             self.recorder.device = config.device_arg(new)

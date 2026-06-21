@@ -22,9 +22,19 @@ def apply_replacements(text: str, mapping: dict) -> str:
     return text
 
 
-def type_text(text: str, mode: str = "type", press_enter: bool = False) -> None:
+PASTE_TIMINGS = {
+    # (sleep before paste, sleep before clipboard-restore, sleep before Enter)
+    "fast":   (0.01, 0.08, 0.03),
+    "normal": (0.03, 0.15, 0.05),
+    "slow":   (0.09, 0.35, 0.12),
+}
+
+
+def type_text(text: str, mode: str = "type", press_enter: bool = False,
+              paste_speed: str = "normal") -> None:
     if not text and not press_enter:
         return
+    pre_ms, restore_ms, enter_ms = PASTE_TIMINGS.get(paste_speed, PASTE_TIMINGS["normal"])
 
     if text and mode == "paste":
         try:
@@ -35,16 +45,16 @@ def type_text(text: str, mode: str = "type", press_enter: bool = False) -> None:
             except Exception:
                 prev = None
             pyperclip.copy(text)
-            time.sleep(0.03)
+            time.sleep(pre_ms)
             keyboard.send("ctrl+v")
             if prev is not None:
-                time.sleep(0.15)
+                time.sleep(restore_ms)
                 try:
                     pyperclip.copy(prev)
                 except Exception:
                     pass
             if press_enter:
-                time.sleep(0.05)
+                time.sleep(enter_ms)
                 keyboard.send("enter")
             return
         except Exception:
@@ -53,7 +63,7 @@ def type_text(text: str, mode: str = "type", press_enter: bool = False) -> None:
     if text:
         keyboard.write(text, delay=0)
     if press_enter:
-        time.sleep(0.05)
+        time.sleep(enter_ms)
         keyboard.send("enter")
 
 
