@@ -180,6 +180,8 @@ def main() -> None:
     h = min(620, max(360, root.winfo_reqheight()))
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
     root.geometry(f"{w}x{h}+{(sw - w) // 2}+{(sh - h) // 3}")
+    from . import winui
+    winui.dark_titlebar(root)
     root.mainloop()
 
 

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import threading
 
-from . import autostart, cleanup, config
+from . import about, autostart, cleanup, config, winui
 
 ENGINES = [("deepgram", "Deepgram — fastest, live"),
            ("openai", "OpenAI Whisper — accurate, slight wait"),
@@ -179,10 +179,11 @@ def main(first_run: bool = False) -> None:
     except Exception:
         pass
     style.configure(".", background=BG, foreground=FG, fieldbackground=CARD,
-                    bordercolor="#2a2e3d", lightcolor=CARD, darkcolor=CARD)
-    style.configure("TLabel", background=BG, foreground=FG)
-    style.configure("Muted.TLabel", background=BG, foreground=MUTED, font=("Segoe UI", 8))
-    style.configure("Head.TLabel", background=BG, foreground=ACCENT, font=("Segoe UI", 10, "bold"))
+                    bordercolor="#2a2e3d", lightcolor=CARD, darkcolor=CARD,
+                    font=("Segoe UI", 10))
+    style.configure("TLabel", background=BG, foreground=FG, font=("Segoe UI", 10))
+    style.configure("Muted.TLabel", background=BG, foreground=MUTED, font=("Segoe UI", 9))
+    style.configure("Head.TLabel", background=BG, foreground=ACCENT, font=("Segoe UI", 13, "bold"))
     style.configure("TButton", background=CARD, foreground=FG, padding=6)
     style.map("TButton", background=[("active", "#262a3a")])
     style.configure("Accent.TButton", background=ACCENT, foreground="#1a0c0d",
@@ -211,7 +212,7 @@ def main(first_run: bool = False) -> None:
     root.option_add("*TCombobox*Listbox.selectForeground", "#1a0c0d")
     style.configure("TEntry", fieldbackground=CARD, foreground=FG, insertcolor=FG)
 
-    pad = dict(padx=14, pady=5, sticky="w")
+    pad = dict(padx=14, pady=8, sticky="w")
 
     def _wheel(canvas):
         # Scroll whichever canvas the pointer is over (two scroll areas exist).
@@ -227,8 +228,10 @@ def main(first_run: bool = False) -> None:
     nb.pack(side="top", fill="both", expand=True)
     tab_settings = ttk.Frame(nb)
     tab_guide = ttk.Frame(nb)
+    tab_about = ttk.Frame(nb)
     nb.add(tab_settings, text="Settings")
     nb.add(tab_guide, text="Guide")
+    nb.add(tab_about, text="About")
 
     # --- Settings tab: scrollable form ---
     _canvas = tk.Canvas(tab_settings, bg=BG, highlightthickness=0)
@@ -236,17 +239,18 @@ def main(first_run: bool = False) -> None:
     _canvas.configure(yscrollcommand=_vbar.set)
     _vbar.pack(side="right", fill="y")
     _canvas.pack(side="left", fill="both", expand=True)
-    frm = ttk.Frame(_canvas, padding=18)
+    frm = ttk.Frame(_canvas, padding=26)
     _canvas.create_window((0, 0), window=frm, anchor="nw")
     frm.bind("<Configure>", lambda e: _canvas.configure(scrollregion=_canvas.bbox("all")))
     _wheel(_canvas)
     _build_guide(tab_guide, _wheel)
+    about.build(tab_about, root, _wheel)
     row = 0
 
     def header(text):
         nonlocal row
         ttk.Label(frm, text=text, style="Head.TLabel").grid(row=row, column=0, columnspan=3,
-                                                             sticky="w", padx=14, pady=(12, 2))
+                                                             sticky="w", padx=14, pady=(24, 6))
         row += 1
 
     def label(text, hint=None):
@@ -290,12 +294,12 @@ def main(first_run: bool = False) -> None:
 
     def combo(var, options, width=26):
         c = ttk.Combobox(frm, textvariable=var, values=options, state="readonly", width=width)
-        c.grid(row=row, column=1, padx=6, pady=5, sticky="w")
+        c.grid(row=row, column=1, padx=6, pady=8, sticky="w")
         return c
 
     def entry(var, width=29):
         e = ttk.Entry(frm, textvariable=var, width=width)
-        e.grid(row=row, column=1, padx=6, pady=5, sticky="w")
+        e.grid(row=row, column=1, padx=6, pady=8, sticky="w")
         return e
 
     # --- General ---
@@ -375,14 +379,14 @@ def main(first_run: bool = False) -> None:
     header("API keys")
     label("OpenAI key", "saved" if config.openai_key() else "not set")
     e_oai = ttk.Entry(frm, textvariable=oai_key_var, width=29, show="•")
-    e_oai.grid(row=row, column=1, padx=6, pady=5, sticky="w"); row += 1
+    e_oai.grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
     label("Deepgram key", "saved" if config.deepgram_key() else "not set")
     e_dg = ttk.Entry(frm, textvariable=dg_key_var, width=29, show="•")
-    e_dg.grid(row=row, column=1, padx=6, pady=5, sticky="w"); row += 1
+    e_dg.grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
     label("Gemini key", "saved" if config.gemini_key() else "not set")
-    ttk.Entry(frm, textvariable=gem_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=5, sticky="w"); row += 1
+    ttk.Entry(frm, textvariable=gem_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
     label("OpenRouter key", "saved" if config.openrouter_key() else "not set")
-    ttk.Entry(frm, textvariable=or_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=5, sticky="w"); row += 1
+    ttk.Entry(frm, textvariable=or_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
     ttk.Label(frm, text="Leave a key blank to keep the current one.",
               style="Muted.TLabel").grid(row=row, column=0, columnspan=3,
                                           sticky="w", padx=14); row += 1
@@ -391,7 +395,7 @@ def main(first_run: bool = False) -> None:
     header("Transcription")
     ttk.Checkbutton(frm, text="Polish with AI (Flow mode — tidies fillers & punctuation)",
                     variable=ai_cleanup_var).grid(row=row, column=0, columnspan=3,
-                                                  sticky="w", padx=14, pady=3); row += 1
+                                                  sticky="w", padx=14, pady=5); row += 1
     label("Cleanup with"); combo(cleanup_var, [l for _, l in CLEANUP_PROVIDERS], width=24); row += 1
     label("Cleanup model", "blank = provider default"); entry(cleanup_model_var); row += 1
 
@@ -401,10 +405,10 @@ def main(first_run: bool = False) -> None:
     cleanup_var.trace_add("write", _on_cleanup_provider)
     ttk.Checkbutton(frm, text="Press Enter after typing (auto-send)",
                     variable=auto_enter_var).grid(row=row, column=0, columnspan=3,
-                                                  sticky="w", padx=14, pady=3); row += 1
+                                                  sticky="w", padx=14, pady=5); row += 1
     ttk.Checkbutton(frm, text="Spoken commands (\"new line\", \"scratch that\", \"send it\")",
                     variable=voice_commands_var).grid(row=row, column=0, columnspan=3,
-                                                      sticky="w", padx=14, pady=3); row += 1
+                                                      sticky="w", padx=14, pady=5); row += 1
     label("Vocabulary", "names & jargon — better recognition"); row += 1
     vocab_box = tk.Frame(frm, bg=BG)
     vocab_box.grid(row=row, column=0, columnspan=3, sticky="w", padx=14, pady=(0, 6))
@@ -440,15 +444,15 @@ def main(first_run: bool = False) -> None:
     # --- Toggles ---
     header("Behaviour")
     ttk.Checkbutton(frm, text="Show live overlay", variable=overlay_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
+        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
     ttk.Checkbutton(frm, text="Play start/stop sounds", variable=sounds_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
+        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
     ttk.Checkbutton(frm, text="Start on Windows login", variable=autostart_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
+        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
     ttk.Checkbutton(frm, text="Automatic updates (check on startup)", variable=auto_update_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
+        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
     ttk.Checkbutton(frm, text="Keep a local dictation history", variable=history_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=3); row += 1
+        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
 
     # --- Advanced ---
     header("Advanced")
@@ -535,6 +539,7 @@ def main(first_run: bool = False) -> None:
     x = max(0, (sw - win_w) // 2)
     y = max(0, (sh - win_h) // 3)
     root.geometry(f"{win_w}x{win_h}+{x}+{y}")
+    winui.dark_titlebar(root)
     root.mainloop()
 
 

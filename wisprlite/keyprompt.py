@@ -158,6 +158,8 @@ def _dialog(cfg) -> None:
     w, h = root.winfo_width(), root.winfo_height()
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
     root.geometry(f"+{(sw - w) // 2}+{(sh - h) // 3}")
+    from . import winui
+    winui.dark_titlebar(root)
     try:
         root.attributes("-topmost", True)
     except Exception:
