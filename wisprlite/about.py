@@ -7,6 +7,7 @@ wraps it in its own short-lived Tk process.
 
 from __future__ import annotations
 
+import os
 import re
 import threading
 import webbrowser
@@ -101,6 +102,19 @@ def build(container, root, wheel=None) -> None:
     inner.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     wheel(canvas)
 
+    def _exit_for_install():
+        # This window runs as its own process and, in the onedir build, holds an
+        # open lock on the very files the installer must replace (Pipevoice.exe,
+        # python311.dll). Closing it frees those locks so the silent installer can
+        # swap files and relaunch the app; leaving it open is what made the update
+        # hang on "Installing…" forever. Exit promptly (before the installer takes
+        # its Restart-Manager snapshot) so it isn't reopened after the update.
+        try:
+            root.destroy()
+        except Exception:
+            pass
+        os._exit(0)
+
     def do_update():
         btn.config(state="disabled", text="Downloading…")
         status.config(text="Downloading the update…", fg=MUTED)
@@ -110,8 +124,10 @@ def build(container, root, wheel=None) -> None:
 
             def done():
                 if ok:
-                    status.config(text="Installing… Pipevoice will restart in a moment.", fg=GOOD)
-                    btn.config(text="Restarting…")
+                    status.config(text="Update downloaded. Pipevoice will close to install, "
+                                       "then reopen on the new version.", fg=GOOD)
+                    btn.config(text="Installing…")
+                    root.after(900, _exit_for_install)
                 else:
                     status.config(text="Update failed. Check your connection and try again.", fg=WARN)
                     btn.config(state="normal", text="Try again", command=do_update)

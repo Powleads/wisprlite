@@ -4,7 +4,7 @@
 ; Produces installer\Output\Pipevoice-Setup.exe — a per-user install (no admin).
 
 #define AppName "Pipevoice"
-#define AppVersion "2.20.0"
+#define AppVersion "2.21.0"
 #define AppExe "Pipevoice.exe"
 
 [Setup]
@@ -46,8 +46,14 @@ Name: "{userstartup}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: startup
 Name: "startup"; Description: "Start {#AppName} automatically when I log in"; GroupDescription: "Startup:"; Flags: unchecked
 
 [Run]
-; The app prompts for the API key on first launch, so just start it.
-Filename: "{app}\{#AppExe}"; Description: "Launch {#AppName}"; Flags: nowait postinstall
+; Interactive install: optional "Launch Pipevoice" checkbox on the final page.
+Filename: "{app}\{#AppExe}"; Description: "Launch {#AppName}"; Flags: nowait postinstall skipifsilent
+; Silent self-update (/VERYSILENT from the in-app updater): relaunch the app
+; ourselves. Restart Manager's RESTARTAPPLICATIONS is unreliable after a forced
+; close, and the postinstall entry above is skipped when silent, so without this
+; the update could finish with no app running. The single-instance lock makes any
+; overlap with RESTARTAPPLICATIONS safe (the second launch just exits).
+Filename: "{app}\{#AppExe}"; Flags: nowait; Check: WizardSilent
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{userappdata}\{#AppName}"
