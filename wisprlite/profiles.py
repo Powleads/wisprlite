@@ -48,6 +48,18 @@ ACCENT = "#e06c75"
 P_ENGINES = [("", "(app default)"), ("deepgram", "Deepgram"), ("openai", "OpenAI"), ("local", "Local")]
 P_OUTPUTS = [("type", "Type"), ("paste", "Paste"), ("clipboard", "Clipboard")]
 
+# Common apps so popular targets appear even when they aren't currently running.
+COMMON_APPS = [
+    ("code.exe", "VS Code"), ("cursor.exe", "Cursor"), ("chrome.exe", "Chrome"),
+    ("msedge.exe", "Edge"), ("firefox.exe", "Firefox"),
+    ("windowsterminal.exe", "Windows Terminal"), ("powershell.exe", "PowerShell"),
+    ("cmd.exe", "Command Prompt"), ("slack.exe", "Slack"), ("discord.exe", "Discord"),
+    ("ms-teams.exe", "Teams"), ("notepad.exe", "Notepad"), ("notepad++.exe", "Notepad++"),
+    ("winword.exe", "Word"), ("outlook.exe", "Outlook"), ("obsidian.exe", "Obsidian"),
+    ("idea64.exe", "IntelliJ IDEA"), ("explorer.exe", "File Explorer"),
+    ("telegram.exe", "Telegram"), ("whatsapp.exe", "WhatsApp"),
+]
+
 
 def _value_for(label, table):
     return {l: k for k, l in table}.get(label, table[0][0])
@@ -65,7 +77,12 @@ def main() -> None:
     cards = []
     from . import foreground
     running = foreground.list_windows()
-    app_values = [w["exe"] + ("  —  " + w["title"][:34] if w.get("title") else "") for w in running]
+    have = {w["exe"].lower() for w in running}
+    merged = list(running) + [{"exe": e, "title": t} for e, t in COMMON_APPS if e.lower() not in have]
+    app_values = sorted(
+        (w["exe"] + ("  —  " + w["title"][:34] if w.get("title") else "") for w in merged),
+        key=str.lower,
+    )
 
     root = tk.Tk()
     root.title("Pipevoice app profiles")
@@ -104,7 +121,7 @@ def main() -> None:
     head.pack(fill="x")
     tk.Label(head, text="App profiles", bg=BG, fg=ACCENT, font=("Segoe UI", 16, "bold")).pack(anchor="w")
     tk.Label(head, text="Give an app its own behaviour. Terminal: raw + Enter. Chat: polished + auto-send.\n"
-                        "Editor: no AI cleanup. Pick a running app from the dropdown, or type its exe name.",
+                        "Editor: no AI cleanup. Pick from the dropdown (running + common apps), or type any exe name.",
              bg=BG, fg=MUTED, font=("Segoe UI", 9), justify="left").pack(anchor="w", pady=(5, 0))
 
     footer = tk.Frame(root, bg=BG, padx=22, pady=12)

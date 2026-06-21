@@ -1,3 +1,3 @@
 """Pipevoice — push-to-talk voice typing for Windows."""
 
-__version__ = "2.17.0"
+__version__ = "2.18.0"

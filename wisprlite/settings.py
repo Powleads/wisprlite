@@ -183,7 +183,7 @@ def main(first_run: bool = False) -> None:
     root = tk.Tk()
     root.title("Set up Pipevoice" if first_run else "Pipevoice settings")
     root.configure(bg=BG)
-    root.resizable(False, True)
+    root.resizable(True, True)
     ico = config.asset_path("wisprlite.ico")
     if ico:
         try:
@@ -242,16 +242,41 @@ def main(first_run: bool = False) -> None:
 
     # Fixed footer (Save/Cancel always visible), then a tabbed body: the form
     # plus a Guide tab that explains engines, speed and polish options.
-    footer = ttk.Frame(root, padding=(14, 9))
+    footer = ttk.Frame(root, padding=(16, 10))
     footer.pack(side="bottom", fill="x")
-    nb = ttk.Notebook(root)
-    nb.pack(side="top", fill="both", expand=True)
-    tab_settings = ttk.Frame(nb)
-    tab_guide = ttk.Frame(nb)
-    tab_about = ttk.Frame(nb)
-    nb.add(tab_settings, text="Settings")
-    nb.add(tab_guide, text="Guide")
-    nb.add(tab_about, text="About")
+
+    # Custom underline tab bar (ttk.Notebook tabs render poorly on clam).
+    tabbar = tk.Frame(root, bg=BG)
+    tabbar.pack(side="top", fill="x", padx=22, pady=(12, 0))
+    tk.Frame(root, bg="#272b37", height=1).pack(side="top", fill="x")
+    body_wrap = tk.Frame(root, bg=BG)
+    body_wrap.pack(side="top", fill="both", expand=True)
+
+    tab_settings = tk.Frame(body_wrap, bg=BG)
+    tab_guide = tk.Frame(body_wrap, bg=BG)
+    tab_about = tk.Frame(body_wrap, bg=BG)
+    _tabs = [("Settings", tab_settings), ("Guide", tab_guide), ("About", tab_about)]
+    _tab_w = {}
+
+    def _show_tab(name):
+        for _n, _f in _tabs:
+            _f.pack_forget()
+        dict(_tabs)[name].pack(fill="both", expand=True)
+        for _n, (lbl, ul) in _tab_w.items():
+            on = _n == name
+            lbl.config(fg=ACCENT if on else MUTED)
+            ul.config(bg=ACCENT if on else BG)
+
+    for _name, _frame in _tabs:
+        w = tk.Frame(tabbar, bg=BG)
+        w.pack(side="left", padx=(0, 8))
+        lbl = tk.Label(w, text=_name, bg=BG, fg=MUTED, font=("Segoe UI", 11, "bold"),
+                       cursor="hand2", padx=10, pady=8)
+        lbl.pack()
+        ul = tk.Frame(w, bg=BG, height=2)
+        ul.pack(fill="x")
+        lbl.bind("<Button-1>", lambda e, n=_name: _show_tab(n))
+        _tab_w[_name] = (lbl, ul)
 
     # --- Settings tab: scrollable form ---
     _canvas = tk.Canvas(tab_settings, bg=BG, highlightthickness=0)
@@ -265,6 +290,7 @@ def main(first_run: bool = False) -> None:
     _wheel(_canvas)
     _build_guide(tab_guide, _wheel)
     about.build(tab_about, root, _wheel)
+    _show_tab("Settings")
     DIV = "#272b37"
 
     def card(title, subtitle=None):
@@ -595,10 +621,10 @@ def main(first_run: bool = False) -> None:
     cw = frm.winfo_reqwidth() + 22          # form width + scrollbar
     ch = frm.winfo_reqheight()
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
-    win_w = max(cw, 660)                    # roomy: keeps descriptions clear of the controls
-    win_h = min(ch + 96, sh - 80)           # + tab strip + footer; never off-screen
+    win_w = max(cw, 760)                    # wider: descriptions sit clear of the controls
+    win_h = min(ch + 110, sh - 150)         # leave room for the taskbar so the footer is never cut off
     x = max(0, (sw - win_w) // 2)
-    y = max(0, (sh - win_h) // 3)
+    y = max(16, (sh - win_h) // 5)          # sit near the top so the bottom stays on-screen
     root.geometry(f"{win_w}x{win_h}+{x}+{y}")
     winui.dark_titlebar(root)
     root.mainloop()
