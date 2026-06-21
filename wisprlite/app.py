@@ -48,9 +48,11 @@ class App:
             is_paused=lambda: self.paused,
         )
 
-        self._engine = None
+        self._engines = {}            # per-engine cache (name -> engine), for per-app profiles
         self._session = None
         self._clipboard_only = False
+        self._active = {}             # per-utterance profile overrides (never mutates cfg)
+        self._fg_ctx = {}             # foreground window captured at hotkey-press time
         self._started_at = 0.0
         self._busy = threading.Lock()
         self._stop = threading.Event()
@@ -86,10 +88,17 @@ class App:
                                language=(self.cfg.language or "").split("-")[0] or None, prompt=vocab)
         raise RuntimeError(f"Unknown engine: {name}")
 
-    def _get_engine(self):
-        if self._engine is None:
-            self._engine = self._build_engine()
-        return self._engine
+    def _get_engine(self, name: str | None = None):
+        name = name or self.cfg.engine
+        eng = self._engines.get(name)
+        if eng is None:
+            eng = self._build_engine(name)
+            self._engines[name] = eng
+        return eng
+
+    def _eff(self, key):
+        """Effective value for this utterance: a per-app profile override, else the setting."""
+        return self._active.get(key, getattr(self.cfg, key))
 
     def _prewarm(self) -> None:
         def work():
@@ -105,12 +114,20 @@ class App:
         if not self._busy.acquire(blocking=False):
             return  # still finishing the previous utterance
         self._clipboard_only = clipboard
+        # Capture the focused app NOW (before our overlay shows) and resolve a
+        # per-app profile into per-utterance overrides. Never mutates self.cfg.
         try:
-            engine = self._get_engine()
+            from . import foreground, profiles
+            self._fg_ctx = foreground.detect()
+            self._active = profiles.resolve(self.cfg.profiles, self._fg_ctx)
+        except Exception:
+            self._fg_ctx, self._active = {}, {}
+        try:
+            engine = self._get_engine(self._active.get("engine"))
             self._session = engine.start_session(on_partial=self.overlay.set_text)
         except Exception as exc:
             self._session = None
-            log.exception("could not start session (engine=%s)", self.cfg.engine)
+            log.exception("could not start session (engine=%s)", self._active.get("engine") or self.cfg.engine)
             self._fail(str(exc))
             self._release()
             return
@@ -162,7 +179,7 @@ class App:
             text = cmd.text
 
             # AI cleanup ("Flow mode") — OpenAI / Gemini / OpenRouter / local Ollama; falls back to raw.
-            if text and self.cfg.ai_cleanup:
+            if text and self._eff("ai_cleanup"):
                 from . import cleanup
 
                 if cleanup.provider_ready(self.cfg.cleanup_provider):
@@ -178,20 +195,26 @@ class App:
             # user word-fixes, applied last so they always stick
             text = apply_replacements(text, self.cfg.replacements)
 
-            press_enter = self.cfg.auto_enter or cmd.press_enter
+            press_enter = self._eff("auto_enter") or cmd.press_enter
             if not text and not press_enter:
                 self.overlay.hide()
                 self._set_icon("idle")
                 return
 
-            if self._clipboard_only:
+            # Output: clipboard hotkey, a profile's clipboard output, or no text
+            # target focused (desktop/shell) -> copy instead of typing into the void.
+            from . import foreground
+
+            out = self._eff("output_mode")
+            to_clipboard = (self._clipboard_only or out == "clipboard"
+                            or foreground.is_no_text_target(self._fg_ctx))
+            if to_clipboard:
                 if text:
                     copy_clipboard(text)
                 self.overlay.set_state("done", "Copied to clipboard" if text else "↵")
             else:
                 self.overlay.set_state("done", text or "↵")
-                type_text(text, self.cfg.output_mode, press_enter=press_enter,
-                          paste_speed=self.cfg.paste_speed)
+                type_text(text, out, press_enter=press_enter, paste_speed=self.cfg.paste_speed)
             if self.cfg.history_enabled and text:
                 try:
                     from . import history
@@ -203,11 +226,15 @@ class App:
             self._set_icon("idle")
         finally:
             self._session = None
+            self._active = {}
+            self._fg_ctx = {}
             self._release()
 
     def _fallback(self, audio, err) -> str:
         """If a cloud engine failed (e.g. offline), try local Whisper once."""
-        if self.cfg.engine == "local":
+        # Use the engine actually active this utterance (a profile may override it).
+        active_engine = self._active.get("engine") or self.cfg.engine
+        if active_engine == "local":
             self._fail(str(err))
             return ""
         try:
@@ -223,7 +250,6 @@ class App:
     # ---- tray actions -----------------------------------------------------
     def set_engine(self, name: str) -> None:
         self.cfg.engine = name
-        self._engine = None
         self.cfg.save()
         self.tray.update()
         self._prewarm()
@@ -301,6 +327,21 @@ class App:
                 subprocess.Popen([_pythonw(), "-m", "wisprlite", "--about"], cwd=parent)
         except Exception as exc:
             self._fail(f"about: {exc}")
+
+    def open_profiles(self) -> None:
+        import os
+        import subprocess
+
+        try:
+            if getattr(sys, "frozen", False):
+                subprocess.Popen([sys.executable, "--profiles"])
+            else:
+                from .autostart import _pythonw
+
+                parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                subprocess.Popen([_pythonw(), "-m", "wisprlite", "--profiles"], cwd=parent)
+        except Exception as exc:
+            self._fail(f"profiles: {exc}")
 
     def autostart_enabled(self) -> bool:
         return autostart.is_enabled()
@@ -386,10 +427,10 @@ class App:
                        "local_model_size", "language", "device", "vocabulary",
                        "deepgram_finish_timeout")
         if any(getattr(old, k) != getattr(new, k) for k in engine_keys):
-            self._engine = None
+            self._engines = {}
             self.recorder.device = config.device_arg(new)
             self._prewarm()
-        elif self._engine is None:
+        elif not self._engines:
             # engine wasn't built yet (e.g. key was missing) — try now
             self._prewarm()
 

@@ -68,6 +68,24 @@ _URLS = {
 }
 
 
+def _launch_child(arg: str) -> None:
+    """Spawn another Pipevoice child window (e.g. the --profiles editor)."""
+    import os
+    import subprocess
+    import sys
+
+    try:
+        if getattr(sys, "frozen", False):
+            subprocess.Popen([sys.executable, arg])
+        else:
+            from .autostart import _pythonw
+
+            parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            subprocess.Popen([_pythonw(), "-m", "wisprlite", arg], cwd=parent)
+    except Exception:
+        pass
+
+
 def _build_guide(parent, wheel) -> None:
     """Populate the Guide tab: how it works, engine speed, polish, tips."""
     import tkinter as tk
@@ -453,6 +471,9 @@ def main(first_run: bool = False) -> None:
         row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
     ttk.Checkbutton(frm, text="Keep a local dictation history", variable=history_var).grid(
         row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
+    ttk.Button(frm, text="Manage app profiles…",
+               command=lambda: _launch_child("--profiles")).grid(
+        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=(10, 4)); row += 1
 
     # --- Advanced ---
     header("Advanced")
@@ -468,6 +489,11 @@ def main(first_run: bool = False) -> None:
         return label_to_value.get(var.get(), table[0][0])
 
     def save(close=True):
+        # Don't clobber app profiles edited in the separate Profiles window.
+        try:
+            cfg.profiles = config.Config.load().profiles
+        except Exception:
+            pass
         cfg.engine = value_for(engine_var, ENGINES)
         cfg.mode = value_for(mode_var, MODES)
         cfg.output_mode = value_for(output_var, OUTPUTS)
