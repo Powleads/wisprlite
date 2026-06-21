@@ -1,10 +1,8 @@
-"""About / Updates window (python -m wisprlite --about).
+"""About / Updates: current version, live update check, "Update now", changelog.
 
-Shows the current version, checks GitHub for a newer release, offers an
-"Update now" button, and lists recent release notes as a changelog. Runs as a
-short-lived separate Tk process (same pattern as settings/history), so the
-"Update now" path just calls the proven updater.download_and_run() and lets the
-Inno installer close + relaunch the app.
+`build(container, root, wheel)` populates any frame, so the same UI is used both
+as the standalone --about window and as the About tab inside Settings. `main()`
+wraps it in its own short-lived Tk process.
 """
 
 from __future__ import annotations
@@ -54,76 +52,55 @@ def _date(iso: str) -> str:
     return f"{int(d)} {months[int(mo)]} {y}"
 
 
-def main() -> None:
-    try:
-        import tkinter as tk
-        from tkinter import ttk
-    except Exception:
-        return
+def _wheel_global(canvas):
+    canvas.bind("<Enter>", lambda e: canvas.bind_all(
+        "<MouseWheel>", lambda ev: canvas.yview_scroll(int(-ev.delta / 120), "units")))
+    canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+
+
+def build(container, root, wheel=None) -> None:
+    """Populate `container` with the About/Updates UI. `root` is the toplevel
+    (used for thread-safe .after); `wheel` scopes mousewheel to our canvas."""
+    import tkinter as tk
+    from tkinter import ttk
     from . import updater
 
+    if wheel is None:
+        wheel = _wheel_global
     state = {"info": None}
 
-    root = tk.Tk()
-    root.title("About Pipevoice")
-    root.configure(bg=BG)
-    root.resizable(False, True)
-    ico = config.asset_path("wisprlite.ico")
-    if ico:
-        try:
-            root.iconbitmap(ico)
-        except Exception:
-            pass
-
-    style = ttk.Style(root)
-    try:
-        style.theme_use("clam")
-    except Exception:
-        pass
-    style.configure("TButton", background=CARD, foreground=FG, padding=7, borderwidth=0)
-    style.map("TButton", background=[("active", "#262a3a")], foreground=[("disabled", MUTED)])
-    style.configure("Accent.TButton", background=ACCENT, foreground="#1a0c0d",
-                    font=("Segoe UI", 9, "bold"), padding=8, borderwidth=0)
-    style.map("Accent.TButton", background=[("active", "#e8838b")])
-    style.configure("Vertical.TScrollbar", background=CARD, troughcolor=BG, borderwidth=0, arrowcolor=MUTED)
-
-    head = tk.Frame(root, bg=BG, padx=26, pady=20)
+    head = tk.Frame(container, bg=BG, padx=28, pady=24)
     head.pack(fill="x")
     tk.Label(head, text="Pipevoice", bg=BG, fg=ACCENT, font=("Segoe UI", 21, "bold")).pack(anchor="w")
     tk.Label(head, text=f"Version {__version__}", bg=BG, fg=MUTED,
-             font=("Consolas", 10)).pack(anchor="w", pady=(1, 12))
+             font=("Consolas", 10)).pack(anchor="w", pady=(3, 16))
 
     status = tk.Label(head, text="Checking for updates…", bg=BG, fg=MUTED, font=("Segoe UI", 10))
     status.pack(anchor="w")
-    btn = ttk.Button(head, text="Checking…", state="disabled", style="Accent.TButton")
-    btn.pack(anchor="w", pady=(10, 0))
+    actions = tk.Frame(head, bg=BG)
+    actions.pack(anchor="w", fill="x", pady=(14, 0))
+    btn = ttk.Button(actions, text="Checking…", state="disabled", style="Accent.TButton")
+    btn.pack(side="left")
+    link = tk.Label(actions, text="All releases ↗", bg=BG, fg=ACCENT, cursor="hand2",
+                    font=("Segoe UI", 9, "underline"))
+    link.pack(side="left", padx=(16, 0))
+    link.bind("<Button-1>", lambda e: webbrowser.open(RELEASES_URL))
 
-    tk.Label(root, text="WHAT'S NEW", bg=BG, fg=ACCENT,
-             font=("Segoe UI", 9, "bold")).pack(anchor="w", padx=26, pady=(16, 4))
+    tk.Label(container, text="WHAT'S NEW", bg=BG, fg=ACCENT,
+             font=("Segoe UI", 9, "bold")).pack(anchor="w", padx=28, pady=(20, 8))
 
-    body = tk.Frame(root, bg=BG)
-    body.pack(fill="both", expand=True)
-    canvas = tk.Canvas(body, bg=BG, highlightthickness=0, width=480, height=300)
-    vbar = ttk.Scrollbar(body, orient="vertical", command=canvas.yview)
+    bodyf = tk.Frame(container, bg=BG)
+    bodyf.pack(fill="both", expand=True)
+    canvas = tk.Canvas(bodyf, bg=BG, highlightthickness=0, width=480, height=280)
+    vbar = ttk.Scrollbar(bodyf, orient="vertical", command=canvas.yview)
     canvas.configure(yscrollcommand=vbar.set)
     vbar.pack(side="right", fill="y")
     canvas.pack(side="left", fill="both", expand=True)
     inner = tk.Frame(canvas, bg=BG)
     canvas.create_window((0, 0), window=inner, anchor="nw")
     inner.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-    canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(int(-e.delta / 120), "units"))
+    wheel(canvas)
 
-    foot = tk.Frame(root, bg=BG, padx=26, pady=12)
-    foot.pack(fill="x")
-    link = tk.Label(foot, text="All releases on GitHub ↗", bg=BG, fg=ACCENT, cursor="hand2",
-                    font=("Segoe UI", 9, "underline"))
-    link.pack(side="left")
-    link.bind("<Button-1>", lambda e: webbrowser.open(RELEASES_URL))
-    tk.Button(foot, text="Close", command=root.destroy, bg=CARD, fg=FG, relief="flat",
-              activebackground="#262a3a", activeforeground=FG, padx=16, pady=6,
-              font=("Segoe UI", 9)).pack(side="right")
-
-    # ---- update flow ----
     def do_update():
         btn.config(state="disabled", text="Downloading…")
         status.config(text="Downloading the update…", fg=MUTED)
@@ -168,17 +145,16 @@ def main() -> None:
             w.destroy()
         if not rels:
             tk.Label(inner, text="Could not load release notes.", bg=BG, fg=MUTED,
-                     font=("Segoe UI", 10), padx=26, pady=10).pack(anchor="w")
+                     font=("Segoe UI", 10), padx=28, pady=10).pack(anchor="w")
             return
         for rel in rels:
-            card = tk.Frame(inner, bg=CARD, padx=14, pady=11)
-            card.pack(fill="x", padx=22, pady=5)
+            card = tk.Frame(inner, bg=CARD, padx=15, pady=12)
+            card.pack(fill="x", padx=24, pady=6)
             top = tk.Frame(card, bg=CARD)
             top.pack(fill="x")
             tag = rel.get("tag", "")
-            is_current = tag.lstrip("vV") == __version__
-            tk.Label(top, text=tag, bg=CARD, fg=FG, font=("Segoe UI", 10, "bold")).pack(side="left")
-            if is_current:
+            tk.Label(top, text=tag, bg=CARD, fg=FG, font=("Segoe UI", 11, "bold")).pack(side="left")
+            if tag.lstrip("vV") == __version__:
                 tk.Label(top, text=" current ", bg=ACCENT, fg="#1a0c0d",
                          font=("Segoe UI", 7, "bold")).pack(side="left", padx=(8, 0))
             dt = _date(rel.get("published_at", ""))
@@ -186,7 +162,7 @@ def main() -> None:
                 tk.Label(top, text=dt, bg=CARD, fg=MUTED, font=("Consolas", 8)).pack(side="right")
             notes = _clean_notes(rel.get("body", "")) or "No notes for this release."
             tk.Label(card, text=notes, bg=CARD, fg=MUTED, font=("Segoe UI", 9),
-                     anchor="w", justify="left", wraplength=430).pack(fill="x", pady=(6, 0))
+                     anchor="w", justify="left", wraplength=430).pack(fill="x", pady=(7, 0))
 
     def load_changelog():
         def work():
@@ -195,15 +171,57 @@ def main() -> None:
         threading.Thread(target=work, daemon=True).start()
 
     tk.Label(inner, text="Loading release notes…", bg=BG, fg=MUTED,
-             font=("Segoe UI", 10), padx=26, pady=10).pack(anchor="w")
+             font=("Segoe UI", 10), padx=28, pady=10).pack(anchor="w")
     check()
     load_changelog()
 
+
+def main() -> None:
+    try:
+        import tkinter as tk
+        from tkinter import ttk
+    except Exception:
+        return
+    from . import winui
+
+    root = tk.Tk()
+    root.title("About Pipevoice")
+    root.configure(bg=BG)
+    root.resizable(False, True)
+    ico = config.asset_path("wisprlite.ico")
+    if ico:
+        try:
+            root.iconbitmap(ico)
+        except Exception:
+            pass
+
+    style = ttk.Style(root)
+    try:
+        style.theme_use("clam")
+    except Exception:
+        pass
+    style.configure("Accent.TButton", background=ACCENT, foreground="#1a0c0d",
+                    font=("Segoe UI", 9, "bold"), padding=8, borderwidth=0)
+    style.map("Accent.TButton", background=[("active", "#e8838b")])
+    style.configure("TButton", background=CARD, foreground=FG, padding=7, borderwidth=0)
+    style.map("TButton", background=[("active", "#262a3a")], foreground=[("disabled", MUTED)])
+    style.configure("Vertical.TScrollbar", background=CARD, troughcolor=BG, borderwidth=0, arrowcolor=MUTED)
+
+    # Reserve the bottom for Close first, then build fills the cavity above it.
+    foot = tk.Frame(root, bg=BG, padx=28, pady=14)
+    foot.pack(side="bottom", fill="x")
+    tk.Button(foot, text="Close", command=root.destroy, bg=CARD, fg=FG, relief="flat",
+              activebackground="#262a3a", activeforeground=FG, padx=18, pady=6,
+              font=("Segoe UI", 9)).pack(side="right")
+
+    build(root, root)
+
     root.update_idletasks()
-    w = max(540, root.winfo_reqwidth())
-    h = min(640, max(420, root.winfo_reqheight()))
+    w = max(560, root.winfo_reqwidth())
+    h = min(660, max(440, root.winfo_reqheight()))
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
     root.geometry(f"{w}x{h}+{(sw - w) // 2}+{(sh - h) // 3}")
+    winui.dark_titlebar(root)
     root.mainloop()
 
 

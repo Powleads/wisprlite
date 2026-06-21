@@ -155,6 +155,8 @@ def show_welcome() -> bool:
     w, h = root.winfo_width(), root.winfo_height()
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
     root.geometry(f"+{(sw - w) // 2}+{max(0, (sh - h) // 5)}")
+    from . import winui
+    winui.dark_titlebar(root)
     try:
         root.attributes("-topmost", True)
     except Exception:
