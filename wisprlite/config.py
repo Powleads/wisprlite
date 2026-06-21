@@ -82,6 +82,7 @@ class Config:
     history_size: int = 50            # entries shown in the history viewer
     deepgram_finish_timeout: float = 6.0  # seconds to wait for Deepgram's final words
     paste_speed: str = "normal"       # fast | normal | slow — clipboard-paste timing
+    last_version: str = ""            # app version last run, to detect a fresh update
 
     @classmethod
     def load(cls) -> "Config":

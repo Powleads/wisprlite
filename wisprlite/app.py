@@ -287,6 +287,21 @@ class App:
         except Exception as exc:
             self._fail(f"history: {exc}")
 
+    def open_about(self) -> None:
+        import os
+        import subprocess
+
+        try:
+            if getattr(sys, "frozen", False):
+                subprocess.Popen([sys.executable, "--about"])
+            else:
+                from .autostart import _pythonw
+
+                parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                subprocess.Popen([_pythonw(), "-m", "wisprlite", "--about"], cwd=parent)
+        except Exception as exc:
+            self._fail(f"about: {exc}")
+
     def autostart_enabled(self) -> bool:
         return autostart.is_enabled()
 
@@ -443,6 +458,16 @@ class App:
             updater.cleanup_old()
         except Exception:
             pass
+        # If the version changed since last run, we were just updated -> tell the user.
+        from . import __version__ as _ver
+        if self.cfg.last_version and self.cfg.last_version != _ver:
+            self._notify(f"Updated to Pipevoice {_ver}. Tray menu, About, to see what's new.")
+        if self.cfg.last_version != _ver:
+            self.cfg.last_version = _ver
+            try:
+                self.cfg.save()
+            except Exception:
+                pass
         if self.cfg.auto_update:
             self.check_for_updates(manual=False)
 
