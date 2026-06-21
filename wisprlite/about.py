@@ -118,25 +118,31 @@ def build(container, root, wheel=None) -> None:
             root.after(0, done)
         threading.Thread(target=work, daemon=True).start()
 
-    def check():
+    def load():
         status.config(text="Checking for updates…", fg=MUTED)
         btn.config(state="disabled", text="Checking…")
 
         def work():
-            rel = updater.latest_release()
-            info = updater.info_from_latest(rel) if rel and rel.get("newer") else None
+            # One call powers BOTH the version check and the changelog, so they
+            # can never disagree (the latest release is just the newest in the list).
+            rels = updater.recent_releases(8)
+            latest = rels[0] if rels else None
+            info = None
+            if latest and updater.is_newer(latest.get("tag", "")) and latest.get("url"):
+                info = updater.info_from_latest(latest)
 
             def done():
-                if rel is None:
+                render_changelog(rels)
+                if not rels:
                     status.config(text="Could not reach GitHub. Check your connection.", fg=WARN)
-                    btn.config(state="normal", text="Check again", command=check, style="TButton")
-                elif rel.get("newer") and info:
+                    btn.config(state="normal", text="Check again", command=load, style="TButton")
+                elif info:
                     state["info"] = info
-                    status.config(text=f"Update available: v{rel['version']}", fg=ACCENT)
+                    status.config(text=f"Update available: v{latest['version']}", fg=ACCENT)
                     btn.config(state="normal", text="Update now  →", command=do_update, style="Accent.TButton")
                 else:
                     status.config(text="You're on the latest version.", fg=GOOD)
-                    btn.config(state="normal", text="Check again", command=check, style="TButton")
+                    btn.config(state="normal", text="Check again", command=load, style="TButton")
             root.after(0, done)
         threading.Thread(target=work, daemon=True).start()
 
@@ -164,16 +170,9 @@ def build(container, root, wheel=None) -> None:
             tk.Label(card, text=notes, bg=CARD, fg=MUTED, font=("Segoe UI", 9),
                      anchor="w", justify="left", wraplength=430).pack(fill="x", pady=(7, 0))
 
-    def load_changelog():
-        def work():
-            rels = updater.recent_releases(6)
-            root.after(0, lambda: render_changelog(rels))
-        threading.Thread(target=work, daemon=True).start()
-
     tk.Label(inner, text="Loading release notes…", bg=BG, fg=MUTED,
              font=("Segoe UI", 10), padx=28, pady=10).pack(anchor="w")
-    check()
-    load_changelog()
+    load()
 
 
 def main() -> None:

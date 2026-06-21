@@ -124,13 +124,29 @@ def recent_releases(n: int = 6) -> list:
         return []
     out = []
     for rel in (data if isinstance(data, list) else []):
+        setup_url = sha_url = None
+        for a in rel.get("assets", []):
+            nm = a.get("name", "")
+            if nm == ASSET:
+                setup_url = a.get("browser_download_url")
+            elif nm == ASSET + ".sha256":
+                sha_url = a.get("browser_download_url")
+        tag = rel.get("tag_name", "")
         out.append({
-            "tag": rel.get("tag_name", ""),
-            "name": rel.get("name") or rel.get("tag_name", ""),
+            "tag": tag,
+            "version": tag.lstrip("vV"),
+            "name": rel.get("name") or tag,
             "published_at": rel.get("published_at", ""),
             "body": rel.get("body", "") or "",
+            "url": setup_url,
+            "sha_url": sha_url,
         })
     return out
+
+
+def is_newer(tag: str) -> bool:
+    """True if `tag` is a newer release than the running version."""
+    return _parse_version(tag or "") > _parse_version(__version__)
 
 
 def _sha256(path: str) -> str:
