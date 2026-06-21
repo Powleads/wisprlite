@@ -209,9 +209,11 @@ def main(first_run: bool = False) -> None:
     style.map("Accent.TButton", background=[("active", "#e8838b")])
     style.configure("TCheckbutton", background=BG, foreground=FG)
     style.map("TCheckbutton", background=[("active", BG)])
-    style.configure("TNotebook", background=BG, borderwidth=0, tabmargins=(8, 6, 0, 0))
+    style.configure("Card.TCheckbutton", background=CARD, foreground=FG)
+    style.map("Card.TCheckbutton", background=[("active", CARD)])
+    style.configure("TNotebook", background=BG, borderwidth=0, tabmargins=(10, 8, 0, 0))
     style.configure("TNotebook.Tab", background=CARD, foreground=MUTED,
-                    padding=(18, 7), font=("Segoe UI", 9, "bold"), borderwidth=0)
+                    padding=(26, 12), font=("Segoe UI", 10, "bold"), borderwidth=0)
     style.map("TNotebook.Tab", background=[("selected", BG)],
               foreground=[("selected", ACCENT), ("active", FG)])
     style.configure("Footer.TFrame", background=CARD)
@@ -263,19 +265,59 @@ def main(first_run: bool = False) -> None:
     _wheel(_canvas)
     _build_guide(tab_guide, _wheel)
     about.build(tab_about, root, _wheel)
-    row = 0
+    DIV = "#272b37"
 
-    def header(text):
-        nonlocal row
-        ttk.Label(frm, text=text, style="Head.TLabel").grid(row=row, column=0, columnspan=3,
-                                                             sticky="w", padx=14, pady=(24, 6))
-        row += 1
+    def card(title, subtitle=None):
+        wrap = tk.Frame(frm, bg=BG)
+        wrap.pack(fill="x", pady=(0, 18))
+        tk.Label(wrap, text=title, bg=BG, fg=FG, font=("Segoe UI", 13, "bold")).pack(anchor="w", padx=3)
+        if subtitle:
+            tk.Label(wrap, text=subtitle, bg=BG, fg=MUTED, font=("Segoe UI", 9),
+                     justify="left").pack(anchor="w", padx=3, pady=(2, 0))
+        c = tk.Frame(wrap, bg=CARD)
+        c.pack(fill="x", pady=(9, 0))
+        c._first = True
+        return c
 
-    def label(text, hint=None):
-        nonlocal row
-        ttk.Label(frm, text=text).grid(row=row, column=0, **pad)
-        if hint:
-            ttk.Label(frm, text=hint, style="Muted.TLabel").grid(row=row, column=2, **pad)
+    def _divide(c):
+        if not getattr(c, "_first", True):
+            tk.Frame(c, bg=DIV, height=1).pack(fill="x")
+        c._first = False
+
+    def row(c, text, desc=None):
+        _divide(c)
+        r = tk.Frame(c, bg=CARD, padx=18, pady=13)
+        r.pack(fill="x")
+        right = tk.Frame(r, bg=CARD)
+        right.pack(side="right")
+        left = tk.Frame(r, bg=CARD)
+        left.pack(side="left", fill="x", expand=True)
+        tk.Label(left, text=text, bg=CARD, fg=FG, font=("Segoe UI", 10)).pack(anchor="w")
+        if desc:
+            tk.Label(left, text=desc, bg=CARD, fg=MUTED, font=("Segoe UI", 8),
+                     wraplength=330, justify="left").pack(anchor="w", pady=(2, 0))
+        return right
+
+    def stack(c, text, desc=None):
+        _divide(c)
+        r = tk.Frame(c, bg=CARD, padx=18, pady=13)
+        r.pack(fill="x")
+        tk.Label(r, text=text, bg=CARD, fg=FG, font=("Segoe UI", 10)).pack(anchor="w")
+        if desc:
+            tk.Label(r, text=desc, bg=CARD, fg=MUTED, font=("Segoe UI", 8),
+                     justify="left").pack(anchor="w", pady=(2, 0))
+        body = tk.Frame(r, bg=CARD)
+        body.pack(fill="x", pady=(8, 0))
+        return body
+
+    def check(c, text, var, desc=None):
+        _divide(c)
+        r = tk.Frame(c, bg=CARD, padx=18, pady=12)
+        r.pack(fill="x")
+        ttk.Checkbutton(r, text=text, variable=var, style="Card.TCheckbutton").pack(anchor="w")
+        if desc:
+            tk.Label(r, text=desc, bg=CARD, fg=MUTED, font=("Segoe UI", 8),
+                     wraplength=470, justify="left").pack(anchor="w", padx=(25, 0), pady=(3, 0))
 
     # --- values ---
     engine_var = tk.StringVar(value=dict(ENGINES).get(cfg.engine, ENGINES[0][1]))
@@ -310,30 +352,31 @@ def main(first_run: bool = False) -> None:
     voice_commands_var = tk.BooleanVar(value=cfg.voice_commands)
     history_var = tk.BooleanVar(value=cfg.history_enabled)
 
-    def combo(var, options, width=26):
-        c = ttk.Combobox(frm, textvariable=var, values=options, state="readonly", width=width)
-        c.grid(row=row, column=1, padx=6, pady=8, sticky="w")
+    def combo(parent, var, options, width=22):
+        c = ttk.Combobox(parent, textvariable=var, values=options, state="readonly", width=width)
+        c.pack(side="left")
         return c
 
-    def entry(var, width=29):
-        e = ttk.Entry(frm, textvariable=var, width=width)
-        e.grid(row=row, column=1, padx=6, pady=8, sticky="w")
+    def entry(parent, var, width=22, show=None):
+        e = ttk.Entry(parent, textvariable=var, width=width, show=(show or ""))
+        e.pack(side="left")
         return e
 
     # --- General ---
-    header("General")
-    label("Engine"); combo(engine_var, [l for _, l in ENGINES]); row += 1
-    ttk.Label(frm, text="Deepgram is fastest (live). Local & OpenAI add a short wait — see the Guide tab.",
-              style="Muted.TLabel").grid(row=row, column=0, columnspan=3, sticky="w", padx=14, pady=(0, 2)); row += 1
-    label("Mode"); combo(mode_var, [l for _, l in MODES]); row += 1
-    label("Output"); combo(output_var, [l for _, l in OUTPUTS]); row += 1
+    c = card("General", "How Pipevoice listens, and where your words go.")
+    combo(row(c, "Engine", "Deepgram streams live (fastest). Local and OpenAI transcribe after you release."),
+          engine_var, [l for _, l in ENGINES])
+    combo(row(c, "Mode", "Push-to-talk holds the key; toggle taps it on and off."),
+          mode_var, [l for _, l in MODES])
+    combo(row(c, "Output", "Type the keystrokes, or paste from the clipboard."),
+          output_var, [l for _, l in OUTPUTS])
 
-    # --- Hotkey ---
-    header("Hotkey")
-    label("Push-to-talk key", "e.g. right ctrl, ctrl+alt, f9")
-    entry(hotkey_var, width=20)
-    cap_btn = ttk.Button(frm, text="Capture")
-    cap_btn.grid(row=row, column=1, padx=(190, 0), pady=5, sticky="w")
+    # --- Hotkeys ---
+    c = card("Hotkeys")
+    r = row(c, "Push-to-talk key", "Hold this to dictate into the focused window.")
+    entry(r, hotkey_var, width=14)
+    cap_btn = ttk.Button(r, text="Capture", width=8)
+    cap_btn.pack(side="left", padx=(8, 0))
 
     def capture():
         cap_btn.config(text="Press keys…")
@@ -355,10 +398,11 @@ def main(first_run: bool = False) -> None:
         threading.Thread(target=work, daemon=True).start()
 
     cap_btn.config(command=capture)
-    row += 1
-    label("Clipboard hotkey", "hold to dictate to the clipboard"); entry(clip_hotkey_var, width=20)
-    clip_cap_btn = ttk.Button(frm, text="Capture")
-    clip_cap_btn.grid(row=row, column=1, padx=(190, 0), pady=5, sticky="w")
+
+    r = row(c, "Clipboard hotkey", "Hold to dictate to the clipboard instead of typing into the app.")
+    entry(r, clip_hotkey_var, width=14)
+    clip_cap_btn = ttk.Button(r, text="Capture", width=8)
+    clip_cap_btn.pack(side="left", padx=(8, 0))
 
     def clip_capture():
         clip_cap_btn.config(text="Press keys…")
@@ -380,67 +424,62 @@ def main(first_run: bool = False) -> None:
         threading.Thread(target=work, daemon=True).start()
 
     clip_cap_btn.config(command=clip_capture)
-    row += 1
 
     # --- Audio ---
-    header("Audio")
-    label("Microphone"); combo(device_var, [lbl for lbl, _ in devices], width=34); row += 1
-    label("Accent / language", "pick yours for best accuracy"); combo(lang_var, [l for _, l in LANGUAGES], width=24); row += 1
+    c = card("Audio")
+    combo(row(c, "Microphone"), device_var, [lbl for lbl, _ in devices], width=30)
+    combo(row(c, "Accent / language", "Pick yours for better accuracy, including non-native accents."),
+          lang_var, [l for _, l in LANGUAGES])
 
     # --- Models ---
-    header("Models")
-    label("OpenAI model"); entry(oai_var); row += 1
-    label("Deepgram model"); entry(dg_var); row += 1
-    label("Local model size"); combo(local_var, LOCAL_SIZES); row += 1
+    c = card("Models", "Per-engine model names. The defaults are good for most people.")
+    entry(row(c, "OpenAI model"), oai_var, width=22)
+    entry(row(c, "Deepgram model"), dg_var, width=22)
+    combo(row(c, "Local model size", "Bigger is more accurate but slower."), local_var, LOCAL_SIZES)
 
     # --- API keys ---
-    header("API keys")
-    label("OpenAI key", "saved" if config.openai_key() else "not set")
-    e_oai = ttk.Entry(frm, textvariable=oai_key_var, width=29, show="•")
-    e_oai.grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
-    label("Deepgram key", "saved" if config.deepgram_key() else "not set")
-    e_dg = ttk.Entry(frm, textvariable=dg_key_var, width=29, show="•")
-    e_dg.grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
-    label("Gemini key", "saved" if config.gemini_key() else "not set")
-    ttk.Entry(frm, textvariable=gem_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
-    label("OpenRouter key", "saved" if config.openrouter_key() else "not set")
-    ttk.Entry(frm, textvariable=or_key_var, width=29, show="•").grid(row=row, column=1, padx=6, pady=8, sticky="w"); row += 1
-    ttk.Label(frm, text="Leave a key blank to keep the current one.",
-              style="Muted.TLabel").grid(row=row, column=0, columnspan=3,
-                                          sticky="w", padx=14); row += 1
+    c = card("API keys", "Stored locally in your .env, never uploaded. Leave a field blank to keep its current key.")
 
-    # --- Transcription ---
-    header("Transcription")
-    ttk.Checkbutton(frm, text="Polish with AI (Flow mode — tidies fillers & punctuation)",
-                    variable=ai_cleanup_var).grid(row=row, column=0, columnspan=3,
-                                                  sticky="w", padx=14, pady=5); row += 1
-    label("Cleanup with"); combo(cleanup_var, [l for _, l in CLEANUP_PROVIDERS], width=24); row += 1
-    label("Cleanup model", "blank = provider default"); entry(cleanup_model_var); row += 1
+    def key_row(name, var, present):
+        entry(row(c, name + " key", "Saved" if present else "Not set"), var, width=26, show="•")
+
+    key_row("OpenAI", oai_key_var, config.openai_key())
+    key_row("Deepgram", dg_key_var, config.deepgram_key())
+    key_row("Gemini", gem_key_var, config.gemini_key())
+    key_row("OpenRouter", or_key_var, config.openrouter_key())
+
+    # --- Polish & text ---
+    c = card("Polish & text", "Clean up and shape what gets typed.")
+    check(c, "Polish with AI (Flow mode)", ai_cleanup_var,
+          "Tidies filler words, punctuation and casing after transcription.")
+    combo(row(c, "Cleanup with", "OpenAI, free Google Gemini, OpenRouter, or fully offline Ollama."),
+          cleanup_var, [l for _, l in CLEANUP_PROVIDERS])
+    entry(row(c, "Cleanup model", "Blank uses the provider's default."), cleanup_model_var, width=22)
 
     def _on_cleanup_provider(*_):
         prov = value_for(cleanup_var, CLEANUP_PROVIDERS)
         cleanup_model_var.set(cleanup.PROVIDERS.get(prov, cleanup.PROVIDERS["openai"])[2])
     cleanup_var.trace_add("write", _on_cleanup_provider)
-    ttk.Checkbutton(frm, text="Press Enter after typing (auto-send)",
-                    variable=auto_enter_var).grid(row=row, column=0, columnspan=3,
-                                                  sticky="w", padx=14, pady=5); row += 1
-    ttk.Checkbutton(frm, text="Spoken commands (\"new line\", \"scratch that\", \"send it\")",
-                    variable=voice_commands_var).grid(row=row, column=0, columnspan=3,
-                                                      sticky="w", padx=14, pady=5); row += 1
-    label("Vocabulary", "names & jargon — better recognition"); row += 1
-    vocab_box = tk.Frame(frm, bg=BG)
-    vocab_box.grid(row=row, column=0, columnspan=3, sticky="w", padx=14, pady=(0, 6))
-    vocab_list = tk.Listbox(vocab_box, height=4, width=30, bg=CARD, fg=FG,
+
+    check(c, "Spoken commands", voice_commands_var,
+          'Say "new line", "scratch that", or end with "send it" while dictating.')
+    check(c, "Press Enter after typing (auto-send)", auto_enter_var,
+          "Submits the line. Handy for chat, leave off for editors.")
+
+    vb = stack(c, "Vocabulary", "Names and jargon, so they're recognised and spelled correctly.")
+    vocab_list = tk.Listbox(vb, height=4, width=26, bg=BG, fg=FG,
                             selectbackground=ACCENT, selectforeground="#1a0c0d",
-                            highlightthickness=1, highlightbackground="#2a2e3d",
+                            highlightthickness=1, highlightbackground=DIV,
                             relief="flat", activestyle="none", exportselection=False,
                             font=("Segoe UI", 9))
-    vocab_list.grid(row=0, column=0, rowspan=2, sticky="w")
+    vocab_list.pack(side="left", anchor="n")
     for _t in [t.strip() for t in (cfg.vocabulary or "").split(",") if t.strip()]:
         vocab_list.insert("end", _t)
+    vside = tk.Frame(vb, bg=CARD)
+    vside.pack(side="left", padx=(8, 0), anchor="n")
     vocab_add_var = tk.StringVar()
-    _vadd = ttk.Entry(vocab_box, textvariable=vocab_add_var, width=20)
-    _vadd.grid(row=0, column=1, padx=(8, 0), sticky="nw")
+    _vadd = ttk.Entry(vside, textvariable=vocab_add_var, width=16)
+    _vadd.pack(anchor="w")
 
     def _vocab_add(*_a):
         t = vocab_add_var.get().strip().strip(",")
@@ -453,35 +492,31 @@ def main(first_run: bool = False) -> None:
             vocab_list.delete(i)
 
     _vadd.bind("<Return>", _vocab_add)
-    ttk.Button(vocab_box, text="Add", command=_vocab_add, width=7).grid(row=0, column=2, padx=(6, 0), sticky="nw")
-    ttk.Button(vocab_box, text="Remove", command=_vocab_remove, width=7).grid(row=1, column=1, padx=(8, 0), pady=(4, 0), sticky="nw")
-    row += 1
-    label("Word fixes", "wrong=right, comma-sep"); entry(fixes_var); row += 1
-    label("Speech notes", "accent / stutter / fillers — guides AI cleanup"); entry(speech_notes_var); row += 1
+    _vrow = tk.Frame(vside, bg=CARD)
+    _vrow.pack(anchor="w", pady=(6, 0))
+    ttk.Button(_vrow, text="Add", command=_vocab_add, width=7).pack(side="left")
+    ttk.Button(_vrow, text="Remove", command=_vocab_remove, width=8).pack(side="left", padx=(6, 0))
 
-    # --- Toggles ---
-    header("Behaviour")
-    ttk.Checkbutton(frm, text="Show live overlay", variable=overlay_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
-    ttk.Checkbutton(frm, text="Play start/stop sounds", variable=sounds_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
-    ttk.Checkbutton(frm, text="Start on Windows login", variable=autostart_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
-    ttk.Checkbutton(frm, text="Automatic updates (check on startup)", variable=auto_update_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
-    ttk.Checkbutton(frm, text="Keep a local dictation history", variable=history_var).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=5); row += 1
-    ttk.Button(frm, text="Manage app profiles…",
-               command=lambda: _launch_child("--profiles")).grid(
-        row=row, column=0, columnspan=2, sticky="w", padx=14, pady=(10, 4)); row += 1
+    entry(row(c, "Word fixes", "Auto-corrections as wrong=right, comma separated."), fixes_var, width=24)
+    entry(row(c, "Speech notes", "Describe your accent, stutter or fillers to guide AI cleanup."),
+          speech_notes_var, width=24)
+
+    # --- Behaviour ---
+    c = card("Behaviour")
+    check(c, "Show live overlay", overlay_var, "A small HUD that shows it's listening.")
+    check(c, "Play start/stop sounds", sounds_var)
+    check(c, "Start on Windows login", autostart_var)
+    check(c, "Automatic updates", auto_update_var, "Check for a newer version on startup and install it silently.")
+    check(c, "Keep a local dictation history", history_var, "Saved on your PC; open it from the tray.")
+    pr = stack(c, "App profiles", "Give specific apps their own engine, cleanup and Enter behaviour.")
+    ttk.Button(pr, text="Manage app profiles…", command=lambda: _launch_child("--profiles")).pack(anchor="w")
 
     # --- Advanced ---
-    header("Advanced")
-    ttk.Label(frm, text="Most people never need these.",
-              style="Muted.TLabel").grid(row=row, column=0, columnspan=3, sticky="w", padx=14); row += 1
-    label("Min seconds", "ignore taps shorter than this"); entry(min_seconds_var, width=8); row += 1
-    label("Deepgram wait", "seconds to wait for final words"); entry(dg_timeout_var, width=8); row += 1
-    label("Paste speed", "slower is more reliable in some apps"); combo(paste_speed_var, [l for _, l in PASTE_SPEEDS], width=12); row += 1
+    c = card("Advanced", "Most people never need these.")
+    entry(row(c, "Min seconds", "Ignore taps shorter than this."), min_seconds_var, width=7)
+    entry(row(c, "Deepgram wait", "Seconds to wait for final words."), dg_timeout_var, width=7)
+    combo(row(c, "Paste speed", "Slower is more reliable in some apps."),
+          paste_speed_var, [l for _, l in PASTE_SPEEDS], width=10)
 
     # --- Save / Cancel (live in the fixed footer) ---
     def value_for(var, table):
@@ -560,7 +595,7 @@ def main(first_run: bool = False) -> None:
     cw = frm.winfo_reqwidth() + 22          # form width + scrollbar
     ch = frm.winfo_reqheight()
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
-    win_w = max(cw, 530)                    # also fit the Guide tab's text width
+    win_w = max(cw, 660)                    # roomy: keeps descriptions clear of the controls
     win_h = min(ch + 96, sh - 80)           # + tab strip + footer; never off-screen
     x = max(0, (sw - win_w) // 2)
     y = max(0, (sh - win_h) // 3)

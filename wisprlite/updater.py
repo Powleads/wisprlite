@@ -165,21 +165,28 @@ def download_and_run(info: dict) -> bool:
     except Exception:
         pass
     dest = str(folder / ASSET)
-    try:
-        req = urllib.request.Request(info["url"], headers=_UA)
-        with urllib.request.urlopen(req, timeout=120) as r, open(dest, "wb") as f:
-            while True:
-                chunk = r.read(65536)
-                if not chunk:
-                    break
-                f.write(chunk)
-    except Exception as exc:
-        log.warning("update download failed: %s", exc)
+    last_err = None
+    for attempt in (1, 2):  # the installer is sizeable; retry once on a transient drop
+        try:
+            req = urllib.request.Request(info["url"], headers=_UA)
+            with urllib.request.urlopen(req, timeout=300) as r, open(dest, "wb") as f:
+                while True:
+                    chunk = r.read(65536)
+                    if not chunk:
+                        break
+                    f.write(chunk)
+            last_err = None
+            break
+        except Exception as exc:
+            last_err = exc
+            log.warning("update download attempt %d failed: %s", attempt, exc)
+    if last_err is not None:
         return False
     # Verify integrity (the app is unsigned, so this is our tamper check).
     if info.get("sha256"):
-        if _sha256(dest) != info["sha256"]:
-            log.warning("update SHA-256 mismatch; aborting")
+        got = _sha256(dest)
+        if got != info["sha256"]:
+            log.warning("update SHA-256 mismatch: expected %s, got %s; aborting", info["sha256"], got)
             try:
                 os.remove(dest)
             except Exception:
