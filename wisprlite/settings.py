@@ -21,6 +21,7 @@ OUTPUTS = [("type", "Type keystrokes"), ("paste", "Clipboard + Ctrl+V")]
 PASTE_SPEEDS = [("fast", "Fast"), ("normal", "Normal"), ("slow", "Slow")]
 CLEANUP_PROVIDERS = [("openai", "OpenAI"), ("gemini", "Google Gemini (free tier)"),
                      ("openrouter", "OpenRouter (free models)"), ("ollama", "Local — Ollama (offline)")]
+STYLES = [("tidy", "Tidy — clean up"), ("prompt", "Prompt — for AI tools"), ("custom", "Custom…")]
 LOCAL_SIZES = ["tiny.en", "base.en", "small.en", "medium.en",
                "tiny", "base", "small", "medium", "large-v3", "large-v3-turbo"]
 LOCAL_DEVICES = [("auto", "Auto-detect"), ("cpu", "CPU"), ("cuda", "GPU (NVIDIA CUDA)")]
@@ -373,6 +374,8 @@ def main(first_run: bool = False) -> None:
     ai_cleanup_var = tk.BooleanVar(value=cfg.ai_cleanup)
     cleanup_var = tk.StringVar(value=dict(CLEANUP_PROVIDERS).get(cfg.cleanup_provider, CLEANUP_PROVIDERS[0][1]))
     cleanup_model_var = tk.StringVar(value=cfg.cleanup_model)
+    cleanup_style_var = tk.StringVar(value=dict(STYLES).get(cfg.cleanup_style, STYLES[0][1]))
+    cleanup_instruction_var = tk.StringVar(value=cfg.cleanup_instruction)
     auto_enter_var = tk.BooleanVar(value=cfg.auto_enter)
     min_seconds_var = tk.StringVar(value=str(cfg.min_seconds))
     dg_timeout_var = tk.StringVar(value=str(cfg.deepgram_finish_timeout))
@@ -493,6 +496,9 @@ def main(first_run: bool = False) -> None:
     combo(row(c, "Cleanup with", "OpenAI, free Google Gemini, OpenRouter, or fully offline Ollama."),
           cleanup_var, [l for _, l in CLEANUP_PROVIDERS])
     entry(row(c, "Cleanup model", "Blank uses the provider's default."), cleanup_model_var, width=22)
+    combo(row(c, "Polish style", "Tidy keeps your words; Prompt rewrites rambling into a clear AI instruction; Custom uses your own instruction."),
+          cleanup_style_var, [l for _, l in STYLES])
+    entry(row(c, "Custom polish instruction", "Used when Polish style = Custom."), cleanup_instruction_var, width=24)
 
     def _on_cleanup_provider(*_):
         prov = value_for(cleanup_var, CLEANUP_PROVIDERS)
@@ -587,6 +593,8 @@ def main(first_run: bool = False) -> None:
         cfg.ai_cleanup = bool(ai_cleanup_var.get())
         cfg.cleanup_provider = value_for(cleanup_var, CLEANUP_PROVIDERS)
         cfg.cleanup_model = cleanup_model_var.get().strip()
+        cfg.cleanup_style = value_for(cleanup_style_var, STYLES)
+        cfg.cleanup_instruction = cleanup_instruction_var.get().strip()
         cfg.auto_enter = bool(auto_enter_var.get())
         cfg.vocabulary = ", ".join(vocab_list.get(0, "end"))
         try:

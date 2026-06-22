@@ -74,6 +74,8 @@ class Config:
     ai_cleanup: bool = True         # polish transcript with an LLM
     cleanup_provider: str = "openai"  # openai | gemini | openrouter | ollama (all OpenAI-compatible)
     cleanup_model: str = ""           # blank = the provider's default model
+    cleanup_style: str = "tidy"       # tidy | prompt | custom — how Flow mode polishes
+    cleanup_instruction: str = ""     # the instruction used when cleanup_style == "custom"
     auto_enter: bool = False        # press Enter after typing (hands-free send)
     vocabulary: str = ""            # comma-separated terms to bias recognition
     speech_notes: str = ""          # free text about the user's accent / speech, fed to AI cleanup

@@ -308,7 +308,9 @@ class App:
             return text
         self.overlay.set_state("transcribing", "Polishing…")
         polished = cleanup.clean(text, self.cfg.cleanup_provider, self.cfg.cleanup_model,
-                                 self.cfg.language, self.cfg.speech_notes)
+                                 self.cfg.language, self.cfg.speech_notes,
+                                 style=self._eff("cleanup_style"),
+                                 custom_instruction=self._eff("cleanup_instruction"))
         return polished or text
 
     def _agent_dispatch(self, req: dict) -> dict:
