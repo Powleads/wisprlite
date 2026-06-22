@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Private Voice Typing: No Account, No Telemetry, No Servers | Pipevoice</title>
+<title>Private Voice Typing: No Account, No Telemetry, No Servers | PipeVoice</title>
 <meta name="description" content="Private voice typing for Windows with no account, no telemetry, and an offline mode. See exactly where your audio goes and how to verify it." />
 <link rel="canonical" href="https://pipevoice.app/blog/private-voice-typing-no-telemetry" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Private Voice Typing: No Account, No Telemetry, No Servers | Pipevoice" />
+<meta property="og:title" content="Private Voice Typing: No Account, No Telemetry, No Servers | PipeVoice" />
 <meta property="og:description" content="Private voice typing for Windows with no account, no telemetry, and an offline mode. See exactly where your audio goes and how to verify it." />
 <meta property="og:url" content="https://pipevoice.app/blog/private-voice-typing-no-telemetry" />
 <meta property="og:image" content="https://pipevoice.app/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Private Voice Typing: No Account, No Telemetry, No Servers | Pipevoice" />
+<meta name="twitter:title" content="Private Voice Typing: No Account, No Telemetry, No Servers | PipeVoice" />
 <meta name="twitter:description" content="Private voice typing for Windows with no account, no telemetry, and an offline mode. See exactly where your audio goes and how to verify it." />
 <meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
 <link rel="icon" type="image/png" href="/favicon.png" />
@@ -23,9 +23,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Private Voice Typing: No Account, No Telemetry, No Servers", "description": "Private voice typing for Windows with no account, no telemetry, and an offline mode. See exactly where your audio goes and how to verify it.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/private-voice-typing-no-telemetry"}, "about": "private voice typing"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Private Voice Typing: No Account, No Telemetry, No Servers", "description": "Private voice typing for Windows with no account, no telemetry, and an offline mode. See exactly where your audio goes and how to verify it.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "PipeVoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "PipeVoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/private-voice-typing-no-telemetry"}, "about": "private voice typing"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Private Voice Typing: No Account, No Telemetry, No Servers", "item": "https://pipevoice.app/blog/private-voice-typing-no-telemetry"}]}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Pipevoice collect or store my voice data?", "acceptedAnswer": {"@type": "Answer", "text": "No. Pipevoice has no telemetry and runs no servers of ours, so it never collects or stores your voice. Your dictation history is kept locally on your own machine. If you choose the Local Whisper engine, your audio is transcribed on your PC and is never transmitted anywhere."}}, {"@type": "Question", "name": "Do I need to create an account to use Pipevoice?", "acceptedAnswer": {"@type": "Answer", "text": "No. There is no sign-up, no email, and no licence server. You download the installer, run it, and start dictating with a hotkey. Nothing ties your dictation to an identity or login."}}, {"@type": "Question", "name": "If I use a cloud engine, who can see my audio?", "acceptedAnswer": {"@type": "Answer", "text": "Only the single provider you chose, using an API key you created and control. If you pick Deepgram, audio goes to Deepgram; if you pick OpenAI Whisper, it goes to OpenAI. Pipevoice never proxies, stores, or sees that audio, because it travels directly from your PC to that provider on your key."}}, {"@type": "Question", "name": "Does the AI polish feature send my audio anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Flow mode polish sends text only, never audio. Transcription happens first, and only the resulting text is passed to the polish provider you selected. If you choose local Ollama for polish, even that text stays on your PC."}}, {"@type": "Question", "name": "How can I verify a voice typing app's privacy claims?", "acceptedAnswer": {"@type": "Answer", "text": "With Pipevoice you can read the full source at github.com/Powleads/PipeVoice to see exactly where data goes. You can also run the offline path (Local Whisper plus Ollama) and watch your network activity with Resource Monitor or a firewall to confirm no transcription traffic is sent. That kind of independent check is only possible with open-source, offline-capable tools."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does PipeVoice collect or store my voice data?", "acceptedAnswer": {"@type": "Answer", "text": "No. PipeVoice has no telemetry and runs no servers of ours, so it never collects or stores your voice. Your dictation history is kept locally on your own machine. If you choose the Local Whisper engine, your audio is transcribed on your PC and is never transmitted anywhere."}}, {"@type": "Question", "name": "Do I need to create an account to use PipeVoice?", "acceptedAnswer": {"@type": "Answer", "text": "No. There is no sign-up, no email, and no licence server. You download the installer, run it, and start dictating with a hotkey. Nothing ties your dictation to an identity or login."}}, {"@type": "Question", "name": "If I use a cloud engine, who can see my audio?", "acceptedAnswer": {"@type": "Answer", "text": "Only the single provider you chose, using an API key you created and control. If you pick Deepgram, audio goes to Deepgram; if you pick OpenAI Whisper, it goes to OpenAI. PipeVoice never proxies, stores, or sees that audio, because it travels directly from your PC to that provider on your key."}}, {"@type": "Question", "name": "Does the AI polish feature send my audio anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Flow mode polish sends text only, never audio. Transcription happens first, and only the resulting text is passed to the polish provider you selected. If you choose local Ollama for polish, even that text stays on your PC."}}, {"@type": "Question", "name": "How can I verify a voice typing app's privacy claims?", "acceptedAnswer": {"@type": "Answer", "text": "With PipeVoice you can read the full source at github.com/Powleads/PipeVoice to see exactly where data goes. You can also run the offline path (Local Whisper plus Ollama) and watch your network activity with Resource Monitor or a firewall to confirm no transcription traffic is sent. That kind of independent check is only possible with open-source, offline-capable tools."}}]}</script>
 <style>
 :root{
   --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
@@ -103,7 +103,7 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 <body>
 <div class="wrap">
   <nav>
-    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="PipeVoice" style="height:30px;width:auto;display:block" /></a></div>
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="/blog">Blog</a>
@@ -115,13 +115,13 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
   <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Private Voice Typing: No Account, No Telemetry, No Servers</p>
   <header class="h">
     <h1>Private Voice Typing: No Account, No Telemetry, No Servers</h1>
-    <p class="dek">How Pipevoice handles your audio in each mode, and how to run a setup where nothing leaves your PC.</p>
+    <p class="dek">How PipeVoice handles your audio in each mode, and how to run a setup where nothing leaves your PC.</p>
     <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
   </header>
   <article>
-<p>Private voice typing means your spoken audio is never collected, stored, or routed through the app maker's servers, and ideally never leaves your PC at all. Pipevoice is a free, open-source Windows dictation tool with no account, no telemetry, and no servers of ours: in its fully offline mode (Local Whisper plus Ollama), nothing you say or type ever leaves your machine.</p>
+<p>Private voice typing means your spoken audio is never collected, stored, or routed through the app maker's servers, and ideally never leaves your PC at all. PipeVoice is a free, open-source Windows dictation tool with no account, no telemetry, and no servers of ours: in its fully offline mode (Local Whisper plus Ollama), nothing you say or type ever leaves your machine.</p>
 
-<p>That is a stronger claim than most dictation apps can make, and because Pipevoice is open source you do not have to take our word for it. This guide explains what "private" should actually mean, shows exactly where your audio goes in each mode, and walks through the zero-data-leaves-your-PC configuration.</p>
+<p>That is a stronger claim than most dictation apps can make, and because PipeVoice is open source you do not have to take our word for it. This guide explains what "private" should actually mean, shows exactly where your audio goes in each mode, and walks through the zero-data-leaves-your-PC configuration.</p>
 
 <h2>What "private" should mean for a voice typing app (and what it usually doesn't)</h2>
 
@@ -137,7 +137,7 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 
 <h2>Where your audio goes in each mode: local, BYO-key cloud, never our servers</h2>
 
-<p>Pipevoice lets you pick the transcription engine, and that choice decides where your audio travels. There is no hidden middle layer: Pipevoice never proxies your audio through any server we run.</p>
+<p>PipeVoice lets you pick the transcription engine, and that choice decides where your audio travels. There is no hidden middle layer: PipeVoice never proxies your audio through any server we run.</p>
 
 <table>
 <thead>
@@ -150,21 +150,21 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 </tbody>
 </table>
 
-<p>If you choose a cloud engine, your audio goes directly from your machine to that one provider, using an API key you created and control. Pipevoice does not see it, store it, or relay it. If you choose Local Whisper, transcription runs entirely on your own CPU. The first time you use it, Pipevoice downloads a model of roughly 150MB, and after that no audio is transmitted anywhere. You can raise the model size for more accuracy at the cost of speed.</p>
+<p>If you choose a cloud engine, your audio goes directly from your machine to that one provider, using an API key you created and control. PipeVoice does not see it, store it, or relay it. If you choose Local Whisper, transcription runs entirely on your own CPU. The first time you use it, PipeVoice downloads a model of roughly 150MB, and after that no audio is transmitted anywhere. You can raise the model size for more accuracy at the cost of speed.</p>
 
 <div class="note"><strong>Streaming vs batch:</strong> Deepgram is fastest and shows words live as you speak. OpenAI Whisper is the most accurate but processes after you release the key. Local Whisper is slower than cloud and wants a decent CPU for larger models, but it is the only option that sends nothing.</div>
 
-<h2>No account, no telemetry, no analytics on your voice: how Pipevoice is built</h2>
+<h2>No account, no telemetry, no analytics on your voice: how PipeVoice is built</h2>
 
-<p>Pipevoice has no sign-up screen. You download the installer, run it, and start dictating. There is no email to hand over, no licence server to check in with, and no account that ties your dictation history to an identity.</p>
+<p>PipeVoice has no sign-up screen. You download the installer, run it, and start dictating. There is no email to hand over, no licence server to check in with, and no account that ties your dictation history to an identity.</p>
 
-<p>There is also no telemetry. Pipevoice does not collect usage analytics, does not count your sessions, and does not report what you dictate. Your <strong>dictation history is stored locally</strong> on your own machine, not in a cloud account. The only network traffic Pipevoice generates on its own is the silent auto-updater, which fetches new versions and verifies them with a SHA-256 checksum before installing.</p>
+<p>There is also no telemetry. PipeVoice does not collect usage analytics, does not count your sessions, and does not report what you dictate. Your <strong>dictation history is stored locally</strong> on your own machine, not in a cloud account. The only network traffic PipeVoice generates on its own is the silent auto-updater, which fetches new versions and verifies them with a SHA-256 checksum before installing.</p>
 
-<p>To dictate, you hold a hotkey (default <kbd>Ctrl</kbd> + <kbd>\</kbd>, or <kbd>Right Ctrl</kbd>), speak, and release. Pipevoice types real keystrokes into whatever app is focused: a terminal, an editor, a browser, or a chat box. A second hotkey copies the result to your clipboard instead of typing it. None of that requires a login.</p>
+<p>To dictate, you hold a hotkey (default <kbd>Ctrl</kbd> + <kbd>\</kbd>, or <kbd>Right Ctrl</kbd>), speak, and release. PipeVoice types real keystrokes into whatever app is focused: a terminal, an editor, a browser, or a chat box. A second hotkey copies the result to your clipboard instead of typing it. None of that requires a login.</p>
 
 <h2>Flow mode polish sends text only, never audio</h2>
 
-<p>Pipevoice has an optional AI cleanup step called Flow mode that removes filler words and fixes punctuation and casing. It is important to be precise about what this does to your data: Flow mode sends <strong>text only, never audio</strong>. The transcription happens first, and only the resulting text is passed to the polish provider.</p>
+<p>PipeVoice has an optional AI cleanup step called Flow mode that removes filler words and fixes punctuation and casing. It is important to be precise about what this does to your data: Flow mode sends <strong>text only, never audio</strong>. The transcription happens first, and only the resulting text is passed to the polish provider.</p>
 
 <p>You choose the polish provider too: OpenAI, Google Gemini (free tier), OpenRouter (free community models), or local Ollama. If you pick Ollama, the polish runs offline on your PC and no text leaves your machine either. If you pick a cloud provider, only the cleaned-up text transcript goes to it, on your own key.</p>
 
@@ -177,24 +177,24 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 <li><strong>Local Ollama</strong> for Flow mode polish (offline, no key)</li>
 </ul>
 
-<p>This is the zero-cost, zero-key, zero-data-leaves-your-PC configuration. Your audio is transcribed locally, your text is polished locally, and Pipevoice itself sends nothing about your usage anywhere. It is the strongest privacy posture the app offers, and it is free.</p>
+<p>This is the zero-cost, zero-key, zero-data-leaves-your-PC configuration. Your audio is transcribed locally, your text is polished locally, and PipeVoice itself sends nothing about your usage anywhere. It is the strongest privacy posture the app offers, and it is free.</p>
 
 <h2>Why open source lets you verify the privacy claims yourself</h2>
 
-<p>Privacy promises are only as good as your ability to check them. Pipevoice is open source, and the full code lives at <a href="https://github.com/Powleads/PipeVoice">github.com/Powleads/PipeVoice</a>. You can read exactly where audio is sent, confirm there is no analytics SDK reporting your activity, and see that the only outbound calls are to the engine you selected and the update check.</p>
+<p>Privacy promises are only as good as your ability to check them. PipeVoice is open source, and the full code lives at <a href="https://github.com/Powleads/PipeVoice">github.com/Powleads/PipeVoice</a>. You can read exactly where audio is sent, confirm there is no analytics SDK reporting your activity, and see that the only outbound calls are to the engine you selected and the update check.</p>
 
-<p>If you do not want to read source, you can still verify the behaviour directly. Run the offline path, then watch your network activity with a tool like Windows Resource Monitor or a firewall: with Local Whisper and Ollama selected, you will see Pipevoice making no transcription traffic at all. That kind of independent verification is simply not possible with a closed, cloud-only app.</p>
+<p>If you do not want to read source, you can still verify the behaviour directly. Run the offline path, then watch your network activity with a tool like Windows Resource Monitor or a firewall: with Local Whisper and Ollama selected, you will see PipeVoice making no transcription traffic at all. That kind of independent verification is simply not possible with a closed, cloud-only app.</p>
 
 <h2>How cloud dictation tools differ on data handling</h2>
 
-<p>It helps to compare Pipevoice with common alternatives on the privacy axis specifically. None of this means the others are bad tools, only that their data model is different.</p>
+<p>It helps to compare PipeVoice with common alternatives on the privacy axis specifically. None of this means the others are bad tools, only that their data model is different.</p>
 
 <table>
 <thead>
 <tr><th>Tool</th><th>Offline option</th><th>Account required</th><th>Open source</th><th>Notes</th></tr>
 </thead>
 <tbody>
-<tr><td>Pipevoice</td><td>Yes (Local Whisper + Ollama)</td><td>No</td><td>Yes</td><td>You choose the engine and bring your own key</td></tr>
+<tr><td>PipeVoice</td><td>Yes (Local Whisper + Ollama)</td><td>No</td><td>Yes</td><td>You choose the engine and bring your own key</td></tr>
 <tr><td>Wispr Flow</td><td>No</td><td>Yes</td><td>No</td><td>Cloud-based, subscription</td></tr>
 <tr><td>Google Docs Voice Typing</td><td>No</td><td>Yes (Google)</td><td>No</td><td>Cloud, tied to the Google Docs editor</td></tr>
 <tr><td>Windows Voice Access</td><td>On-device</td><td>No</td><td>No</td><td>Built-in and free, but no engine choice</td></tr>
@@ -202,12 +202,12 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 </tbody>
 </table>
 
-<p>Pipevoice's wedge is the combination: free, open source, Windows-native, with an offline option, and it types into <em>any</em> focused app including the terminal and editors like Claude Code, Cursor, and VS Code. Read more in our <a href="/vs/wispr-flow">Wispr Flow alternative comparison</a> and on <a href="/blog/wispr-flow-windows-alternative">Windows alternatives to Wispr Flow</a>.</p>
+<p>PipeVoice's wedge is the combination: free, open source, Windows-native, with an offline option, and it types into <em>any</em> focused app including the terminal and editors like Claude Code, Cursor, and VS Code. Read more in our <a href="/vs/wispr-flow">Wispr Flow alternative comparison</a> and on <a href="/blog/wispr-flow-windows-alternative">Windows alternatives to Wispr Flow</a>.</p>
 
 <h2>Setting up the zero-data-leaves-your-PC configuration</h2>
 
 <ol>
-<li>Download the installer from <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">the latest release</a> and run it. Because Pipevoice is currently unsigned, Windows SmartScreen may show an "unrecognised app" warning. Click <strong>More info</strong>, then <strong>Run anyway</strong> (code signing is in progress).</li>
+<li>Download the installer from <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">the latest release</a> and run it. Because PipeVoice is currently unsigned, Windows SmartScreen may show an "unrecognised app" warning. Click <strong>More info</strong>, then <strong>Run anyway</strong> (code signing is in progress).</li>
 <li>In settings, choose <strong>Local Whisper / faster-whisper</strong> as your transcription engine. The first use downloads a model of about 150MB; raise the model size later if you want more accuracy.</li>
 <li>For Flow mode, choose <strong>local Ollama</strong> as the polish provider so cleanup also runs offline.</li>
 <li>Hold <kbd>Ctrl</kbd> + <kbd>\</kbd> (or <kbd>Right Ctrl</kbd>), speak, and release. Your words are transcribed locally and typed into the focused app.</li>
@@ -220,41 +220,41 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 <p>Whatever app you end up using, run it through these questions:</p>
 
 <ul>
-<li>Does it require an account to dictate? (Pipevoice: no.)</li>
-<li>Does it send usage analytics or telemetry? (Pipevoice: no.)</li>
-<li>Is there an offline mode where audio never leaves your PC? (Pipevoice: yes, Local Whisper plus Ollama.)</li>
-<li>When using a cloud engine, do you control the key and the provider? (Pipevoice: yes, bring your own key.)</li>
-<li>Can you verify the claims, ideally because the code is open source? (Pipevoice: yes, on GitHub.)</li>
-<li>Does the AI cleanup step send your audio anywhere? (Pipevoice: no, text only.)</li>
+<li>Does it require an account to dictate? (PipeVoice: no.)</li>
+<li>Does it send usage analytics or telemetry? (PipeVoice: no.)</li>
+<li>Is there an offline mode where audio never leaves your PC? (PipeVoice: yes, Local Whisper plus Ollama.)</li>
+<li>When using a cloud engine, do you control the key and the provider? (PipeVoice: yes, bring your own key.)</li>
+<li>Can you verify the claims, ideally because the code is open source? (PipeVoice: yes, on GitHub.)</li>
+<li>Does the AI cleanup step send your audio anywhere? (PipeVoice: no, text only.)</li>
 </ul>
 
-<p>If a tool fails several of these, "private" is doing a lot of marketing work. Pipevoice was built to pass all of them, and to let you confirm it yourself.</p>
+<p>If a tool fails several of these, "private" is doing a lot of marketing work. PipeVoice was built to pass all of them, and to let you confirm it yourself.</p>
 
-<div class="note"><strong>Free forever.</strong> The core of Pipevoice stays free. A managed-key Pro tier may arrive later, but the offline, no-account, no-telemetry path is the foundation. Tagline: talk faster than you type. <a href="/windows-voice-typing">See Windows voice typing</a> or grab <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">the download</a>.</div>
+<div class="note"><strong>Free forever.</strong> The core of PipeVoice stays free. A managed-key Pro tier may arrive later, but the offline, no-account, no-telemetry path is the foundation. Tagline: talk faster than you type. <a href="/windows-voice-typing">See Windows voice typing</a> or grab <a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">the download</a>.</div>
   </article>
   <div class="cta">
-    <h3>Try Pipevoice free</h3>
+    <h3>Try PipeVoice free</h3>
     <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
     <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
     <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
   </div>
   <section class="faq">
     <h2>FAQ</h2>
-      <details><summary>Does Pipevoice collect or store my voice data?</summary><p>No. Pipevoice has no telemetry and runs no servers of ours, so it never collects or stores your voice. Your dictation history is kept locally on your own machine. If you choose the Local Whisper engine, your audio is transcribed on your PC and is never transmitted anywhere.</p></details>
-      <details><summary>Do I need to create an account to use Pipevoice?</summary><p>No. There is no sign-up, no email, and no licence server. You download the installer, run it, and start dictating with a hotkey. Nothing ties your dictation to an identity or login.</p></details>
-      <details><summary>If I use a cloud engine, who can see my audio?</summary><p>Only the single provider you chose, using an API key you created and control. If you pick Deepgram, audio goes to Deepgram; if you pick OpenAI Whisper, it goes to OpenAI. Pipevoice never proxies, stores, or sees that audio, because it travels directly from your PC to that provider on your key.</p></details>
+      <details><summary>Does PipeVoice collect or store my voice data?</summary><p>No. PipeVoice has no telemetry and runs no servers of ours, so it never collects or stores your voice. Your dictation history is kept locally on your own machine. If you choose the Local Whisper engine, your audio is transcribed on your PC and is never transmitted anywhere.</p></details>
+      <details><summary>Do I need to create an account to use PipeVoice?</summary><p>No. There is no sign-up, no email, and no licence server. You download the installer, run it, and start dictating with a hotkey. Nothing ties your dictation to an identity or login.</p></details>
+      <details><summary>If I use a cloud engine, who can see my audio?</summary><p>Only the single provider you chose, using an API key you created and control. If you pick Deepgram, audio goes to Deepgram; if you pick OpenAI Whisper, it goes to OpenAI. PipeVoice never proxies, stores, or sees that audio, because it travels directly from your PC to that provider on your key.</p></details>
       <details><summary>Does the AI polish feature send my audio anywhere?</summary><p>No. Flow mode polish sends text only, never audio. Transcription happens first, and only the resulting text is passed to the polish provider you selected. If you choose local Ollama for polish, even that text stays on your PC.</p></details>
-      <details><summary>How can I verify a voice typing app&#x27;s privacy claims?</summary><p>With Pipevoice you can read the full source at github.com/Powleads/PipeVoice to see exactly where data goes. You can also run the offline path (Local Whisper plus Ollama) and watch your network activity with Resource Monitor or a firewall to confirm no transcription traffic is sent. That kind of independent check is only possible with open-source, offline-capable tools.</p></details>
+      <details><summary>How can I verify a voice typing app&#x27;s privacy claims?</summary><p>With PipeVoice you can read the full source at github.com/Powleads/PipeVoice to see exactly where data goes. You can also run the offline path (Local Whisper plus Ollama) and watch your network activity with Resource Monitor or a firewall to confirm no transcription traffic is sent. That kind of independent check is only possible with open-source, offline-capable tools.</p></details>
   </section>
   <section class="related">
     <h2>Keep reading</h2>
-      <a href="/blog/offline-voice-typing-windows">Offline Voice Typing for Windows: 100% Private, No Cloud<span>How to dictate into any Windows app with zero internet, no API key, and nothing leaving your PC, using Local Whisper and Ollama in Pipevoice.</span></a>
+      <a href="/blog/offline-voice-typing-windows">Offline Voice Typing for Windows: 100% Private, No Cloud<span>How to dictate into any Windows app with zero internet, no API key, and nothing leaving your PC, using Local Whisper and Ollama in PipeVoice.</span></a>
       <a href="/blog/free-voice-typing-software-windows">Free Voice Typing Software for Windows (2026): The Honest Guide<span>What &quot;free&quot; really means in voice typing, where the built-in Windows option falls short, and how to type into any app with your voice for zero cost.</span></a>
-      <a href="/blog/wispr-flow-windows-alternative">The Best Wispr Flow Alternative for Windows (Free &amp; Open Source)<span>Pipevoice is a free, open-source, Windows-native voice typing tool with an offline mode and your choice of transcription engine.</span></a>
+      <a href="/blog/wispr-flow-windows-alternative">The Best Wispr Flow Alternative for Windows (Free &amp; Open Source)<span>PipeVoice is a free, open-source, Windows-native voice typing tool with an offline mode and your choice of transcription engine.</span></a>
       <a href="/blog/best-free-dictation-software-windows">Best Free Dictation Software for Windows in 2026 (Tested)<span>A straight comparison of the genuinely free voice typing tools for Windows 10 and 11, including offline and open-source options.</span></a>
   </section>
   <footer>
-    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div>PipeVoice · free, private voice typing for Windows.</div>
     <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
   </footer>
 </div>

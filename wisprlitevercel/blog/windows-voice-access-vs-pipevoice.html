@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Windows Voice Access vs Pipevoice: When Built-In Isn&#x27;t Enough</title>
-<meta name="description" content="Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs Pipevoice." />
+<title>Windows Voice Access vs PipeVoice: When Built-In Isn&#x27;t Enough</title>
+<meta name="description" content="Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs PipeVoice." />
 <link rel="canonical" href="https://pipevoice.app/blog/windows-voice-access-vs-pipevoice" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Windows Voice Access vs Pipevoice: When Built-In Isn&#x27;t Enough" />
-<meta property="og:description" content="Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs Pipevoice." />
+<meta property="og:title" content="Windows Voice Access vs PipeVoice: When Built-In Isn&#x27;t Enough" />
+<meta property="og:description" content="Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs PipeVoice." />
 <meta property="og:url" content="https://pipevoice.app/blog/windows-voice-access-vs-pipevoice" />
 <meta property="og:image" content="https://pipevoice.app/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Windows Voice Access vs Pipevoice: When Built-In Isn&#x27;t Enough" />
-<meta name="twitter:description" content="Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs Pipevoice." />
+<meta name="twitter:title" content="Windows Voice Access vs PipeVoice: When Built-In Isn&#x27;t Enough" />
+<meta name="twitter:description" content="Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs PipeVoice." />
 <meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Windows Voice Access vs Pipevoice: When Built-In Isn't Enough", "description": "Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs Pipevoice.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "Pipevoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/windows-voice-access-vs-pipevoice"}, "about": "windows voice access vs"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Windows Voice Access vs Pipevoice: When Built-In Isn't Enough", "item": "https://pipevoice.app/blog/windows-voice-access-vs-pipevoice"}]}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Windows Voice Typing good enough or do I need an app?", "acceptedAnswer": {"@type": "Answer", "text": "For basic dictation into Word, Outlook, Edge, and standard text boxes, Win+H and Voice Access are good enough and free. You need a dedicated app like Pipevoice when you want engine choice, AI cleanup, a fully offline setup, or reliable typing into terminals and code editors where the built-in tools struggle."}}, {"@type": "Question", "name": "Why doesn't Windows voice typing work in some apps?", "acceptedAnswer": {"@type": "Answer", "text": "Windows voice typing relies on a standard dictation hook that assumes a well-behaved text control. Terminals, many code editors, and custom Electron chat boxes often do not qualify, so dictation does nothing or drops characters. Pipevoice avoids this by sending real keystrokes that any text-accepting app receives."}}, {"@type": "Question", "name": "Can I choose the transcription engine in Windows Voice Access?", "acceptedAnswer": {"@type": "Answer", "text": "No. Windows Voice Access and Win+H use Microsoft's recognizer only, with no way to swap it. Pipevoice lets you pick Deepgram for live streaming, OpenAI Whisper for top accuracy, or Local Whisper to run fully offline."}}, {"@type": "Question", "name": "Does Windows voice typing add AI cleanup or punctuation polish?", "acceptedAnswer": {"@type": "Answer", "text": "No, built-in dictation transcribes literally, so filler words and false starts stay in the text and punctuation is inconsistent. Pipevoice offers optional Flow mode that cleans fillers, fixes punctuation, and corrects casing using OpenAI, Gemini, OpenRouter, or local Ollama, and it sends text only, never audio."}}, {"@type": "Question", "name": "Is Pipevoice more accurate than built-in Windows dictation?", "acceptedAnswer": {"@type": "Answer", "text": "It can be, because you choose the engine. OpenAI Whisper is the most accurate option for hard audio, and vocabulary boosting helps with jargon, neither of which Windows offers. With Local Whisper you can also raise the model size for more accuracy at the cost of speed."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Windows Voice Access vs PipeVoice: When Built-In Isn't Enough", "description": "Windows Voice Access and Win+H are free and fine for basics. See where they fall short on apps, engine choice, and AI cleanup vs PipeVoice.", "image": "https://pipevoice.app/og-image.png", "datePublished": "2026-06-22", "dateModified": "2026-06-22", "author": {"@type": "Organization", "name": "PipeVoice", "url": "https://pipevoice.app"}, "publisher": {"@type": "Organization", "name": "PipeVoice", "url": "https://pipevoice.app", "logo": {"@type": "ImageObject", "url": "https://pipevoice.app/apple-touch-icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://pipevoice.app/blog/windows-voice-access-vs-pipevoice"}, "about": "windows voice access vs"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pipevoice.app/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pipevoice.app/blog"}, {"@type": "ListItem", "position": 3, "name": "Windows Voice Access vs PipeVoice: When Built-In Isn't Enough", "item": "https://pipevoice.app/blog/windows-voice-access-vs-pipevoice"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Windows Voice Typing good enough or do I need an app?", "acceptedAnswer": {"@type": "Answer", "text": "For basic dictation into Word, Outlook, Edge, and standard text boxes, Win+H and Voice Access are good enough and free. You need a dedicated app like PipeVoice when you want engine choice, AI cleanup, a fully offline setup, or reliable typing into terminals and code editors where the built-in tools struggle."}}, {"@type": "Question", "name": "Why doesn't Windows voice typing work in some apps?", "acceptedAnswer": {"@type": "Answer", "text": "Windows voice typing relies on a standard dictation hook that assumes a well-behaved text control. Terminals, many code editors, and custom Electron chat boxes often do not qualify, so dictation does nothing or drops characters. PipeVoice avoids this by sending real keystrokes that any text-accepting app receives."}}, {"@type": "Question", "name": "Can I choose the transcription engine in Windows Voice Access?", "acceptedAnswer": {"@type": "Answer", "text": "No. Windows Voice Access and Win+H use Microsoft's recognizer only, with no way to swap it. PipeVoice lets you pick Deepgram for live streaming, OpenAI Whisper for top accuracy, or Local Whisper to run fully offline."}}, {"@type": "Question", "name": "Does Windows voice typing add AI cleanup or punctuation polish?", "acceptedAnswer": {"@type": "Answer", "text": "No, built-in dictation transcribes literally, so filler words and false starts stay in the text and punctuation is inconsistent. PipeVoice offers optional Flow mode that cleans fillers, fixes punctuation, and corrects casing using OpenAI, Gemini, OpenRouter, or local Ollama, and it sends text only, never audio."}}, {"@type": "Question", "name": "Is PipeVoice more accurate than built-in Windows dictation?", "acceptedAnswer": {"@type": "Answer", "text": "It can be, because you choose the engine. OpenAI Whisper is the most accurate option for hard audio, and vocabulary boosting helps with jargon, neither of which Windows offers. With Local Whisper you can also raise the model size for more accuracy at the cost of speed."}}]}</script>
 <style>
 :root{
   --canvas:#13151d; --deep:#0f1117; --card:#1b1e29;
@@ -103,7 +103,7 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 <body>
 <div class="wrap">
   <nav>
-    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" /></a></div>
+    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="PipeVoice" style="height:30px;width:auto;display:block" /></a></div>
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="/blog">Blog</a>
@@ -112,14 +112,14 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
       <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
     </div>
   </nav>
-  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Windows Voice Access vs Pipevoice: When Built-In Isn&#x27;t Enough</p>
+  <p class="crumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Windows Voice Access vs PipeVoice: When Built-In Isn&#x27;t Enough</p>
   <header class="h">
-    <h1>Windows Voice Access vs Pipevoice: When Built-In Isn&#x27;t Enough</h1>
+    <h1>Windows Voice Access vs PipeVoice: When Built-In Isn&#x27;t Enough</h1>
     <p class="dek">The free built-in tools cover basic dictation. Here is exactly where they stop and a dedicated app starts.</p>
     <div class="meta"><span>7 min read</span><span>Updated Jun 2026</span><span>Free · Windows</span></div>
   </header>
   <article>
-<p>If you only need basic dictation into common Windows apps, the built-in Voice Access and <kbd>Win</kbd>+<kbd>H</kbd> voice typing are good enough and cost nothing. You start needing a dedicated app like <strong>Pipevoice</strong> when you want to pick your own transcription engine, run fully offline, get AI cleanup of filler words and punctuation, or dictate reliably into terminals, code editors, and Claude Code where the built-in tools struggle.</p>
+<p>If you only need basic dictation into common Windows apps, the built-in Voice Access and <kbd>Win</kbd>+<kbd>H</kbd> voice typing are good enough and cost nothing. You start needing a dedicated app like <strong>PipeVoice</strong> when you want to pick your own transcription engine, run fully offline, get AI cleanup of filler words and punctuation, or dictate reliably into terminals, code editors, and Claude Code where the built-in tools struggle.</p>
 
 <h2>What Windows Voice Access and Win+H voice typing actually do</h2>
 <p>Windows ships two related speech features. <strong>Win+H voice typing</strong> is a quick dictation panel: press <kbd>Win</kbd>+<kbd>H</kbd>, speak, and it types into the focused text field using Microsoft's cloud recognizer. <strong>Voice Access</strong> (Windows 11) is broader, adding hands-free navigation and on-device recognition so you can click, scroll, and control windows by voice, not just dictate.</p>
@@ -130,7 +130,7 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 <ul>
 <li><strong>Free and already there.</strong> No download, no account, no API key.</li>
 <li><strong>Basic dictation in Microsoft-friendly apps.</strong> Word, Outlook, Edge, and standard text boxes handle dictation cleanly.</li>
-<li><strong>Accessibility navigation.</strong> Voice Access can drive the whole desktop by voice, which Pipevoice does not try to do.</li>
+<li><strong>Accessibility navigation.</strong> Voice Access can drive the whole desktop by voice, which PipeVoice does not try to do.</li>
 <li><strong>On-device option.</strong> Voice Access can run recognition locally for privacy and offline use.</li>
 </ul>
 <p>If that describes your needs, you can stop reading. There is no reason to add software.</p>
@@ -144,11 +144,11 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 <h3>No AI cleanup</h3>
 <p>Built-in dictation transcribes literally. Your "um", "you know", and false starts land in the text exactly as spoken, and punctuation is hit or miss unless you say it aloud.</p>
 
-<h2>Pipevoice vs Windows voice typing: side by side</h2>
-<p>Pipevoice is a free, open-source, push-to-talk voice typing app for Windows 10 and 11. You hold a hotkey (default <kbd>Ctrl</kbd>+<kbd>\</kbd>, or Right <kbd>Ctrl</kbd>), speak, release, and it types real keystrokes into whatever app is focused. Here is how the two compare.</p>
+<h2>PipeVoice vs Windows voice typing: side by side</h2>
+<p>PipeVoice is a free, open-source, push-to-talk voice typing app for Windows 10 and 11. You hold a hotkey (default <kbd>Ctrl</kbd>+<kbd>\</kbd>, or Right <kbd>Ctrl</kbd>), speak, release, and it types real keystrokes into whatever app is focused. Here is how the two compare.</p>
 <table>
 <thead>
-<tr><th>Capability</th><th>Windows Voice Typing / Voice Access</th><th>Pipevoice</th></tr>
+<tr><th>Capability</th><th>Windows Voice Typing / Voice Access</th><th>PipeVoice</th></tr>
 </thead>
 <tbody>
 <tr><td>Price</td><td>Free, built in</td><td>Free, open source</td></tr>
@@ -165,25 +165,25 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 </table>
 
 <h2>Engine choice and accuracy</h2>
-<p>This is the core difference. With Pipevoice you pick the engine that fits the moment, and you bring your own free or low-cost API key:</p>
+<p>This is the core difference. With PipeVoice you pick the engine that fits the moment, and you bring your own free or low-cost API key:</p>
 <ul>
 <li><strong>Deepgram</strong> (streaming): words appear live as you speak, the fastest option, needs your own free API key, roughly pennies per day.</li>
 <li><strong>OpenAI Whisper</strong> (batch): the most accurate option, needs your OpenAI key.</li>
 <li><strong>Local Whisper / faster-whisper</strong>: runs fully offline on your PC, free, no key. First use downloads a model of about 150MB, and you can raise the model size for more accuracy.</li>
 </ul>
-<p>The built-in recognizer gives you none of these levers. If Microsoft mishears your domain jargon, you are stuck; with Pipevoice you can switch engines or add vocabulary boosting for specific terms.</p>
+<p>The built-in recognizer gives you none of these levers. If Microsoft mishears your domain jargon, you are stuck; with PipeVoice you can switch engines or add vocabulary boosting for specific terms.</p>
 
 <h2>Typing into terminals, editors, and Claude Code</h2>
-<p>Because Pipevoice emits real keystrokes rather than relying on a dictation hook, it types into anything that accepts text: a terminal, VS Code, Cursor, a browser chat box, or the Claude Code CLI. That matters for developers dictating prompts, since one consistent hotkey works in the CLI and everywhere else. A second hotkey copies the result to your clipboard instead of typing it, which is handy when an app fights direct input.</p>
-<div class="note"><strong>Why keystrokes matter:</strong> apps that ignore the Windows dictation panel still accept ordinary typed characters, so Pipevoice reaches places Win+H cannot.</div>
+<p>Because PipeVoice emits real keystrokes rather than relying on a dictation hook, it types into anything that accepts text: a terminal, VS Code, Cursor, a browser chat box, or the Claude Code CLI. That matters for developers dictating prompts, since one consistent hotkey works in the CLI and everywhere else. A second hotkey copies the result to your clipboard instead of typing it, which is handy when an app fights direct input.</p>
+<div class="note"><strong>Why keystrokes matter:</strong> apps that ignore the Windows dictation panel still accept ordinary typed characters, so PipeVoice reaches places Win+H cannot.</div>
 
 <h2>Offline and privacy differences</h2>
-<p>Voice Access can run on-device, which is good. Pipevoice gives you a fully offline path too: <strong>Local Whisper for transcription plus local Ollama for AI cleanup</strong> means zero cost, no key, and nothing leaving your PC. If you choose a cloud engine instead, audio goes only to the provider you picked, on your own key, and AI polish sends text only, never audio. Pipevoice itself has no account, no telemetry, and no servers of ours.</p>
+<p>Voice Access can run on-device, which is good. PipeVoice gives you a fully offline path too: <strong>Local Whisper for transcription plus local Ollama for AI cleanup</strong> means zero cost, no key, and nothing leaving your PC. If you choose a cloud engine instead, audio goes only to the provider you picked, on your own key, and AI polish sends text only, never audio. PipeVoice itself has no account, no telemetry, and no servers of ours.</p>
 
 <h2>Optional AI polish</h2>
 <p>Flow mode cleans filler words, fixes punctuation, and corrects casing after transcription. You choose the provider: OpenAI, Google Gemini (free tier), OpenRouter (free community models), or local Ollama for an offline, no-key setup. The built-in Windows tools have no equivalent, so your raw "uh, so basically" stays in the text.</p>
 
-<h2>Honest limitations of Pipevoice</h2>
+<h2>Honest limitations of PipeVoice</h2>
 <p>To be fair both ways:</p>
 <ul>
 <li>Windows only. There is no Mac or Linux build.</li>
@@ -196,25 +196,25 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 <ol>
 <li><strong>Just basic dictation in Word, Outlook, or a browser, and you want zero setup?</strong> Use Win+H or Voice Access. Done.</li>
 <li><strong>Need to navigate the whole desktop hands-free?</strong> Voice Access is built for that.</li>
-<li><strong>Dictating into terminals, code editors, or Claude Code, or you want a faster/more accurate engine, AI cleanup, or a fully offline setup?</strong> Use Pipevoice.</li>
+<li><strong>Dictating into terminals, code editors, or Claude Code, or you want a faster/more accurate engine, AI cleanup, or a fully offline setup?</strong> Use PipeVoice.</li>
 </ol>
-<p>The two are not really rivals so much as different tiers. The built-in tools cover the floor; Pipevoice picks up where they stop. If you want to dig into the broader landscape, see <a href="/blog/free-voice-typing-software-windows">free voice typing software for Windows</a>, our overview of <a href="/blog/speech-to-text-windows">speech-to-text on Windows</a>, and a practical <a href="/blog/how-to-dictate-on-windows">guide to dictating on Windows</a>. You can also compare against the paid cloud option on our <a href="/vs/wispr-flow">Pipevoice vs Wispr Flow</a> page.</p>
+<p>The two are not really rivals so much as different tiers. The built-in tools cover the floor; PipeVoice picks up where they stop. If you want to dig into the broader landscape, see <a href="/blog/free-voice-typing-software-windows">free voice typing software for Windows</a>, our overview of <a href="/blog/speech-to-text-windows">speech-to-text on Windows</a>, and a practical <a href="/blog/how-to-dictate-on-windows">guide to dictating on Windows</a>. You can also compare against the paid cloud option on our <a href="/vs/wispr-flow">PipeVoice vs Wispr Flow</a> page.</p>
 
-<p><a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download Pipevoice free</a> and try the offline path, or read the <a href="/docs">docs</a> first. Talk faster than you type.</p>
+<p><a href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">Download PipeVoice free</a> and try the offline path, or read the <a href="/docs">docs</a> first. Talk faster than you type.</p>
   </article>
   <div class="cta">
-    <h3>Try Pipevoice free</h3>
+    <h3>Try PipeVoice free</h3>
     <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>
     <a class="btn" href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
     <p class="fine">free forever · open source · Windows 10 &amp; 11</p>
   </div>
   <section class="faq">
     <h2>FAQ</h2>
-      <details><summary>Is Windows Voice Typing good enough or do I need an app?</summary><p>For basic dictation into Word, Outlook, Edge, and standard text boxes, Win+H and Voice Access are good enough and free. You need a dedicated app like Pipevoice when you want engine choice, AI cleanup, a fully offline setup, or reliable typing into terminals and code editors where the built-in tools struggle.</p></details>
-      <details><summary>Why doesn&#x27;t Windows voice typing work in some apps?</summary><p>Windows voice typing relies on a standard dictation hook that assumes a well-behaved text control. Terminals, many code editors, and custom Electron chat boxes often do not qualify, so dictation does nothing or drops characters. Pipevoice avoids this by sending real keystrokes that any text-accepting app receives.</p></details>
-      <details><summary>Can I choose the transcription engine in Windows Voice Access?</summary><p>No. Windows Voice Access and Win+H use Microsoft&#x27;s recognizer only, with no way to swap it. Pipevoice lets you pick Deepgram for live streaming, OpenAI Whisper for top accuracy, or Local Whisper to run fully offline.</p></details>
-      <details><summary>Does Windows voice typing add AI cleanup or punctuation polish?</summary><p>No, built-in dictation transcribes literally, so filler words and false starts stay in the text and punctuation is inconsistent. Pipevoice offers optional Flow mode that cleans fillers, fixes punctuation, and corrects casing using OpenAI, Gemini, OpenRouter, or local Ollama, and it sends text only, never audio.</p></details>
-      <details><summary>Is Pipevoice more accurate than built-in Windows dictation?</summary><p>It can be, because you choose the engine. OpenAI Whisper is the most accurate option for hard audio, and vocabulary boosting helps with jargon, neither of which Windows offers. With Local Whisper you can also raise the model size for more accuracy at the cost of speed.</p></details>
+      <details><summary>Is Windows Voice Typing good enough or do I need an app?</summary><p>For basic dictation into Word, Outlook, Edge, and standard text boxes, Win+H and Voice Access are good enough and free. You need a dedicated app like PipeVoice when you want engine choice, AI cleanup, a fully offline setup, or reliable typing into terminals and code editors where the built-in tools struggle.</p></details>
+      <details><summary>Why doesn&#x27;t Windows voice typing work in some apps?</summary><p>Windows voice typing relies on a standard dictation hook that assumes a well-behaved text control. Terminals, many code editors, and custom Electron chat boxes often do not qualify, so dictation does nothing or drops characters. PipeVoice avoids this by sending real keystrokes that any text-accepting app receives.</p></details>
+      <details><summary>Can I choose the transcription engine in Windows Voice Access?</summary><p>No. Windows Voice Access and Win+H use Microsoft&#x27;s recognizer only, with no way to swap it. PipeVoice lets you pick Deepgram for live streaming, OpenAI Whisper for top accuracy, or Local Whisper to run fully offline.</p></details>
+      <details><summary>Does Windows voice typing add AI cleanup or punctuation polish?</summary><p>No, built-in dictation transcribes literally, so filler words and false starts stay in the text and punctuation is inconsistent. PipeVoice offers optional Flow mode that cleans fillers, fixes punctuation, and corrects casing using OpenAI, Gemini, OpenRouter, or local Ollama, and it sends text only, never audio.</p></details>
+      <details><summary>Is PipeVoice more accurate than built-in Windows dictation?</summary><p>It can be, because you choose the engine. OpenAI Whisper is the most accurate option for hard audio, and vocabulary boosting helps with jargon, neither of which Windows offers. With Local Whisper you can also raise the model size for more accuracy at the cost of speed.</p></details>
   </section>
   <section class="related">
     <h2>Keep reading</h2>
@@ -223,7 +223,7 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
       <a href="/blog/how-to-dictate-on-windows">How to Dictate on Windows: Type Into Any App With Your Voice<span>Two ways to talk to type on Windows: the built-in Win+H tool and a push-to-talk app that types into any window, including your terminal.</span></a>
   </section>
   <footer>
-    <div>Pipevoice · free, private voice typing for Windows.</div>
+    <div>PipeVoice · free, private voice typing for Windows.</div>
     <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>
   </footer>
 </div>

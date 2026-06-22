@@ -1,4 +1,4 @@
-"""Assemble Pipevoice blog pages from the SEO workflow output.
+"""Assemble PipeVoice blog pages from the SEO workflow output.
 
 Reads /tmp/articles.json  (= {plan:{overview,pillars,articles:[...]}, articles:[{slug,title,h1,dek,
 metaDescription,keyword,bodyHtml,faqs,readingMinutes}, ...]}) and writes:
@@ -43,7 +43,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WEB = os.path.join(ROOT, "wisprlitevercel")
 BLOG = os.path.join(WEB, "blog")
 SITE = "https://pipevoice.app"
-DL = "https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe"
+DL = "https://github.com/Powleads/PipeVoice/releases/latest/download/PipeVoice-Setup.exe"
 PUBLISHED = "2026-06-22"  # overnight batch
 
 STATIC_PAGES = [
@@ -131,7 +131,7 @@ footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
 
 NAV = (
     '  <nav>\n'
-    '    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="Pipevoice" '
+    '    <div class="logo"><a href="/"><img src="/pipevoice-lockup.png" alt="PipeVoice" '
     'style="height:30px;width:auto;display:block" /></a></div>\n'
     '    <div class="nav-links">\n'
     '      <a href="/">Home</a>\n'
@@ -145,7 +145,7 @@ NAV = (
 
 FOOTER = (
     '  <footer>\n'
-    '    <div>Pipevoice · free, private voice typing for Windows.</div>\n'
+    '    <div>PipeVoice · free, private voice typing for Windows.</div>\n'
     '    <div><a href="/">Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a> · '
     '<a href="https://github.com/Powleads/PipeVoice">GitHub</a></div>\n'
     '  </footer>\n'
@@ -205,7 +205,7 @@ def faq_html(faqs):
 def cta_html():
     return (
         '  <div class="cta">\n'
-        '    <h3>Try Pipevoice free</h3>\n'
+        '    <h3>Try PipeVoice free</h3>\n'
         '    <p>Push-to-talk voice typing for Windows. Free, open source, works offline. No account.</p>\n'
         f'    <a class="btn" href="{DL}">↓ Download for Windows</a>\n'
         '    <p class="fine">free forever · open source · Windows 10 &amp; 11</p>\n'
@@ -229,14 +229,14 @@ def related_html(art, by_slug):
 def build_article(art, by_slug):
     slug = art["slug"]
     canonical = f"{SITE}/blog/{slug}"
-    title_tag = art["title"] if "pipevoice" in art["title"].lower() else f'{art["title"]} | Pipevoice'
+    title_tag = art["title"] if "pipevoice" in art["title"].lower() else f'{art["title"]} | PipeVoice'
     faqs = art.get("faqs") or []
     article_ld = {
         "@context": "https://schema.org", "@type": "Article",
         "headline": art["h1"][:110], "description": art["metaDescription"],
         "image": f"{SITE}/og-image.png", "datePublished": PUBLISHED, "dateModified": PUBLISHED,
-        "author": {"@type": "Organization", "name": "Pipevoice", "url": SITE},
-        "publisher": {"@type": "Organization", "name": "Pipevoice", "url": SITE,
+        "author": {"@type": "Organization", "name": "PipeVoice", "url": SITE},
+        "publisher": {"@type": "Organization", "name": "PipeVoice", "url": SITE,
                       "logo": {"@type": "ImageObject", "url": f"{SITE}/apple-touch-icon.png"}},
         "mainEntityOfPage": {"@type": "WebPage", "@id": canonical},
         "about": art.get("keyword", "voice typing for Windows"),
@@ -279,11 +279,11 @@ def build_article(art, by_slug):
 
 def build_index(articles, overview):
     canonical = f"{SITE}/blog"
-    desc = "Guides, comparisons and how-tos for voice typing and dictation on Windows: free tools, offline speech-to-text, coding by voice, and more from Pipevoice."
+    desc = "Guides, comparisons and how-tos for voice typing and dictation on Windows: free tools, offline speech-to-text, coding by voice, and more from PipeVoice."
     ld = [{
         "@context": "https://schema.org", "@type": "Blog", "@id": canonical,
-        "name": "Pipevoice Blog", "description": desc, "url": canonical,
-        "publisher": {"@type": "Organization", "name": "Pipevoice", "url": SITE},
+        "name": "PipeVoice Blog", "description": desc, "url": canonical,
+        "publisher": {"@type": "Organization", "name": "PipeVoice", "url": SITE},
         "blogPost": [{"@type": "BlogPosting", "headline": a["title"],
                       "url": f"{SITE}/blog/{a['slug']}", "datePublished": PUBLISHED} for a in articles],
     }, {
@@ -293,7 +293,7 @@ def build_index(articles, overview):
             {"@type": "ListItem", "position": 2, "name": "Blog", "item": canonical},
         ],
     }]
-    head = page_head("Pipevoice Blog: voice typing & dictation for Windows", desc, canonical, ld)
+    head = page_head("PipeVoice Blog: voice typing & dictation for Windows", desc, canonical, ld)
     cards = []
     for a in articles:
         cards.append(
@@ -305,9 +305,9 @@ def build_index(articles, overview):
         )
     body = (
         '  <p class="crumb"><a href="/">Home</a> / Blog</p>\n'
-        '  <header class="h">\n    <h1>Pipevoice blog</h1>\n'
+        '  <header class="h">\n    <h1>PipeVoice blog</h1>\n'
         '    <p class="dek">Guides, comparisons and how-tos for faster, more private voice typing on Windows: '
-        'free tools, offline speech-to-text, dictating into your editor and terminal, and getting the most out of Pipevoice.</p>\n'
+        'free tools, offline speech-to-text, dictating into your editor and terminal, and getting the most out of PipeVoice.</p>\n'
         '  </header>\n'
         '  <div class="bloglist">\n' + "".join(cards) + "  </div>\n"
         + cta_html()
@@ -328,9 +328,9 @@ def build_sitemap(slugs):
 
 def build_llms(articles):
     lines = [
-        "# Pipevoice",
+        "# PipeVoice",
         "",
-        "> Pipevoice is free, open-source, push-to-talk voice typing for Windows 10 and 11. Hold a hotkey, speak, release, and your words are typed as real keystrokes into any focused app (terminal, editor, browser, chat). It is the free, Windows-native, privacy-first alternative to paid Mac-first dictation apps.",
+        "> PipeVoice is free, open-source, push-to-talk voice typing for Windows 10 and 11. Hold a hotkey, speak, release, and your words are typed as real keystrokes into any focused app (terminal, editor, browser, chat). It is the free, Windows-native, privacy-first alternative to paid Mac-first dictation apps.",
         "",
         "Key facts:",
         "- Free forever and open source (github.com/Powleads/PipeVoice). No account, no telemetry.",
@@ -345,7 +345,7 @@ def build_llms(articles):
         lines.append(f"- [{a['title']}]({SITE}/blog/{a['slug']}): {a['metaDescription']}")
     lines += ["", "## Pages",
               f"- [Windows voice typing]({SITE}/windows-voice-typing)",
-              f"- [Pipevoice vs Wispr Flow]({SITE}/vs/wispr-flow)",
+              f"- [PipeVoice vs Wispr Flow]({SITE}/vs/wispr-flow)",
               f"- [Docs / quickstart]({SITE}/docs)"]
     return "\n".join(lines) + "\n"
 

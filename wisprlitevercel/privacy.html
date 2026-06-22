@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Privacy Policy — Pipevoice</title>
-<meta name="description" content="How Pipevoice handles your data. Local-first, no telemetry, no developer backend. Cloud transcription uses your own API key and goes only to the provider you choose." />
+<title>Privacy Policy — PipeVoice</title>
+<meta name="description" content="How PipeVoice handles your data. Local-first, no telemetry, no developer backend. Cloud transcription uses your own API key and goes only to the provider you choose." />
 <link rel="canonical" href="https://pipevoice.app/privacy" />
 <meta name="robots" content="index,follow" />
 <link rel="icon" type="image/png" href="/favicon.png" />
@@ -73,7 +73,7 @@
 <div class="wrap">
   <nav>
     <a class="logo" href="/">
-      <img src="/pipevoice-lockup.png" alt="Pipevoice" style="height:30px;width:auto;display:block" />
+      <img src="/pipevoice-lockup.png" alt="PipeVoice" style="height:30px;width:auto;display:block" />
     </a>
     <div class="nav-links">
       <a href="/">Home</a>
@@ -84,11 +84,11 @@
   <main class="legal">
     <h1>Privacy Policy</h1>
     <p class="updated">Last updated: 21 June 2026</p>
-    <p class="intro">Pipevoice is a free, open-source, push-to-talk voice-typing app for Windows. This policy explains exactly what happens to your data when you use the app and the website at pipevoice.app. The short version: Pipevoice is local-first, the desktop app talks to no server of ours, and we receive none of your data from the app.</p>
+    <p class="intro">PipeVoice is a free, open-source, push-to-talk voice-typing app for Windows. This policy explains exactly what happens to your data when you use the app and the website at pipevoice.app. The short version: PipeVoice is local-first, the desktop app talks to no server of ours, and we receive none of your data from the app.</p>
 
     <div class="tldr">
       <ul>
-        <li>The Pipevoice desktop app has <strong>no analytics, no telemetry, no tracking, no crash reporting, and no developer-operated backend</strong>. We do not collect, see, or receive any of your audio, transcripts, settings, or API keys from the app.</li>
+        <li>The PipeVoice desktop app has <strong>no analytics, no telemetry, no tracking, no crash reporting, and no developer-operated backend</strong>. We do not collect, see, or receive any of your audio, transcripts, settings, or API keys from the app.</li>
         <li>Your microphone audio and transcribed text are kept <strong>in memory only</strong>, for one utterance at a time, and are never written to disk by the app.</li>
         <li>If you choose a cloud transcription or AI cleanup engine, your audio or text goes to <strong>the provider you picked, using your own API key</strong>. It does not pass through any server we control.</li>
         <li>If you use the fully local engines (Local Whisper, Ollama), <strong>nothing leaves your PC at all</strong>.</li>
@@ -100,7 +100,7 @@
     <h2>Who This Covers</h2>
     <p>This policy covers two things:</p>
     <ul>
-      <li>The Pipevoice desktop app for Windows.</li>
+      <li>The PipeVoice desktop app for Windows.</li>
       <li>The website at pipevoice.app.</li>
     </ul>
     <p>They are described separately below because they behave differently. The desktop app contacts no server of ours. The website does run one serverless function we operate, for the optional email signup.</p>
@@ -108,7 +108,7 @@
     <h2>The Desktop App</h2>
 
     <h3>What the app does with your audio</h3>
-    <p>When you hold the hotkey, Pipevoice captures microphone audio (16 kHz mono PCM) only while the key is held. That audio is used for one purpose: turning your speech into text. Where it goes depends entirely on the engine you choose:</p>
+    <p>When you hold the hotkey, PipeVoice captures microphone audio (16 kHz mono PCM) only while the key is held. That audio is used for one purpose: turning your speech into text. Where it goes depends entirely on the engine you choose:</p>
     <ul>
       <li><strong>Local Whisper (faster-whisper), fully offline.</strong> The audio never leaves your PC. The first time you ever use this engine, faster-whisper downloads the model file (about 150 MB) from Hugging Face. After that, transcription is fully on-device.</li>
       <li><strong>OpenAI engine.</strong> The recorded WAV audio is uploaded to OpenAI's transcription API (<code>api.openai.com</code>) using your own <code>OPENAI_API_KEY</code>.</li>
@@ -131,26 +131,26 @@
     <h3>Your API keys</h3>
     <p>To use a cloud engine, you supply your own API key for that provider (<code>OPENAI_API_KEY</code>, <code>DEEPGRAM_API_KEY</code>, <code>GEMINI_API_KEY</code>, or <code>OPENROUTER_API_KEY</code>). These keys authenticate your own account to the provider you chose.</p>
     <ul>
-      <li>Keys are stored locally only, in plaintext, in <code>%APPDATA%\Pipevoice\.env</code>.</li>
+      <li>Keys are stored locally only, in plaintext, in <code>%APPDATA%\PipeVoice\.env</code>.</li>
       <li>Keys are sent only to the matching provider, as the credential on your API requests. They are never sent anywhere else, and never to any first-party or developer server, because there is none.</li>
       <li>Keys are deliberately never written to <code>config.json</code>. The app keeps a strict split between secret and non-secret data.</li>
       <li>Keys stay on disk until you change or delete them.</li>
     </ul>
 
     <h3>Your settings and other local data</h3>
-    <p>Pipevoice stores your preferences locally so it can remember how you like it to work. All of this lives in your per-user folder, <code>%APPDATA%\Pipevoice\</code>. None of it is transmitted to us.</p>
+    <p>PipeVoice stores your preferences locally so it can remember how you like it to work. All of this lives in your per-user folder, <code>%APPDATA%\PipeVoice\</code>. None of it is transmitted to us.</p>
     <ul>
       <li><strong>Settings</strong> (<code>config.json</code>): engine choice, hotkeys, language, microphone device, model names, overlay/sounds/auto-update/AI-cleanup/auto-enter toggles, and output mode.</li>
       <li><strong>Vocabulary and word-replacement fixes</strong> (in <code>config.json</code>): your custom terms and "wrong = right" pairs. The vocabulary text is also sent to the transcription provider you already chose, as a recognition hint, to help it recognize names and jargon. Your replacement pairs are applied locally only.</li>
       <li><strong>Speech notes</strong> (in <code>config.json</code>): your free-text description of your accent, stutter, or fillers. This is embedded into the AI cleanup prompt sent to your chosen cleanup provider, but only when AI cleanup is enabled and actually runs.</li>
     </ul>
-    <p>Other items in that folder: <code>pipevoice.log</code> (an app log plus error traces, but no transcript bodies), a temporary installer downloaded during auto-update (deleted on the next start), and a generated launcher file. Autostart, if enabled, is a single registry value under <code>HKCU\...\Run</code> named "Pipevoice". Your microphone audio and transcripts are never stored in this folder, or anywhere on disk.</p>
+    <p>Other items in that folder: <code>pipevoice.log</code> (an app log plus error traces, but no transcript bodies), a temporary installer downloaded during auto-update (deleted on the next start), and a generated launcher file. Autostart, if enabled, is a single registry value under <code>HKCU\...\Run</code> named "PipeVoice". Your microphone audio and transcripts are never stored in this folder, or anywhere on disk.</p>
 
     <h3>Running on your machine</h3>
-    <p>To make sure only one copy of Pipevoice runs at a time, the app binds a local socket on your own machine (<code>127.0.0.1:49517</code>). This is entirely local, transmits no data, and never leaves your PC.</p>
+    <p>To make sure only one copy of PipeVoice runs at a time, the app binds a local socket on your own machine (<code>127.0.0.1:49517</code>). This is entirely local, transmits no data, and never leaves your PC.</p>
 
     <h3>The update check</h3>
-    <p>When the app starts (if auto-update is on) or when you check manually, Pipevoice asks GitHub whether a newer version exists. This is the only network request the app makes on its own, without you choosing a cloud engine.</p>
+    <p>When the app starts (if auto-update is on) or when you check manually, PipeVoice asks GitHub whether a newer version exists. This is the only network request the app makes on its own, without you choosing a cloud engine.</p>
     <ul>
       <li>It is an unauthenticated <code>GET</code> to the GitHub Releases API (<code>api.github.com</code>).</li>
       <li>It sends no user data: no settings, no identifiers, no query parameters. The only thing it includes is a fixed User-Agent string, "Pipevoice-updater".</li>
@@ -211,7 +211,7 @@
 
     <h2>Your Rights and How to Delete Your Data</h2>
     <ul>
-      <li><strong>App data.</strong> Everything the app stores lives on your own PC in <code>%APPDATA%\Pipevoice\</code>. You can delete any of it (settings, vocabulary, speech notes, your <code>.env</code> with your API keys, the log file) at any time, or uninstall the app to remove it. We hold no copy, so there is nothing for us to delete on your behalf.</li>
+      <li><strong>App data.</strong> Everything the app stores lives on your own PC in <code>%APPDATA%\PipeVoice\</code>. You can delete any of it (settings, vocabulary, speech notes, your <code>.env</code> with your API keys, the log file) at any time, or uninstall the app to remove it. We hold no copy, so there is nothing for us to delete on your behalf.</li>
       <li><strong>Your email on our list.</strong> You can unsubscribe at any time using the link in any email we send. To have your email address deleted entirely from Resend, contact us using the details below and we will remove it.</li>
       <li><strong>Data sent to providers.</strong> Audio and text you send to OpenAI, Deepgram, Google Gemini, or OpenRouter using your own key are governed by those providers' own policies and your own account with them. Requests to access or delete that data should be directed to the provider.</li>
     </ul>
@@ -220,7 +220,7 @@
     <p>We never sell your data, and we do not share it for advertising. We do not have your app data to sell. The only place we forward any personal information is your email address to Resend, solely to operate the mailing list you chose to join. There are no ads in the app or on the website.</p>
 
     <h2>Children</h2>
-    <p>Pipevoice is a general-purpose tool and is not directed at children. We do not knowingly collect personal information from children.</p>
+    <p>PipeVoice is a general-purpose tool and is not directed at children. We do not knowingly collect personal information from children.</p>
 
     <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. When we do, we will change the "Last updated" date at the top. Please check back occasionally.</p>
@@ -231,7 +231,7 @@
 
   <footer>
     <div class="foot-row">
-      <span>Pipevoice — free, private voice typing for Windows.</span>
+      <span>PipeVoice — free, private voice typing for Windows.</span>
       <span><a href="/">Home</a> &nbsp;·&nbsp; <a href="https://github.com/Powleads/PipeVoice">github.com/Powleads/PipeVoice ↗</a></span>
     </div>
     <div class="made">
