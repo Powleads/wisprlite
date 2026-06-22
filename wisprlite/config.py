@@ -84,6 +84,12 @@ class Config:
     paste_speed: str = "normal"       # fast | normal | slow — clipboard-paste timing
     last_version: str = ""            # app version last run, to detect a fresh update
     profiles: list = field(default_factory=list)  # per-app behaviour overrides
+    # Agent MCP server (listen + transcribe). Off by default; opt-in via the tray.
+    mcp_enabled: bool = False
+    mcp_port: int = 49518             # loopback control bridge (distinct from the 49517 lock)
+    mcp_default_mode: str = "push_to_talk"  # push_to_talk | hands_free  (for `listen`)
+    hands_free_silence_ms: int = 800  # trailing silence that ends a hands-free capture
+    transcribe_model_size: str = ""   # blank = reuse local_model_size
 
     @classmethod
     def load(cls) -> "Config":
