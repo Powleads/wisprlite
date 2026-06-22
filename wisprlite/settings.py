@@ -360,7 +360,12 @@ def main(first_run: bool = False) -> None:
                      wraplength=470, justify="left").pack(anchor="w", padx=(25, 0), pady=(3, 0))
 
     # --- values ---
-    engine_var = tk.StringVar(value=dict(ENGINES).get(cfg.engine, ENGINES[0][1]))
+    # Show the current engine even if it's a legacy/hidden one (e.g. "openai"),
+    # so saving settings never silently switches an existing user to the default.
+    engine_opts = list(ENGINES)
+    if cfg.engine not in dict(engine_opts):
+        engine_opts.append((cfg.engine, f"{cfg.engine} (current)"))
+    engine_var = tk.StringVar(value=dict(engine_opts).get(cfg.engine, engine_opts[0][1]))
     mode_var = tk.StringVar(value=dict(MODES).get(cfg.mode, MODES[0][1]))
     output_var = tk.StringVar(value=dict(OUTPUTS).get(cfg.output_mode, OUTPUTS[0][1]))
     hotkey_var = tk.StringVar(value=cfg.hotkey)
@@ -412,7 +417,7 @@ def main(first_run: bool = False) -> None:
     # --- General ---
     c = card("General", "How Pipevoice listens, and where your words go.")
     combo(row(c, "Engine", "Gemini is free (one key also does AI polish). Groq is fast, accurate Whisper. Deepgram streams live. Local is offline."),
-          engine_var, [l for _, l in ENGINES])
+          engine_var, [l for _, l in engine_opts])
     combo(row(c, "Mode", "Push-to-talk holds the key; toggle taps it on and off."),
           mode_var, [l for _, l in MODES])
     combo(row(c, "Output", "Type the keystrokes, or paste from the clipboard."),
@@ -585,7 +590,7 @@ def main(first_run: bool = False) -> None:
             cfg.profiles = config.Config.load().profiles
         except Exception:
             pass
-        cfg.engine = value_for(engine_var, ENGINES)
+        cfg.engine = value_for(engine_var, engine_opts)
         cfg.mode = value_for(mode_var, MODES)
         cfg.output_mode = value_for(output_var, OUTPUTS)
         cfg.hotkey = hotkey_var.get().strip() or "right ctrl"
