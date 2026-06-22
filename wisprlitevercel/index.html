@@ -21,6 +21,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Pipevoice","operatingSystem":"Windows 10, Windows 11","applicationCategory":"UtilitiesApplication","applicationSubCategory":"Voice typing / dictation","description":"Free, open-source push-to-talk voice typing for Windows. Hold a key, talk, release, and your words type into any app. Cloud engines or a fully offline local option.","url":"https://pipevoice.app/","downloadUrl":"https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe","image":"https://pipevoice.app/og-image.png","screenshot":"https://pipevoice.app/og-image.png","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Pipevoice","url":"https://pipevoice.app/","logo":"https://pipevoice.app/apple-touch-icon.png"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Pipevoice","url":"https://pipevoice.app/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoObject","name":"PipeVoice — talk faster than you type (3-minute demo)","description":"A walkthrough of PipeVoice, the free open-source push-to-talk voice typing app for Windows: dictating into Claude Code by voice, the settings tour, per-app profiles, and 100% offline mode.","thumbnailUrl":"https://img.youtube.com/vi/3DZJbwTmcGU/maxresdefault.jpg","uploadDate":"2026-06-22","contentUrl":"https://youtu.be/3DZJbwTmcGU","embedUrl":"https://www.youtube.com/embed/3DZJbwTmcGU"}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -301,6 +302,38 @@
       <span class="p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg> Open source</span>
     </div>
   </div>
+
+  <!-- SEE IT IN ACTION / demo video -->
+  <section id="demo">
+    <p class="eyebrow">See it in action</p>
+    <h2>Watch it work — in 3 minutes.</h2>
+    <p class="lead">A real walkthrough: dictating a full build into Claude Code by voice, the settings tour, per-app profiles, and going 100% offline.</p>
+    <style>
+      .vid{position:relative;max-width:760px;margin:38px auto 0;aspect-ratio:16/9;border-radius:14px;overflow:hidden;
+        border:1px solid var(--border);box-shadow:0 24px 70px rgba(0,0,0,.5);cursor:pointer;background:var(--deep)}
+      .vid img{width:100%;height:100%;object-fit:cover;display:block;opacity:.82;transition:opacity .2s}
+      .vid:hover img{opacity:1}
+      .vid .vplay{position:absolute;inset:0;margin:auto;width:74px;height:74px;border:none;border-radius:50%;
+        display:flex;align-items:center;justify-content:center;background:var(--accent);color:#1a0c0d;
+        font-size:24px;padding-left:5px;cursor:pointer;box-shadow:var(--glow);transition:transform .15s}
+      .vid:hover .vplay{transform:scale(1.06)}
+      .vid iframe{width:100%;height:100%;border:0;display:block}
+      .vid:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    </style>
+    <div class="vid" id="pv-demo" role="button" tabindex="0"
+         aria-label="Play the 3-minute PipeVoice demo video"
+         onclick="pvPlayDemo()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pvPlayDemo()}">
+      <img src="https://img.youtube.com/vi/3DZJbwTmcGU/maxresdefault.jpg"
+           onerror="this.onerror=null;this.src='https://img.youtube.com/vi/3DZJbwTmcGU/hqdefault.jpg'"
+           alt="Watch the PipeVoice demo" loading="lazy" width="760" height="428" />
+      <span class="vplay" aria-hidden="true">▶</span>
+    </div>
+    <script>
+      function pvPlayDemo(){var d=document.getElementById('pv-demo');
+        d.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/3DZJbwTmcGU?autoplay=1&rel=0" title="PipeVoice demo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+        d.style.cursor='default';}
+    </script>
+  </section>
 
   <!-- WHY / honest comparison -->
   <section id="why">
