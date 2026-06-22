@@ -12,7 +12,7 @@ import os
 
 from . import config
 
-KEYS = ("engine", "ai_cleanup", "auto_enter", "output_mode")
+KEYS = ("engine", "ai_cleanup", "auto_enter", "output_mode", "cleanup_style", "cleanup_instruction")
 
 
 def resolve(profiles, ctx) -> dict:
@@ -49,6 +49,7 @@ ACCENT = "#e06c75"
 
 P_ENGINES = [("", "(app default)"), ("deepgram", "Deepgram"), ("openai", "OpenAI"), ("local", "Local")]
 P_OUTPUTS = [("type", "Type"), ("paste", "Paste"), ("clipboard", "Clipboard")]
+P_STYLES = [("", "(app default)"), ("tidy", "Tidy — clean up"), ("prompt", "Prompt — for AI tools"), ("custom", "Custom…")]
 
 # Common apps so popular targets appear even when they aren't currently running.
 # Full product names so a natural search ("visual studio code") matches.
@@ -216,6 +217,13 @@ def main() -> None:
         ttk.Combobox(out_col, textvariable=output_var, values=[l for _, l in P_OUTPUTS],
                      state="readonly", width=12).pack(anchor="w", pady=(5, 0))
 
+        sty_col = tk.Frame(ctl, bg=CARD)
+        sty_col.pack(side="left", padx=(26, 0))
+        tk.Label(sty_col, text="POLISH STYLE", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
+        style_var = tk.StringVar(value=dict(P_STYLES).get(overrides.get("cleanup_style", ""), P_STYLES[0][1]))
+        ttk.Combobox(sty_col, textvariable=style_var, values=[l for _, l in P_STYLES],
+                     state="readonly", width=16).pack(anchor="w", pady=(5, 0))
+
         chk = tk.Frame(inner, bg=CARD)
         chk.pack(fill="x", pady=(16, 0))
         cleanup_var = tk.BooleanVar(value=bool(overrides.get("ai_cleanup", cfg.ai_cleanup)))
@@ -223,8 +231,15 @@ def main() -> None:
         ttk.Checkbutton(chk, text="AI cleanup", variable=cleanup_var).pack(side="left")
         ttk.Checkbutton(chk, text="Auto-Enter", variable=autoenter_var).pack(side="left", padx=(22, 0))
 
+        instr_frame = tk.Frame(inner, bg=CARD)
+        instr_frame.pack(fill="x", pady=(12, 0))
+        tk.Label(instr_frame, text="Custom polish instruction (used when style = Custom)",
+                 bg=CARD, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w")
+        instr_var = tk.StringVar(value=overrides.get("cleanup_instruction", ""))
+        ttk.Entry(instr_frame, textvariable=instr_var, width=60).pack(anchor="w", pady=(4, 0))
+
         card.update(exe=exe_var, engine=engine_var, output=output_var,
-                    cleanup=cleanup_var, autoenter=autoenter_var)
+                    cleanup=cleanup_var, autoenter=autoenter_var, style=style_var, instruction=instr_var)
         cards.append(card)
 
     for p in (cfg.profiles or []):
@@ -244,6 +259,12 @@ def main() -> None:
                 "auto_enter": bool(card["autoenter"].get()),
                 "output_mode": _value_for(card["output"].get(), P_OUTPUTS),
             }
+            sty = _value_for(card["style"].get(), P_STYLES)
+            if sty:
+                ov["cleanup_style"] = sty
+            ci = card["instruction"].get().strip()
+            if ci:
+                ov["cleanup_instruction"] = ci
             eng = _value_for(card["engine"].get(), P_ENGINES)
             if eng:
                 ov["engine"] = eng
