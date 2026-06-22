@@ -72,7 +72,7 @@ class Config:
     auto_update: bool = True         # check GitHub for a newer release on startup and install it
     min_seconds: float = 0.35       # ignore taps shorter than this
     ai_cleanup: bool = True         # polish transcript with an LLM
-    cleanup_provider: str = "openai"  # openai | gemini | openrouter | ollama (all OpenAI-compatible)
+    cleanup_provider: str = "gemini"  # gemini(free) | openai | openrouter | ollama (all OpenAI-compatible)
     cleanup_model: str = ""           # blank = the provider's default model
     cleanup_style: str = "tidy"       # tidy | prompt | custom — how Flow mode polishes
     cleanup_instruction: str = ""     # the instruction used when cleanup_style == "custom"

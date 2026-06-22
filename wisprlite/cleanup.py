@@ -74,11 +74,11 @@ _ACCENTS = {
 
 # provider -> (base_url, API-key env var, default model). All OpenAI-compatible.
 PROVIDERS = {
-    "openai": (None, "OPENAI_API_KEY", "gpt-4o-mini"),
+    "openai": (None, "OPENAI_API_KEY", "gpt-4.1-mini"),
     "gemini": ("https://generativelanguage.googleapis.com/v1beta/openai/",
-               "GEMINI_API_KEY", "gemini-2.0-flash"),
+               "GEMINI_API_KEY", "gemini-3.1-flash-lite"),
     "openrouter": ("https://openrouter.ai/api/v1",
-                   "OPENROUTER_API_KEY", "google/gemini-2.0-flash-exp:free"),
+                   "OPENROUTER_API_KEY", "google/gemma-4-31b-it:free"),
     "ollama": ("http://localhost:11434/v1", None, "llama3.2:3b"),
 }
 
