@@ -65,6 +65,8 @@ class Config:
     openai_model: str = "whisper-1"
     deepgram_model: str = "nova-3"
     local_model_size: str = "base.en"
+    local_device: str = "auto"        # auto | cpu | cuda  (faster-whisper device)
+    local_compute_type: str = "int8"  # int8 | int8_float16 | float16 | float32
     overlay: bool = True
     sounds: bool = False
     auto_update: bool = True         # check GitHub for a newer release on startup and install it
