@@ -30,4 +30,5 @@ Key facts:
 ## Pages
 - [Windows voice typing](https://pipevoice.app/windows-voice-typing)
 - [Pipevoice vs Wispr Flow](https://pipevoice.app/vs/wispr-flow)
+- [PipeVoice vs Voicebox](https://pipevoice.app/vs/voicebox)
 - [Docs / quickstart](https://pipevoice.app/docs)

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Voicebox alternative for Windows dictation, no GPU needed | PipeVoice</title>
+<meta name="description" content="Voicebox is a powerful local AI voice studio. If you just want to dictate on Windows, PipeVoice is the focused, no-GPU alternative: 3 transcription engines, live streaming, nothing to download, free and open source." />
+<link rel="canonical" href="https://pipevoice.app/vs/voicebox" />
+<meta name="robots" content="index,follow" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pipevoice.app/vs/voicebox" />
+<meta property="og:title" content="Voicebox alternative for Windows dictation, no GPU needed | PipeVoice" />
+<meta property="og:description" content="Voicebox is a powerful local AI voice studio. If you just want to dictate on Windows, PipeVoice is the focused, no-GPU alternative: 3 transcription engines, live streaming, nothing to download, free and open source." />
+<meta property="og:image" content="https://pipevoice.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Voicebox alternative for Windows dictation, no GPU needed | PipeVoice" />
+<meta name="twitter:description" content="Voicebox is a powerful local AI voice studio. If you just want to dictate on Windows, PipeVoice is the focused, no-GPU alternative: 3 transcription engines, live streaming, nothing to download, free and open source." />
+<meta name="twitter:image" content="https://pipevoice.app/og-image.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --canvas:#282c34; --deep:#131313; --card:#1b1e24; --popover:#20242c;
+    --border:rgba(53,90,102,.55); --border-soft:rgba(53,90,102,.28);
+    --accent:#e06c75; --accent-soft:rgba(224,108,117,.12); --accent-line:rgba(224,108,117,.55);
+    --glow:0 0 22px rgba(224,108,117,.32);
+    --good:#98c379; --warn:#e5c07b;
+    --text:#e6e8eb; --muted:#9aa1ad; --r:10px;
+    --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{background:var(--canvas);color:var(--text);
+    font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  /* ambient glow behind hero */
+  .aura{position:absolute;top:-160px;left:50%;transform:translateX(-50%);
+    width:900px;height:560px;pointer-events:none;z-index:0;
+    background:radial-gradient(closest-side,rgba(224,108,117,.16),transparent 70%)}
+  @media(max-width:640px){.aura{width:100%;left:0;transform:none}}
+
+  /* nav */
+  nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:20px 0;
+    border-bottom:1px solid var(--border-soft)}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.01em}
+  .logo svg{width:30px;height:30px}
+  .nav-links{display:flex;gap:26px;align-items:center;color:var(--muted);font-size:14.5px}
+  .nav-links a:hover{color:var(--text)}
+  .nav-links .gh{color:var(--text)}
+  @media(max-width:640px){.nav-links a:not(.gh){display:none}}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;border-radius:var(--r);
+    font-weight:600;cursor:pointer;transition:.15s;border:1px solid transparent;font-size:15px}
+  .btn-primary{background:var(--accent);color:#1a0c0d;padding:13px 24px;box-shadow:var(--glow)}
+  .btn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .btn-ghost{border-color:var(--border);color:var(--text);padding:13px 22px}
+  .btn-ghost:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+  .btn-sm{padding:9px 16px;font-size:14px}
+
+  /* hero */
+  .hero{position:relative;z-index:1;padding:74px 0 26px;text-align:center}
+  .kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);
+    color:var(--muted);border-radius:999px;padding:6px 14px;font-size:13px;margin-bottom:26px}
+  .kicker .d{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good)}
+  h1{font-size:clamp(42px,7vw,72px);line-height:1.02;letter-spacing:-.03em;font-weight:800}
+  h1 .c{color:var(--accent)}
+  .sub{color:var(--muted);font-size:clamp(17px,2.3vw,20px);max-width:620px;margin:22px auto 34px}
+  .sub b{color:var(--text);font-weight:600}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .fine{color:var(--muted);font-size:13px;margin-top:15px;font-family:var(--mono)}
+
+  /* faux terminal */
+  .stage{position:relative;z-index:1;margin:54px auto 0;max-width:760px}
+  .win{background:var(--deep);border:1px solid var(--border);border-radius:var(--r);
+    box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;text-align:left}
+  .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--border-soft)}
+  .bar i{width:11px;height:11px;border-radius:50%;display:block}
+  .bar .t{margin-left:10px;color:var(--muted);font-size:12.5px;font-family:var(--mono)}
+  .body{padding:22px 20px;font-family:var(--mono);font-size:14.5px;line-height:1.7}
+  .body .p{color:var(--good)}
+  .body .dim{color:var(--muted)}
+  .cur{display:inline-block;width:8px;height:17px;background:var(--accent);vertical-align:-3px;margin-left:3px;animation:bk 1.05s steps(1) infinite}
+  @keyframes bk{50%{opacity:0}}
+  .pill{display:inline-flex;align-items:center;gap:10px;margin:18px auto 0;
+    background:var(--card);border:1px solid var(--accent-line);border-radius:999px;
+    padding:8px 15px;font-size:13.5px;font-family:var(--mono);box-shadow:var(--glow)}
+  .pill .lv{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:ps 1.2s infinite}
+  @keyframes ps{0%,100%{opacity:1}50%{opacity:.3}}
+  .meter{letter-spacing:1px;color:var(--accent)}
+
+  /* pillars strip */
+  .strip{padding:34px 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);margin-top:56px}
+  .pillars{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .pillars .p{display:flex;align-items:center;gap:9px;color:var(--text);font-size:14.5px}
+  .pillars .p svg{width:17px;height:17px;color:var(--good);flex:none}
+  .pillars .sep{color:var(--border);align-self:center}
+  @media(max-width:640px){.pillars .sep{display:none}}
+
+  /* sections */
+  section{position:relative;z-index:1;padding:70px 0}
+  .eyebrow{color:var(--accent);font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;text-align:center}
+  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;text-align:center;font-weight:800;margin-top:10px}
+  .lead{color:var(--muted);text-align:center;max-width:580px;margin:14px auto 0;font-size:16px}
+
+  /* comparison */
+  .cmp-wrap{margin-top:44px;overflow-x:auto;border:1px solid var(--border-soft);border-radius:14px}
+  table.cmp{width:100%;border-collapse:collapse;min-width:560px;font-size:14.5px}
+  table.cmp th,table.cmp td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--border-soft)}
+  table.cmp thead th{font-weight:700;color:var(--text);font-size:14px}
+  table.cmp thead th.us{color:var(--accent)}
+  table.cmp tbody th{font-weight:500;color:var(--muted);white-space:nowrap}
+  table.cmp td{color:var(--muted)}
+  table.cmp td.us{color:var(--text);background:var(--accent-soft);font-weight:600}
+  table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+  .yes{color:var(--good);font-weight:700}
+  .no{color:var(--muted)}
+  .cmp-note{text-align:center;color:var(--muted);font-size:12.5px;margin-top:14px;font-family:var(--mono)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px}
+  @media(max-width:780px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r);padding:24px;transition:.15s}
+  .card:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+  .card .h{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+  .card .h svg{width:18px;height:18px;flex:none}
+  .card h3{font-size:16.5px;font-weight:600}
+  .card p{color:var(--muted);font-size:14.5px}
+
+  /* spotlight */
+  .spot{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:42px 32px;margin-top:18px;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}
+  @media(max-width:820px){.spot{grid-template-columns:1fr;padding:32px 24px}}
+  .spot.rev{grid-template-columns:.9fr 1.1fr}
+  @media(max-width:820px){.spot.rev{grid-template-columns:1fr}}
+  .spot h2{text-align:left;margin-top:6px}
+  .spot .eyebrow{text-align:left}
+  .spot p{color:var(--muted);margin-top:14px;font-size:15.5px}
+  .spot .mini{background:var(--deep);border:1px solid var(--border-soft);border-radius:var(--r);overflow:hidden}
+  .spot .mini .bar{padding:9px 12px}
+  .spot .mini .body{font-size:13px;padding:16px}
+  .spot .ok{color:var(--good)} .spot .ar{color:var(--accent)}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px}
+  @media(max-width:780px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r);padding:24px}
+  .step .n{font-family:var(--mono);font-size:13px;color:var(--accent);border:1px solid var(--accent-line);
+    width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .step h3{font-size:16px;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:14.5px}
+
+  .faq{max-width:760px;margin:42px auto 0}
+  details{border:1px solid var(--border-soft);border-radius:var(--r);padding:2px 20px;margin-bottom:10px;background:var(--card)}
+  summary{cursor:pointer;padding:16px 0;font-weight:600;list-style:none;font-size:15.5px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";float:right;color:var(--muted);font-family:var(--mono)}
+  details[open] summary::after{content:"\2013"}
+  details p{color:var(--muted);padding:0 0 18px;font-size:14.5px}
+  details a{color:var(--accent)}
+
+  /* footer */
+  footer{border-top:1px solid var(--border-soft);margin-top:10px;padding:34px 0 40px;color:var(--muted);font-size:13.5px;font-family:var(--mono)}
+  .foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer a:hover{color:var(--accent)}
+  .made{margin-top:20px;padding-top:18px;border-top:1px solid var(--border-soft);
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted)}
+  .made a{color:var(--text)} .made a:hover{color:var(--accent)}
+  .made .se{color:var(--accent)}
+</style>
+<script type="application/ld+json">[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"PipeVoice","operatingSystem":"Windows 10, Windows 11","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free, open-source push-to-talk voice typing for Windows. No GPU required.","downloadUrl":"https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe","url":"https://pipevoice.app/"},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Voicebox good for just dictation on Windows?","acceptedAnswer":{"@type":"Answer","text":"It can dictate, but dictation is a newer feature (added in v0.5.0, April 2026) on a GPU-heavy AI voice studio. It runs Whisper locally, transcribes after you release the key, and downloads models. If dictation is all you want, PipeVoice is purpose-built: no GPU, nothing to download on the cloud engines, and words stream in live as you talk."}},{"@type":"Question","name":"Do I need a GPU to dictate?","acceptedAnswer":{"@type":"Answer","text":"For Voicebox, effectively yes. Its local models are built around a GPU and the CPU-only fallback is slow. PipeVoice's cloud engines (Deepgram, OpenAI) need no GPU and download nothing, and the offline local engine runs on a normal CPU."}},{"@type":"Question","name":"Does PipeVoice do voice cloning or text-to-speech?","acceptedAnswer":{"@type":"Answer","text":"No, and that is deliberate. PipeVoice does one thing: voice typing into any Windows app. If you want voice cloning, text-to-speech, or agent voices, Voicebox is an excellent project built for exactly that."}},{"@type":"Question","name":"Is PipeVoice free and open source like Voicebox?","acceptedAnswer":{"@type":"Answer","text":"Yes. Both are free and MIT-licensed. The difference is focus, not price: Voicebox is a full voice studio, while PipeVoice is a lightweight, Windows-first dictation tool."}},{"@type":"Question","name":"Which one is faster for dictation?","acceptedAnswer":{"@type":"Answer","text":"With Deepgram, PipeVoice streams words into the on-screen overlay as you speak. Voicebox transcribes in a batch after you release the key, and its speed depends on your GPU."}}]}]</script>
+</head>
+<body>
+<div class="aura"></div>
+<div class="wrap">
+
+  <nav>
+    <a class="logo" href="/">
+      <img src="/pipevoice-lockup.png" alt="PipeVoice" style="height:30px;width:auto;display:block" />
+    </a>
+    <div class="nav-links">
+      <a href="/#why">Why</a>
+      <a href="/#features">Features</a>
+      <a href="/#how">Setup</a>
+      <a href="/blog">Blog</a>
+      <a class="gh" href="https://github.com/Powleads/PipeVoice">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <span class="kicker"><span class="d"></span> Windows 10 &amp; 11 · no GPU needed · free &amp; open source</span>
+    <h1>The focused, no-GPU<br /><span class="c">Voicebox</span> alternative<br />for Windows.</h1>
+    <p class="sub">Voicebox is a brilliant local AI voice <b>studio</b> — cloning, text-to-speech, agent voices — built around a GPU.
+      If you just want to <b>talk and type</b> on Windows, PipeVoice does that one thing: <b>no GPU</b>, nothing to download,
+      and words appear <b>live</b> as you speak.</p>
+    <div class="cta">
+      <a class="btn btn-primary" data-download href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+      <a class="btn btn-ghost" href="/">See all features</a>
+    </div>
+    <p class="fine">free · open source · cloud or 100% offline</p>
+  </header>
+
+  <section id="compare">
+    <p class="eyebrow">Side by side</p>
+    <h2>PipeVoice vs Voicebox</h2>
+    <p class="lead">An honest comparison from the public repo, docs and release notes, 2026. Both are free and open source — the difference is focus.</p>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th scope="col"></th><th scope="col" class="us">PipeVoice</th><th scope="col">Voicebox</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">What it is</th><td class="us">Focused voice typing</td><td>Full AI voice studio (cloning, TTS, dictation, agent voices)</td></tr>
+          <tr><th scope="row">Dictation is…</th><td class="us">The whole product</td><td>One feature, added in v0.5.0 (Apr 2026)</td></tr>
+          <tr><th scope="row">GPU required</th><td class="us"><span class="yes">No</span> · cloud needs none, local runs on CPU</td><td>Built around a local GPU (CPU fallback is slow)</td></tr>
+          <tr><th scope="row">To download</th><td class="us">Nothing on cloud · ~150&nbsp;MB local model</td><td>Whisper model 0.3–3&nbsp;GB, plus an LLM for cleanup</td></tr>
+          <tr><th scope="row">Words appear</th><td class="us"><span class="yes">Live as you speak</span> · Deepgram streaming</td><td>After you release · batch</td></tr>
+          <tr><th scope="row">Transcription engines</th><td class="us">3 — Deepgram, OpenAI, local Whisper</td><td>Local Whisper only</td></tr>
+          <tr><th scope="row">AI cleanup</th><td class="us">Yes · OpenAI / free Gemini / OpenRouter / local Ollama</td><td>Yes · local LLM (required)</td></tr>
+          <tr><th scope="row">Types into any app</th><td class="us"><span class="yes">Yes</span></td><td>Yes</td></tr>
+          <tr><th scope="row">Per-app profiles</th><td class="us"><span class="yes">Yes</span></td><td><span class="no">No</span></td></tr>
+          <tr><th scope="row">Voice commands</th><td class="us"><span class="yes">Yes</span></td><td><span class="no">No</span></td></tr>
+          <tr><th scope="row">Accent + speech notes</th><td class="us"><span class="yes">Yes</span></td><td><span class="no">No</span></td></tr>
+          <tr><th scope="row">Voice cloning / TTS / agent voices</th><td class="us">No (by design)</td><td><span class="yes">Yes</span> · its core</td></tr>
+          <tr><th scope="row">App footprint</th><td class="us">Light tray app</td><td>Heavyweight studio</td></tr>
+          <tr><th scope="row">License / price</th><td class="us">Free · MIT</td><td>Free · MIT</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cmp-note">Voicebox is excellent if you want the whole voice stack. For just-dictation on Windows, PipeVoice is lighter and needs no GPU.</p>
+  </section>
+
+  <section>
+    <div class="spot">
+      <div>
+        <p class="eyebrow">The honest take</p>
+        <h2>When to pick each.</h2>
+        <p><b>Pick Voicebox</b> if you want voice cloning, text-to-speech or agent voices, you have a capable GPU, and you want the entire local voice I/O stack in one app. It is a genuinely impressive project.</p>
+        <p><b>Pick PipeVoice</b> if you just want to talk and type on Windows, you do not have a GPU (or would rather not spin one up), you want words to appear live as you speak, and you prefer a quiet tray app that does one thing well.</p>
+      </div>
+      <div class="mini">
+        <div class="bar"><i style="background:#e06c75;width:9px;height:9px;border-radius:50%"></i><i style="background:#e5c07b;width:9px;height:9px;border-radius:50%"></i><i style="background:#98c379;width:9px;height:9px;border-radius:50%"></i><span class="t">dictating on a laptop · no GPU</span></div>
+        <div class="body mono">
+          <span class="dim">transcribe</span>&nbsp;&nbsp;<span class="ok">Deepgram</span> <span class="dim">· streaming</span><br/>
+          <span class="dim">GPU</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="ok">none</span><br/>
+          <span class="dim">download</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ok">0 MB</span><br/><br/>
+          <span class="ar">↻</span> <span class="dim">the words appear as I</span> <span class="ok">speak</span><span class="cur"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Good to know</p>
+    <h2>Questions</h2>
+    <div class="faq">
+      <details><summary>Is Voicebox good for just dictation on Windows?</summary>
+        <p>It can dictate, but dictation is a newer feature (added in v0.5.0, April 2026) on a GPU-heavy AI voice studio. It runs Whisper locally, transcribes after you release the key, and downloads models. If dictation is all you want, PipeVoice is purpose-built: no GPU, nothing to download on the cloud engines, and words stream in live as you talk.</p></details>
+      <details><summary>Do I need a GPU to dictate?</summary>
+        <p>For Voicebox, effectively yes. Its local models are built around a GPU and the CPU-only fallback is slow. PipeVoice's cloud engines (Deepgram, OpenAI) need no GPU and download nothing, and the offline local engine runs on a normal CPU.</p></details>
+      <details><summary>Does PipeVoice do voice cloning or text-to-speech?</summary>
+        <p>No, and that is deliberate. PipeVoice does one thing: voice typing into any Windows app. If you want voice cloning, text-to-speech, or agent voices, <a href="https://github.com/jamiepine/voicebox">Voicebox</a> is an excellent project built for exactly that.</p></details>
+      <details><summary>Is PipeVoice free and open source like Voicebox?</summary>
+        <p>Yes. Both are free and MIT-licensed. The difference is focus, not price: Voicebox is a full voice studio, while PipeVoice is a lightweight, Windows-first dictation tool.</p></details>
+      <details><summary>Which one is faster for dictation?</summary>
+        <p>With Deepgram, PipeVoice streams words into the on-screen overlay as you speak. Voicebox transcribes in a batch after you release the key, and its speed depends on your GPU.</p></details>
+    </div>
+  </section>
+  <div class="signup" style="background:transparent;border:none;padding:54px 0 20px;text-align:center">
+    <h2>Just want to talk and type? No GPU, free.</h2>
+    <div class="cta" style="margin-top:24px;justify-content:center;display:flex">
+      <a class="btn btn-primary" data-download href="https://github.com/Powleads/PipeVoice/releases/latest/download/Pipevoice-Setup.exe">↓ Download for Windows</a>
+    </div>
+    <p class="fine">free · open source · Windows 10 &amp; 11</p>
+  </div>
+
+  <footer>
+    <div class="foot-row">
+      <span>PipeVoice: free, private voice typing for Windows.</span>
+      <span><a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy">Privacy</a> &nbsp;·&nbsp; <a href="https://github.com/Powleads/PipeVoice">github.com/Powleads/PipeVoice ↗</a></span>
+    </div>
+    <div class="made">
+      Built by the team behind <a class="se" href="https://engine.signalsprint.io">SignalEngine</a>, agentic AI outbound for founders &amp; agencies.
+      <a href="https://engine.signalsprint.io">Take a look ↗</a>
+    </div>
+  </footer>
+
+</div>
+<script>/* first-party, cookieless pageview beacon -> /api/track (disclosed in /privacy) */
+(function(){try{var q=new URLSearchParams(location.search),b={p:location.pathname,r:document.referrer};["utm_source","utm_medium","utm_campaign"].forEach(function(k){var v=q.get(k);if(v)b[k]=v;});fetch("/api/track",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});}catch(e){}})();
+</script>
+</body>
+</html>
