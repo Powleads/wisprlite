@@ -166,11 +166,18 @@ class App:
 
             # Agent MCP listen: route the transcript to the caller instead of typing.
             if self._pending_agent_listen is not None:
+                import concurrent.futures
                 pending = self._pending_agent_listen
                 self._pending_agent_listen = None
-                if not pending["future"].cancelled():  # not already timed out
+                try:
                     answer = apply_replacements(self._polish(text), self.cfg.replacements) if text else ""
+                except Exception:
+                    log.exception("agent-listen polish failed")
+                    answer = text  # fall back to the raw transcript so the caller still gets it
+                try:
                     pending["future"].set_result({"status": "ok", "text": answer})
+                except concurrent.futures.InvalidStateError:
+                    pass  # caller already timed out / cancelled
                 self.overlay.set_state("done", "↩ sent to agent" if text else "↩ (nothing heard)")
                 self._set_icon("idle")
                 return
@@ -334,7 +341,7 @@ class App:
     def on_agent_listen(self, prompt="", timeout=45, mode="") -> dict:
         import concurrent.futures
         mode = mode or self.cfg.mcp_default_mode
-        if self._busy.locked():
+        if self._busy.locked() or self._pending_agent_listen is not None:
             return {"status": "busy", "text": ""}
         if mode == "hands_free":
             return self._agent_listen_hands_free(prompt, timeout)
@@ -373,7 +380,7 @@ class App:
                     break
             audio = self.recorder.stop()
             self._set_icon("transcribing")
-            if not endpointer._speech_started:
+            if not endpointer.heard_speech:
                 self.overlay.hide(); self._set_icon("idle")
                 return {"status": "timeout", "text": ""}
             try:

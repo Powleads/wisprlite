@@ -15,6 +15,11 @@ class SilenceEndpointer:
         self._speech_started = False
         self._silent_blocks = 0
 
+    @property
+    def heard_speech(self) -> bool:
+        """True once any above-threshold audio has been seen this capture."""
+        return self._speech_started
+
     def feed(self, level: float) -> bool:
         """Return True when the capture should stop."""
         if level >= self.threshold:
