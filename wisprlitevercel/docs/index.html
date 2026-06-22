@@ -133,6 +133,16 @@
   <h3>Nothing happens when I hold the key</h3>
   <p>Confirm the hotkey in Settings, and that an engine is selected (the tray tooltip shows the current engine). For cloud engines, make sure a valid key is saved.</p>
 
+  <h2 id="mcp">Talk to your AI agent (MCP)</h2>
+  <p>PipeVoice can act as a local MCP server so agents (Claude Code, Cursor, Cline) can use your voice — no API key, everything runs on your machine.</p>
+  <ul>
+    <li><b><code>listen</code></b> — the agent asks a question, you answer by voice, and it gets the text back.</li>
+    <li><b><code>transcribe</code></b> — hand it a local audio or video file and get a transcript with timestamps, or ready-made captions (<code>format: "srt"</code> / <code>"vtt"</code>).</li>
+  </ul>
+  <p>Enable <b>Agent MCP (listen + transcribe)</b> in the tray menu, then register it once with your client:</p>
+  <div class="card"><code>claude mcp add pipevoice -- python -m wisprlite --mcp</code></div>
+  <p>The server is loopback-only and off by default.</p>
+
   <footer>
     <span>Pipevoice — free, private voice typing for Windows.</span>
     <span><a href="/">Home</a> · <a href="https://github.com/Powleads/PipeVoice">GitHub ↗</a></span>

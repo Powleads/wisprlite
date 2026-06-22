@@ -47,6 +47,24 @@ Switch engines anytime in **Tray → Engine**. Your choice persists.
 `medium.en`, or multilingual `small` / `medium` / `large-v3`. Bigger = slower
 but more accurate; a GPU helps a lot (it auto-detects CUDA).
 
+## Talk to your AI agent (MCP)
+
+PipeVoice can act as a local MCP server so agents (Claude Code, Cursor, Cline) can use
+your voice — no API key, everything runs on your machine:
+
+- **`listen`** — the agent asks a question, you answer by voice (push-to-talk by
+  default, or hands-free), and it gets the text back.
+- **`transcribe`** — hand it a local audio or video file and get the transcript with
+  word/segment timestamps, or ready-made captions (`format: "srt"` / `"vtt"`).
+
+Enable **Agent MCP (listen + transcribe)** in the tray menu, then register it once with
+your client (the app shows the exact command when you toggle it on):
+
+    claude mcp add pipevoice -- python -m wisprlite --mcp        # running from source
+    claude mcp add pipevoice -- "C:\Path\To\Pipevoice.exe" --mcp # installed build
+
+The server is loopback-only and off by default.
+
 ## The overlay HUD
 
 The pill shows what's happening:

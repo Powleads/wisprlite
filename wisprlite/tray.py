@@ -96,6 +96,8 @@ class Tray:
                  checked=lambda it: app.cfg.sounds),
             Item("Start on login", lambda i, it: app.toggle_autostart(),
                  checked=lambda it: app.autostart_enabled()),
+            Item("Agent MCP (listen + transcribe)", lambda i, it: app.toggle_mcp(),
+                 checked=lambda it: app.cfg.mcp_enabled),
             Item("Paused", lambda i, it: app.toggle_pause(),
                  checked=lambda it: app.paused),
             Menu.SEPARATOR,
