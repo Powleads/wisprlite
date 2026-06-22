@@ -22,7 +22,10 @@ PASTE_SPEEDS = [("fast", "Fast"), ("normal", "Normal"), ("slow", "Slow")]
 CLEANUP_PROVIDERS = [("openai", "OpenAI"), ("gemini", "Google Gemini (free tier)"),
                      ("openrouter", "OpenRouter (free models)"), ("ollama", "Local — Ollama (offline)")]
 LOCAL_SIZES = ["tiny.en", "base.en", "small.en", "medium.en",
-               "tiny", "base", "small", "medium", "large-v3"]
+               "tiny", "base", "small", "medium", "large-v3", "large-v3-turbo"]
+LOCAL_DEVICES = [("auto", "Auto-detect"), ("cpu", "CPU"), ("cuda", "GPU (NVIDIA CUDA)")]
+LOCAL_COMPUTE_TYPES = [("int8", "int8 — fastest on CPU"), ("int8_float16", "int8_float16 — GPU"),
+                       ("float16", "float16 — GPU"), ("float32", "float32 — most accurate")]
 LANGUAGES = [
     ("", "Auto-detect"),
     ("en-US", "English — US"),
@@ -361,6 +364,8 @@ def main(first_run: bool = False) -> None:
     oai_var = tk.StringVar(value=cfg.openai_model)
     dg_var = tk.StringVar(value=cfg.deepgram_model)
     local_var = tk.StringVar(value=cfg.local_model_size)
+    local_device_var = tk.StringVar(value=dict(LOCAL_DEVICES).get(cfg.local_device, LOCAL_DEVICES[0][1]))
+    local_compute_var = tk.StringVar(value=dict(LOCAL_COMPUTE_TYPES).get(cfg.local_compute_type, LOCAL_COMPUTE_TYPES[0][1]))
     oai_key_var = tk.StringVar()
     dg_key_var = tk.StringVar()
     gem_key_var = tk.StringVar()
@@ -465,6 +470,10 @@ def main(first_run: bool = False) -> None:
     entry(row(c, "OpenAI model"), oai_var, width=22)
     entry(row(c, "Deepgram model"), dg_var, width=22)
     combo(row(c, "Local model size", "Bigger is more accurate but slower."), local_var, LOCAL_SIZES)
+    combo(row(c, "Local: device", "Auto picks GPU if available, else CPU."),
+          local_device_var, [l for _, l in LOCAL_DEVICES])
+    combo(row(c, "Local: compute type", "int8 is fastest on CPU; float16/int8_float16 for GPU."),
+          local_compute_var, [l for _, l in LOCAL_COMPUTE_TYPES], width=26)
 
     # --- API keys ---
     c = card("API keys", "Stored locally in your .env, never uploaded. Leave a field blank to keep its current key.")
@@ -568,6 +577,8 @@ def main(first_run: bool = False) -> None:
         cfg.openai_model = oai_var.get().strip() or "whisper-1"
         cfg.deepgram_model = dg_var.get().strip() or "nova-2"
         cfg.local_model_size = local_var.get().strip() or "base.en"
+        cfg.local_device = value_for(local_device_var, LOCAL_DEVICES)
+        cfg.local_compute_type = value_for(local_compute_var, LOCAL_COMPUTE_TYPES)
         cfg.overlay = bool(overlay_var.get())
         cfg.sounds = bool(sounds_var.get())
         cfg.auto_update = bool(auto_update_var.get())

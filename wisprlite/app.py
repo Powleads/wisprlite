@@ -87,7 +87,8 @@ class App:
             from .engines.local_engine import LocalEngine
 
             return LocalEngine(model_size=self.cfg.local_model_size,
-                               language=(self.cfg.language or "").split("-")[0] or None, prompt=vocab)
+                               language=(self.cfg.language or "").split("-")[0] or None, prompt=vocab,
+                               device=self.cfg.local_device, compute_type=self.cfg.local_compute_type)
         raise RuntimeError(f"Unknown engine: {name}")
 
     def _get_engine(self, name: str | None = None):
@@ -254,7 +255,8 @@ class App:
             self.overlay.set_state("transcribing", "Cloud failed — using local…")
             from .engines.local_engine import LocalEngine
 
-            local = LocalEngine(model_size=self.cfg.local_model_size, language=(self.cfg.language or "").split("-")[0] or None)
+            local = LocalEngine(model_size=self.cfg.local_model_size, language=(self.cfg.language or "").split("-")[0] or None,
+                                device=self.cfg.local_device, compute_type=self.cfg.local_compute_type)
             return local.start_session(on_partial=self.overlay.set_text).finish(audio)
         except Exception as exc:
             self._fail(f"{err} (local fallback: {exc})")
@@ -578,7 +580,8 @@ class App:
         self.cfg = new  # hotkey/mode/output read live via lambdas
 
         engine_keys = ("engine", "openai_model", "deepgram_model",
-                       "local_model_size", "language", "device", "vocabulary",
+                       "local_model_size", "local_device", "local_compute_type",
+                       "language", "device", "vocabulary",
                        "deepgram_finish_timeout")
         if any(getattr(old, k) != getattr(new, k) for k in engine_keys):
             self._engines = {}
