@@ -25,6 +25,21 @@ WARN = "#e5c07b"
 RELEASES_URL = "https://github.com/Powleads/PipeVoice/releases"
 
 
+def _open_feedback() -> None:
+    import os
+    import subprocess
+    import sys
+    try:
+        if getattr(sys, "frozen", False):
+            subprocess.Popen([sys.executable, "--feedback"])
+        else:
+            from .autostart import _pythonw
+            parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            subprocess.Popen([_pythonw(), "-m", "wisprlite", "--feedback"], cwd=parent)
+    except Exception:
+        pass
+
+
 def _clean_notes(body: str) -> str:
     """Tidy GitHub's auto-generated release notes into readable lines."""
     lines = []
@@ -87,6 +102,10 @@ def build(container, root, wheel=None) -> None:
                     font=("Segoe UI", 9, "underline"))
     link.pack(side="left", padx=(16, 0))
     link.bind("<Button-1>", lambda e: webbrowser.open(RELEASES_URL))
+    fb = tk.Label(actions, text="Send feedback ↗", bg=BG, fg=ACCENT, cursor="hand2",
+                  font=("Segoe UI", 9, "underline"))
+    fb.pack(side="left", padx=(16, 0))
+    fb.bind("<Button-1>", lambda e: _open_feedback())
 
     tk.Label(container, text="WHAT'S NEW", bg=BG, fg=ACCENT,
              font=("Segoe UI", 9, "bold")).pack(anchor="w", padx=28, pady=(20, 8))

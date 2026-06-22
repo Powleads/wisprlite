@@ -483,6 +483,21 @@ class App:
         except Exception as exc:
             self._fail(f"about: {exc}")
 
+    def open_feedback(self) -> None:
+        import os
+        import subprocess
+
+        try:
+            if getattr(sys, "frozen", False):
+                subprocess.Popen([sys.executable, "--feedback"])
+            else:
+                from .autostart import _pythonw
+
+                parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                subprocess.Popen([_pythonw(), "-m", "wisprlite", "--feedback"], cwd=parent)
+        except Exception as exc:
+            self._fail(f"feedback: {exc}")
+
     def open_profiles(self) -> None:
         import os
         import subprocess

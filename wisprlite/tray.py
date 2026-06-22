@@ -102,6 +102,7 @@ class Tray:
                  checked=lambda it: app.paused),
             Menu.SEPARATOR,
             Item("About / What's new…", lambda i, it: app.open_about()),
+            Item("Send feedback…", lambda i, it: app.open_feedback()),
             Item("Check for updates…", lambda i, it: app.check_for_updates(manual=True)),
             Item("Quit", lambda i, it: app.quit()),
         )

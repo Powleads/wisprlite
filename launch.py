@@ -15,6 +15,8 @@ elif "--profiles" in sys.argv:
     from wisprlite.profiles import main
 elif "--mcp" in sys.argv:
     from wisprlite.mcp_shim import main
+elif "--feedback" in sys.argv:
+    from wisprlite.feedback import main
 else:
     from wisprlite.app import main
 
