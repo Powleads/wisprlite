@@ -56,6 +56,8 @@ class App:
         self._started_at = 0.0
         self._busy = threading.Lock()
         self._stop = threading.Event()
+        self._pending_agent_listen = None   # set while a listen() awaits the user's hotkey
+        self._bridge = None                  # agent_bridge.ControlListener when MCP is on
 
     # ---- engine -----------------------------------------------------------
     def _build_engine(self, name: str | None = None):
@@ -161,6 +163,18 @@ class App:
                 text = self._fallback(audio, exc)
 
             text = (text or "").strip()
+
+            # Agent MCP listen: route the transcript to the caller instead of typing.
+            if self._pending_agent_listen is not None:
+                pending = self._pending_agent_listen
+                self._pending_agent_listen = None
+                if not pending["future"].cancelled():  # not already timed out
+                    answer = apply_replacements(self._polish(text), self.cfg.replacements) if text else ""
+                    pending["future"].set_result({"status": "ok", "text": answer})
+                self.overlay.set_state("done", "↩ sent to agent" if text else "↩ (nothing heard)")
+                self._set_icon("idle")
+                return
+
             if not text:
                 self.overlay.hide()
                 self._set_icon("idle")
@@ -178,16 +192,8 @@ class App:
                 return
             text = cmd.text
 
-            # AI cleanup ("Flow mode") — OpenAI / Gemini / OpenRouter / local Ollama; falls back to raw.
-            if text and self._eff("ai_cleanup"):
-                from . import cleanup
-
-                if cleanup.provider_ready(self.cfg.cleanup_provider):
-                    self.overlay.set_state("transcribing", "Polishing…")
-                    polished = cleanup.clean(text, self.cfg.cleanup_provider, self.cfg.cleanup_model,
-                                             self.cfg.language, self.cfg.speech_notes)
-                    if polished:
-                        text = polished
+            # AI cleanup ("Flow mode") — OpenAI / Gemini / OpenRouter / local Ollama.
+            text = self._polish(text)
 
             # inline formatting commands ("new line") — after cleanup so newlines survive
             text = commands.inline(text, self.cfg.voice_commands)
@@ -281,6 +287,141 @@ class App:
 
     def toggle_pause(self) -> None:
         self.paused = not self.paused
+        self.tray.update()
+
+    # ---- agent MCP -------------------------------------------------------
+    def _polish(self, text: str) -> str:
+        """Optional LLM cleanup ('Flow mode'); returns the input unchanged if off/unavailable."""
+        if not (text and self._eff("ai_cleanup")):
+            return text
+        from . import cleanup
+        if not cleanup.provider_ready(self.cfg.cleanup_provider):
+            return text
+        self.overlay.set_state("transcribing", "Polishing…")
+        polished = cleanup.clean(text, self.cfg.cleanup_provider, self.cfg.cleanup_model,
+                                 self.cfg.language, self.cfg.speech_notes)
+        return polished or text
+
+    def _agent_dispatch(self, req: dict) -> dict:
+        op = req.get("op")
+        if op == "listen":
+            return self.on_agent_listen(req.get("prompt", ""), req.get("timeout", 45), req.get("mode", ""))
+        if op == "transcribe":
+            return self.on_agent_transcribe(req.get("path", ""), req.get("format", "json"),
+                                            req.get("language", ""), req.get("model_size", ""))
+        return {"status": "error", "error": f"unknown op: {op}"}
+
+    def on_agent_transcribe(self, path="", fmt="json", language="", model_size="") -> dict:
+        import os
+        if not path or not os.path.exists(path):
+            return {"status": "error", "error": f"file not found: {path}"}
+        size = model_size or self.cfg.transcribe_model_size or self.cfg.local_model_size
+        try:
+            from .engines.transcribe import transcribe_file
+            r = transcribe_file(path, language=(language or None), model_size=size)
+        except Exception as exc:
+            log.exception("agent transcribe failed")
+            return {"status": "error", "error": str(exc)}
+        out = {"status": "ok", "text": r["text"], "language": r["language"], "duration": r["duration"]}
+        fmt = (fmt or "json").lower()
+        if fmt in ("srt", "vtt"):
+            from . import captions
+            out["captions"] = captions.to_srt(r["segments"]) if fmt == "srt" else captions.to_vtt(r["segments"])
+        else:
+            out["segments"] = r["segments"]
+        return out
+
+    def on_agent_listen(self, prompt="", timeout=45, mode="") -> dict:
+        import concurrent.futures
+        mode = mode or self.cfg.mcp_default_mode
+        if self._busy.locked():
+            return {"status": "busy", "text": ""}
+        if mode == "hands_free":
+            return self._agent_listen_hands_free(prompt, timeout)
+        # push-to-talk: arm, cue the overlay, wait for the user's normal hotkey cycle.
+        fut = concurrent.futures.Future()
+        self._pending_agent_listen = {"future": fut}
+        self.overlay.show("listening", prompt or "🎙 your agent is listening — hold your hotkey & speak")
+        try:
+            return fut.result(timeout=max(1, int(timeout)))
+        except concurrent.futures.TimeoutError:
+            fut.cancel()
+            self._pending_agent_listen = None
+            self.overlay.hide()
+            return {"status": "timeout", "text": ""}
+
+    def _agent_listen_hands_free(self, prompt="", timeout=45) -> dict:
+        import time
+        from .vad import SilenceEndpointer
+        if not self._busy.acquire(blocking=False):
+            return {"status": "busy", "text": ""}
+        try:
+            try:
+                engine = self._get_engine()
+                self._session = engine.start_session(on_partial=self.overlay.set_text)
+            except Exception as exc:
+                self._fail(str(exc))
+                return {"status": "error", "text": "", "error": str(exc)}
+            self.overlay.show("listening", prompt or "🎙 your agent is listening…")
+            self._set_icon("recording")
+            self.recorder.start(on_frame=self._session.feed if engine.streaming else None)
+            endpointer = SilenceEndpointer(silence_ms=self.cfg.hands_free_silence_ms)
+            deadline = time.time() + max(1, int(timeout))
+            while time.time() < deadline:
+                time.sleep(0.05)
+                if endpointer.feed(self.recorder.level):
+                    break
+            audio = self.recorder.stop()
+            self._set_icon("transcribing")
+            if not endpointer._speech_started:
+                self.overlay.hide(); self._set_icon("idle")
+                return {"status": "timeout", "text": ""}
+            try:
+                text = self._session.finish(audio) if self._session else ""
+            except Exception as exc:
+                text = self._fallback(audio, exc)
+            text = apply_replacements(self._polish((text or "").strip()), self.cfg.replacements)
+            self.overlay.set_state("done", "↩ sent to agent")
+            self._beep(990, 60); self._set_icon("idle")
+            return {"status": "ok", "text": text}
+        finally:
+            self._session = None
+            self._release()
+
+    def _mcp_add_command(self) -> str:
+        if getattr(sys, "frozen", False):
+            return f'claude mcp add pipevoice -- "{sys.executable}" --mcp'
+        return "claude mcp add pipevoice -- python -m wisprlite --mcp"
+
+    def start_mcp_bridge(self) -> None:
+        if self._bridge is not None:
+            return
+        try:
+            from .agent_bridge import ControlListener
+            self._bridge = ControlListener(self.cfg.mcp_port, self._agent_dispatch)
+            self._bridge.start()
+            log.info("MCP control bridge on 127.0.0.1:%s", self.cfg.mcp_port)
+        except Exception as exc:
+            self._bridge = None
+            log.warning("MCP bridge failed to start: %s", exc)
+            self._fail(f"MCP bridge: {exc}")
+
+    def stop_mcp_bridge(self) -> None:
+        if self._bridge is not None:
+            try:
+                self._bridge.stop()
+            except Exception:
+                pass
+            self._bridge = None
+
+    def toggle_mcp(self) -> None:
+        self.cfg.mcp_enabled = not self.cfg.mcp_enabled
+        self.cfg.save()
+        if self.cfg.mcp_enabled:
+            self.start_mcp_bridge()
+            self._notify("Agent MCP on. Register once:\n" + self._mcp_add_command())
+        else:
+            self.stop_mcp_bridge()
         self.tray.update()
 
     def open_settings(self) -> None:
@@ -385,6 +526,7 @@ class App:
 
     def quit(self) -> None:
         self._stop.set()
+        self.stop_mcp_bridge()
         self.hotkeys.stop()
         self.overlay.stop()
         self.tray.stop()
@@ -492,6 +634,8 @@ class App:
         self.tray.start()
         self.hotkeys.start()
         self.clip_hotkeys.start()
+        if self.cfg.mcp_enabled:
+            self.start_mcp_bridge()
         self._prewarm()
         threading.Thread(target=self._watch_config, daemon=True).start()
         try:
