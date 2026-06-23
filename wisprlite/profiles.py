@@ -1,9 +1,11 @@
-"""Per-app profiles: when the focused app matches, apply per-utterance overrides
-(engine, ai_cleanup, auto_enter, output_mode). resolve() does the matching;
-main() is the --profiles editor window.
+"""Per-app profiles: when the focused app matches, apply a named Voice's
+per-utterance overrides. resolve() does the matching; main() is the --profiles
+editor window (App -> Voice).
 
-A profile is {name, match:{exe|title_contains}, overrides:{...}}. Overrides never
-mutate saved settings; app.py applies them for one utterance only.
+A profile is {name, match:{exe|title_contains}, voice:"<name>"}. Legacy profiles
+carrying ``overrides`` are still resolved (back-compat) and migrated to Voices via
+voices.migrate_profiles(). Overrides never mutate saved settings; app.py applies
+them for one utterance only.
 """
 
 from __future__ import annotations
@@ -11,8 +13,6 @@ from __future__ import annotations
 import os
 
 from . import config, voices
-
-KEYS = ("engine", "ai_cleanup", "auto_enter", "output_mode", "cleanup_style", "cleanup_instruction")
 
 
 def resolve(cfg, ctx) -> dict:
@@ -51,11 +51,6 @@ FG = "#e5e7eb"
 MUTED = "#94a3b8"
 ACCENT = "#e06c75"
 
-P_ENGINES = [("", "(app default)"), ("gemini", "Gemini"), ("groq", "Groq"),
-             ("deepgram", "Deepgram"), ("local", "Local")]
-P_OUTPUTS = [("type", "Type"), ("paste", "Paste"), ("clipboard", "Clipboard")]
-P_STYLES = [("", "(app default)"), ("tidy", "Tidy — clean up"), ("prompt", "Prompt — for AI tools"), ("custom", "Custom…")]
-
 # Common apps so popular targets appear even when they aren't currently running.
 # Full product names so a natural search ("visual studio code") matches.
 COMMON_APPS = [
@@ -68,10 +63,6 @@ COMMON_APPS = [
     ("idea64.exe", "IntelliJ IDEA"), ("explorer.exe", "File Explorer"),
     ("telegram.exe", "Telegram"), ("whatsapp.exe", "WhatsApp"),
 ]
-
-
-def _value_for(label, table):
-    return {l: k for k, l in table}.get(label, table[0][0])
 
 
 def _searchable(combo, all_values):
@@ -98,6 +89,9 @@ def main() -> None:
     from . import winui
 
     cfg = config.Config.load()
+    from . import voices
+    if voices.migrate_profiles(cfg):
+        cfg.save()
     cards = []
     from . import foreground
     running = foreground.list_windows()
@@ -193,8 +187,8 @@ def main() -> None:
         "<MouseWheel>", lambda ev: canvas.yview_scroll(int(-ev.delta / 120), "units")))
     canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
 
-    def add_card(exe="", overrides=None):
-        overrides = overrides or {}
+    def add_card(exe="", voice=""):
+        overrides_voice = voice
         wrap = tk.Frame(holder, bg=BG)
         wrap.pack(fill="x", padx=18, pady=(0, 12))
         c = tk.Frame(wrap, bg=CARD)
@@ -232,49 +226,22 @@ def main() -> None:
         ttk.Button(pick, text="Remove",
                    command=lambda: (wrap.destroy(), card in cards and cards.remove(card))).pack(side="right")
 
-        ctl = tk.Frame(inner, bg=CARD)
-        ctl.pack(fill="x", pady=(16, 0))
-        eng_col = tk.Frame(ctl, bg=CARD)
-        eng_col.pack(side="left", padx=(0, 26))
-        tk.Label(eng_col, text="ENGINE", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
-        engine_var = tk.StringVar(value=dict(P_ENGINES).get(overrides.get("engine", ""), P_ENGINES[0][1]))
-        ttk.Combobox(eng_col, textvariable=engine_var, values=[l for _, l in P_ENGINES],
-                     state="readonly", width=14).pack(anchor="w", pady=(5, 0))
-        out_col = tk.Frame(ctl, bg=CARD)
-        out_col.pack(side="left")
-        tk.Label(out_col, text="OUTPUT", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
-        output_var = tk.StringVar(value=dict(P_OUTPUTS).get(overrides.get("output_mode", cfg.output_mode), P_OUTPUTS[0][1]))
-        ttk.Combobox(out_col, textvariable=output_var, values=[l for _, l in P_OUTPUTS],
-                     state="readonly", width=12).pack(anchor="w", pady=(5, 0))
+        vrow = tk.Frame(inner, bg=CARD)
+        vrow.pack(fill="x", pady=(14, 0))
+        tk.Label(vrow, text="VOICE", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
+        tk.Label(vrow, text="The polish preset to use in this app. Create/edit voices in Settings → Manage voices.",
+                 bg=CARD, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w", pady=(2, 0))
+        voice_opts = voices.names(cfg) or ["Tidy"]
+        cur = overrides_voice if overrides_voice in voice_opts else voice_opts[0]
+        voice_var = tk.StringVar(value=cur)
+        ttk.Combobox(vrow, textvariable=voice_var, values=voice_opts, state="readonly", width=24).pack(anchor="w", pady=(5, 0))
 
-        sty_col = tk.Frame(ctl, bg=CARD)
-        sty_col.pack(side="left", padx=(26, 0))
-        tk.Label(sty_col, text="POLISH STYLE", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
-        style_var = tk.StringVar(value=dict(P_STYLES).get(overrides.get("cleanup_style", ""), P_STYLES[0][1]))
-        ttk.Combobox(sty_col, textvariable=style_var, values=[l for _, l in P_STYLES],
-                     state="readonly", width=16).pack(anchor="w", pady=(5, 0))
-
-        chk = tk.Frame(inner, bg=CARD)
-        chk.pack(fill="x", pady=(16, 0))
-        cleanup_var = tk.BooleanVar(value=bool(overrides.get("ai_cleanup", cfg.ai_cleanup)))
-        autoenter_var = tk.BooleanVar(value=bool(overrides.get("auto_enter", cfg.auto_enter)))
-        ttk.Checkbutton(chk, text="AI cleanup", variable=cleanup_var).pack(side="left")
-        ttk.Checkbutton(chk, text="Auto-Enter", variable=autoenter_var).pack(side="left", padx=(22, 0))
-
-        instr_frame = tk.Frame(inner, bg=CARD)
-        instr_frame.pack(fill="x", pady=(12, 0))
-        tk.Label(instr_frame, text="Custom polish instruction (used when style = Custom)",
-                 bg=CARD, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w")
-        instr_var = tk.StringVar(value=overrides.get("cleanup_instruction", ""))
-        ttk.Entry(instr_frame, textvariable=instr_var, width=60).pack(anchor="w", pady=(4, 0))
-
-        card.update(exe=exe_var, engine=engine_var, output=output_var,
-                    cleanup=cleanup_var, autoenter=autoenter_var, style=style_var, instruction=instr_var)
+        card.update(exe=exe_var, voice=voice_var)
         cards.append(card)
 
     for p in (cfg.profiles or []):
         if isinstance(p, dict):
-            add_card((p.get("match") or {}).get("exe", ""), p.get("overrides") or {})
+            add_card((p.get("match") or {}).get("exe", ""), p.get("voice", ""))
     if not cfg.profiles:
         add_card()
 
@@ -284,21 +251,7 @@ def main() -> None:
             exe = card["exe"].get().split("—")[0].strip().lower()
             if not exe:
                 continue
-            ov = {
-                "ai_cleanup": bool(card["cleanup"].get()),
-                "auto_enter": bool(card["autoenter"].get()),
-                "output_mode": _value_for(card["output"].get(), P_OUTPUTS),
-            }
-            sty = _value_for(card["style"].get(), P_STYLES)
-            if sty:
-                ov["cleanup_style"] = sty
-            ci = card["instruction"].get().strip()
-            if ci:
-                ov["cleanup_instruction"] = ci
-            eng = _value_for(card["engine"].get(), P_ENGINES)
-            if eng:
-                ov["engine"] = eng
-            out.append({"name": exe, "match": {"exe": exe}, "overrides": ov})
+            out.append({"name": exe, "match": {"exe": exe}, "voice": card["voice"].get()})
         # Reload first so we only change `profiles`, not other settings the user
         # may have edited in the Settings window meanwhile.
         fresh = config.Config.load()

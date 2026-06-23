@@ -774,6 +774,15 @@ class App:
             print("Pipevoice is already running.", file=sys.stderr)
             return
 
+        # Upgrade any legacy per-app profile overrides into named Voices on launch,
+        # so a normal start (not just opening the profiles editor) migrates them.
+        try:
+            from . import voices
+            if voices.migrate_profiles(self.cfg):
+                self.cfg.save()
+        except Exception:
+            pass
+
         # First run: if a cloud engine has no key, ask for it in a dialog.
         from . import keyprompt
 
