@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import threading
 
-from . import about, autostart, cleanup, config, history, winui
+from . import about, autostart, cleanup, config, history, voices, winui
 
 ENGINES = [("gemini", "Gemini — free, one key does it all"),
            ("groq", "Groq Whisper — fast & cheap, top accuracy"),
@@ -404,6 +404,43 @@ def main(first_run: bool = False) -> None:
     voice_commands_var = tk.BooleanVar(value=cfg.voice_commands)
     history_var = tk.BooleanVar(value=cfg.history_enabled)
 
+    # Voice hotkeys: option table for the dropdowns, StringVars for 3 key+voice
+    # rows plus the picker. Prefilled from the first three saved voice_hotkeys.
+    voice_opts = [("", "(none)")] + [(n, n) for n in voices.names(cfg)]
+    _vh = list(cfg.voice_hotkeys or [])
+
+    def _capture_factory():
+        def _mk_capture(btn, var):
+            def cap():
+                btn.config(text="Press keys…")
+
+                def work():
+                    hk = None
+                    try:
+                        import keyboard
+                        hk = keyboard.read_hotkey(suppress=False)
+                    except Exception:
+                        hk = None
+
+                    def done():
+                        if hk:
+                            var.set(hk)
+                        btn.config(text="Capture")
+                    root.after(0, done)
+                threading.Thread(target=work, daemon=True).start()
+            return cap
+        return _mk_capture
+
+    _mk_capture = _capture_factory()
+
+    vk_vars, vv_vars = [], []
+    for _i in range(3):
+        _e = _vh[_i] if _i < len(_vh) else {}
+        vk_vars.append(tk.StringVar(value=(_e.get("hotkey") if isinstance(_e, dict) else "") or ""))
+        vv_vars.append(tk.StringVar(
+            value=dict(voice_opts).get((_e.get("voice") if isinstance(_e, dict) else ""), "(none)")))
+    picker_var = tk.StringVar(value=cfg.voice_picker_hotkey)
+
     def combo(parent, var, options, width=22):
         c = ttk.Combobox(parent, textvariable=var, values=options, state="readonly", width=width)
         c.pack(side="left")
@@ -476,6 +513,22 @@ def main(first_run: bool = False) -> None:
         threading.Thread(target=work, daemon=True).start()
 
     clip_cap_btn.config(command=clip_capture)
+
+    # --- Voice hotkeys ---
+    c = card("Voice hotkeys",
+             "Press a key to dictate with a specific Voice. Optional picker key chooses on the fly.")
+    for _i in range(3):
+        r = row(c, f"Voice key {_i + 1}", "Hold this to dictate using the chosen Voice.")
+        entry(r, vk_vars[_i], width=14)
+        _vcap = ttk.Button(r, text="Capture", width=8)
+        _vcap.pack(side="left", padx=(8, 0))
+        _vcap.config(command=_mk_capture(_vcap, vk_vars[_i]))
+        combo(r, vv_vars[_i], [l for _, l in voice_opts], width=18)
+    r = row(c, "Picker key", "Hold to pop a numbered voice list on the overlay.")
+    entry(r, picker_var, width=14)
+    _pcap = ttk.Button(r, text="Capture", width=8)
+    _pcap.pack(side="left", padx=(8, 0))
+    _pcap.config(command=_mk_capture(_pcap, picker_var))
 
     # --- Audio ---
     c = card("Audio")
@@ -571,6 +624,8 @@ def main(first_run: bool = False) -> None:
     check(c, "Keep a local dictation history", history_var, "Saved on your PC; open it from the tray.")
     pr = stack(c, "App profiles", "Give specific apps their own engine, cleanup and Enter behaviour.")
     ttk.Button(pr, text="Manage app profiles…", command=lambda: _launch_child("--profiles")).pack(anchor="w")
+    vc = stack(c, "Voices", "Named polish presets (Tidy, Social, Professional, Code…). Bind them to keys or apps.")
+    ttk.Button(vc, text="Manage voices…", command=lambda: _launch_child("--voices")).pack(anchor="w")
 
     # --- Advanced ---
     c = card("Advanced", "Most people never need these.")
@@ -588,6 +643,11 @@ def main(first_run: bool = False) -> None:
         # Don't clobber app profiles edited in the separate Profiles window.
         try:
             cfg.profiles = config.Config.load().profiles
+        except Exception:
+            pass
+        # don't clobber voices edited in the separate Voices window
+        try:
+            cfg.voices = config.Config.load().voices
         except Exception:
             pass
         cfg.engine = value_for(engine_var, engine_opts)
@@ -609,6 +669,13 @@ def main(first_run: bool = False) -> None:
         cfg.auto_update = bool(auto_update_var.get())
         cfg.voice_commands = bool(voice_commands_var.get())
         cfg.history_enabled = bool(history_var.get())
+        vh = []
+        for kv, vv in zip(vk_vars, vv_vars):
+            hk = kv.get().strip(); vn = value_for(vv, voice_opts)
+            if hk and vn:
+                vh.append({"hotkey": hk, "voice": vn})
+        cfg.voice_hotkeys = vh
+        cfg.voice_picker_hotkey = picker_var.get().strip()
         cfg.ai_cleanup = bool(ai_cleanup_var.get())
         cfg.cleanup_provider = value_for(cleanup_var, CLEANUP_PROVIDERS)
         cfg.cleanup_model = cleanup_model_var.get().strip()
