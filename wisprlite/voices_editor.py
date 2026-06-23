@@ -52,30 +52,7 @@ def main() -> None:
         except Exception:
             pass
 
-    style = ttk.Style(root)
-    try:
-        style.theme_use("clam")
-    except Exception:
-        pass
-    style.configure(".", background=BG, foreground=FG, font=("Segoe UI", 10))
-    style.configure("TButton", background=CARD, foreground=FG, padding=6, borderwidth=0)
-    style.map("TButton", background=[("active", "#262a3a")])
-    style.configure("Accent.TButton", background=ACCENT, foreground="#1a0c0d",
-                    font=("Segoe UI", 9, "bold"), padding=7, borderwidth=0)
-    style.map("Accent.TButton", background=[("active", "#e8838b")])
-    style.configure("Pick.TButton", background="#2a2f3d", foreground=FG, padding=6, borderwidth=0)
-    style.map("Pick.TButton", background=[("active", "#333a4a")])
-    style.configure("TCheckbutton", background=CARD, foreground=FG)
-    style.map("TCheckbutton", background=[("active", CARD)])
-    style.configure("TCombobox", fieldbackground=CARD, background=CARD, foreground=FG, arrowcolor=FG)
-    style.map("TCombobox", fieldbackground=[("readonly", CARD)], foreground=[("readonly", FG)],
-              selectbackground=[("readonly", CARD)], selectforeground=[("readonly", FG)],
-              background=[("readonly", CARD), ("active", CARD)])
-    style.configure("TEntry", fieldbackground=CARD, foreground=FG, insertcolor=FG)
-    root.option_add("*TCombobox*Listbox.background", CARD)
-    root.option_add("*TCombobox*Listbox.foreground", FG)
-    root.option_add("*TCombobox*Listbox.selectBackground", ACCENT)
-    root.option_add("*TCombobox*Listbox.selectForeground", "#1a0c0d")
+    style = winui.apply_theme(root)
 
     head = tk.Frame(root, bg=BG, padx=22, pady=18)
     head.pack(fill="x")
@@ -118,7 +95,9 @@ def main() -> None:
         name_col.pack(side="left", fill="x", expand=True)
         tk.Label(name_col, text="NAME", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
         name_var = tk.StringVar(value=voice.get("name", ""))
-        ttk.Entry(name_col, textvariable=name_var, width=32).pack(anchor="w", pady=(5, 0))
+        _nm = ttk.Entry(name_col, textvariable=name_var, width=32)
+        _nm.pack(anchor="w", pady=(5, 0))
+        winui.tooltip(_nm, "A short name for this voice (e.g. 'Email', 'Reddit'). You pick it from hotkeys and app profiles.")
         ttk.Button(toprow, text="Remove",
                    command=lambda: (wrap.destroy(), card in cards and cards.remove(card))).pack(side="right")
 
@@ -130,22 +109,28 @@ def main() -> None:
         sty_col.pack(side="left", padx=(0, 26))
         tk.Label(sty_col, text="STYLE", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
         style_var = tk.StringVar(value=dict(STYLES).get(voice.get("cleanup_style", ""), STYLES[0][1]))
-        ttk.Combobox(sty_col, textvariable=style_var, values=[l for _, l in STYLES],
-                     state="readonly", width=30).pack(anchor="w", pady=(5, 0))
+        _sty = ttk.Combobox(sty_col, textvariable=style_var, values=[l for _, l in STYLES],
+                            state="readonly", width=30)
+        _sty.pack(anchor="w", pady=(5, 0))
+        winui.tooltip(_sty, "How this voice polishes. Tidy = light clean-up that keeps your wording. Prompt = reshuffle rambling into a clear instruction for an AI tool. Custom = your own instruction (below).")
 
         eng_col = tk.Frame(ctl, bg=CARD)
         eng_col.pack(side="left", padx=(0, 26))
         tk.Label(eng_col, text="ENGINE", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
         engine_var = tk.StringVar(value=dict(ENGINES).get(voice.get("engine", ""), ENGINES[0][1]))
-        ttk.Combobox(eng_col, textvariable=engine_var, values=[l for _, l in ENGINES],
-                     state="readonly", width=14).pack(anchor="w", pady=(5, 0))
+        _eng = ttk.Combobox(eng_col, textvariable=engine_var, values=[l for _, l in ENGINES],
+                            state="readonly", width=14)
+        _eng.pack(anchor="w", pady=(5, 0))
+        winui.tooltip(_eng, "Transcription engine for this voice. Leave as-is to use whatever you set globally.")
 
         out_col = tk.Frame(ctl, bg=CARD)
         out_col.pack(side="left")
         tk.Label(out_col, text="OUTPUT", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
         output_var = tk.StringVar(value=dict(OUTPUTS).get(voice.get("output_mode", ""), OUTPUTS[0][1]))
-        ttk.Combobox(out_col, textvariable=output_var, values=[l for _, l in OUTPUTS],
-                     state="readonly", width=14).pack(anchor="w", pady=(5, 0))
+        _out = ttk.Combobox(out_col, textvariable=output_var, values=[l for _, l in OUTPUTS],
+                            state="readonly", width=14)
+        _out.pack(anchor="w", pady=(5, 0))
+        winui.tooltip(_out, "Where the text goes: type it, paste it, or copy to clipboard. Leave as-is to use your default.")
 
         # Auto-Enter
         ae_row = tk.Frame(inner, bg=CARD)
@@ -156,8 +141,10 @@ def main() -> None:
         ae = voice.get("auto_enter", None)
         ae_label = AUTO[0][1] if ae is None else (AUTO[1][1] if ae else AUTO[2][1])
         autoenter_var = tk.StringVar(value=ae_label)
-        ttk.Combobox(ae_col, textvariable=autoenter_var, values=[l for _, l in AUTO],
-                     state="readonly", width=14).pack(anchor="w", pady=(5, 0))
+        _ae = ttk.Combobox(ae_col, textvariable=autoenter_var, values=[l for _, l in AUTO],
+                           state="readonly", width=14)
+        _ae.pack(anchor="w", pady=(5, 0))
+        winui.tooltip(_ae, "Press Enter after typing (e.g. to send a chat message). Leave as-is to use your default.")
 
         cl_col = tk.Frame(ae_row, bg=CARD)
         cl_col.pack(side="left", padx=(26, 0))
@@ -165,8 +152,10 @@ def main() -> None:
         ac = voice.get("ai_cleanup", None)
         ac_label = CLEANUP[0][1] if ac is None else (CLEANUP[1][1] if ac else CLEANUP[2][1])
         cleanup_var = tk.StringVar(value=ac_label)
-        ttk.Combobox(cl_col, textvariable=cleanup_var, values=[l for _, l in CLEANUP],
-                     state="readonly", width=14).pack(anchor="w", pady=(5, 0))
+        _cl = ttk.Combobox(cl_col, textvariable=cleanup_var, values=[l for _, l in CLEANUP],
+                           state="readonly", width=14)
+        _cl.pack(anchor="w", pady=(5, 0))
+        winui.tooltip(_cl, "Whether the AI polishes at all. On = always polish with this style. Off = type your raw words, no AI. Leave as-is = use your global setting.")
 
         # Custom instruction
         instr_frame = tk.Frame(inner, bg=CARD)
@@ -174,7 +163,9 @@ def main() -> None:
         tk.Label(instr_frame, text="Custom instruction (used when Style = Custom)",
                  bg=CARD, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w")
         instr_var = tk.StringVar(value=voice.get("cleanup_instruction", ""))
-        ttk.Entry(instr_frame, textvariable=instr_var, width=60).pack(anchor="w", pady=(4, 0))
+        _instr = ttk.Entry(instr_frame, textvariable=instr_var, width=60)
+        _instr.pack(anchor="w", pady=(4, 0))
+        winui.tooltip(_instr, "Used only when Style = Custom. Describe how to rewrite, e.g. 'Rewrite as a polite, formal email.'")
 
         card.update(name=name_var, style=style_var, engine=engine_var, output=output_var,
                     auto_enter=autoenter_var, ai_cleanup=cleanup_var, instruction=instr_var)

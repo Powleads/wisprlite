@@ -112,31 +112,7 @@ def main() -> None:
         except Exception:
             pass
 
-    style = ttk.Style(root)
-    try:
-        style.theme_use("clam")
-    except Exception:
-        pass
-    style.configure(".", background=BG, foreground=FG, font=("Segoe UI", 10))
-    style.configure("TButton", background=CARD, foreground=FG, padding=6, borderwidth=0)
-    style.map("TButton", background=[("active", "#262a3a")])
-    style.configure("Accent.TButton", background=ACCENT, foreground="#1a0c0d",
-                    font=("Segoe UI", 9, "bold"), padding=7, borderwidth=0)
-    style.map("Accent.TButton", background=[("active", "#e8838b")])
-    # Lighter than the card so in-card buttons (Browse) read as buttons, not text.
-    style.configure("Pick.TButton", background="#2a2f3d", foreground=FG, padding=6, borderwidth=0)
-    style.map("Pick.TButton", background=[("active", "#333a4a")])
-    style.configure("TCheckbutton", background=CARD, foreground=FG)
-    style.map("TCheckbutton", background=[("active", CARD)])
-    style.configure("TCombobox", fieldbackground=CARD, background=CARD, foreground=FG, arrowcolor=FG)
-    style.map("TCombobox", fieldbackground=[("readonly", CARD)], foreground=[("readonly", FG)],
-              selectbackground=[("readonly", CARD)], selectforeground=[("readonly", FG)],
-              background=[("readonly", CARD), ("active", CARD)])
-    style.configure("TEntry", fieldbackground=CARD, foreground=FG, insertcolor=FG)
-    root.option_add("*TCombobox*Listbox.background", CARD)
-    root.option_add("*TCombobox*Listbox.foreground", FG)
-    root.option_add("*TCombobox*Listbox.selectBackground", ACCENT)
-    root.option_add("*TCombobox*Listbox.selectForeground", "#1a0c0d")
+    style = winui.apply_theme(root)
 
     head = tk.Frame(root, bg=BG, padx=22, pady=18)
     head.pack(fill="x")

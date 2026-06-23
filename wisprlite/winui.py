@@ -8,6 +8,125 @@ import ctypes
 
 DARK = "#13151d"
 
+# Shared dark + coral palette so every window (settings, voices, profiles) matches.
+PALETTE = {
+    "bg": "#13151d", "card": "#1b1e29", "popover": "#20242c", "fg": "#e5e7eb",
+    "muted": "#94a3b8", "accent": "#e06c75", "accent_hi": "#e8838b", "div": "#272b37",
+    # subtle field border instead of clam's default WHITE bevel; coral on focus.
+    "border": "#39414f",
+}
+
+
+def apply_theme(root):
+    """Apply the shared dark + coral ttk theme to a window and return its Style.
+
+    Centralizes what used to be copy-pasted per window — and, crucially, sets
+    lightcolor/darkcolor/bordercolor so ttk Entry/Combobox stop drawing the default
+    light (white) 3D bevel on our dark cards. Safe on any platform.
+    """
+    from tkinter import ttk
+
+    p = PALETTE
+    style = ttk.Style(root)
+    try:
+        style.theme_use("clam")
+    except Exception:
+        pass
+    # base: kill the white bevel (lightcolor/darkcolor = card), subtle dark border
+    style.configure(".", background=p["bg"], foreground=p["fg"], fieldbackground=p["card"],
+                    bordercolor=p["border"], lightcolor=p["card"], darkcolor=p["card"],
+                    troughcolor=p["card"], font=("Segoe UI", 10))
+    style.configure("TLabel", background=p["bg"], foreground=p["fg"], font=("Segoe UI", 10))
+    style.configure("Muted.TLabel", background=p["bg"], foreground=p["muted"], font=("Segoe UI", 9))
+    style.configure("Head.TLabel", background=p["bg"], foreground=p["accent"], font=("Segoe UI", 13, "bold"))
+    style.configure("TButton", background=p["card"], foreground=p["fg"], padding=6, borderwidth=0)
+    style.map("TButton", background=[("active", "#262a3a")])
+    style.configure("Accent.TButton", background=p["accent"], foreground="#1a0c0d",
+                    font=("Segoe UI", 9, "bold"), padding=7, borderwidth=0)
+    style.map("Accent.TButton", background=[("active", p["accent_hi"])])
+    style.configure("Pick.TButton", background="#2a2f3d", foreground=p["fg"], padding=6, borderwidth=0)
+    style.map("Pick.TButton", background=[("active", "#333a4a")])
+    style.configure("TCheckbutton", background=p["bg"], foreground=p["fg"])
+    style.map("TCheckbutton", background=[("active", p["bg"])])
+    style.configure("Card.TCheckbutton", background=p["card"], foreground=p["fg"])
+    style.map("Card.TCheckbutton", background=[("active", p["card"])])
+    style.configure("TEntry", fieldbackground=p["card"], foreground=p["fg"], insertcolor=p["fg"],
+                    bordercolor=p["border"], lightcolor=p["card"], darkcolor=p["card"])
+    style.map("TEntry", bordercolor=[("focus", p["accent"])], lightcolor=[("focus", p["accent"])],
+              darkcolor=[("focus", p["accent"])])
+    style.configure("TCombobox", fieldbackground=p["card"], background=p["card"], foreground=p["fg"],
+                    arrowcolor=p["fg"], bordercolor=p["border"], lightcolor=p["card"], darkcolor=p["card"])
+    style.map("TCombobox",
+              fieldbackground=[("readonly", p["card"]), ("disabled", p["card"])],
+              foreground=[("readonly", p["fg"]), ("disabled", p["muted"])],
+              selectbackground=[("readonly", p["card"])],
+              selectforeground=[("readonly", p["fg"])],
+              bordercolor=[("focus", p["accent"])],
+              lightcolor=[("focus", p["accent"])], darkcolor=[("focus", p["accent"])],
+              background=[("readonly", p["card"]), ("active", p["card"])])
+    style.configure("TNotebook", background=p["bg"], borderwidth=0, tabmargins=(10, 8, 0, 0))
+    style.configure("TNotebook.Tab", background=p["card"], foreground=p["muted"],
+                    padding=(26, 12), font=("Segoe UI", 10, "bold"), borderwidth=0)
+    style.map("TNotebook.Tab", background=[("selected", p["bg"])],
+              foreground=[("selected", p["accent"]), ("active", p["fg"])])
+    style.configure("Footer.TFrame", background=p["card"])
+    style.configure("TScrollbar", background=p["card"], troughcolor=p["bg"],
+                    bordercolor=p["bg"], arrowcolor=p["muted"])
+    # the combobox dropdown popup is a plain Tk Listbox (not themed by ttk)
+    root.option_add("*TCombobox*Listbox.background", p["card"])
+    root.option_add("*TCombobox*Listbox.foreground", p["fg"])
+    root.option_add("*TCombobox*Listbox.selectBackground", p["accent"])
+    root.option_add("*TCombobox*Listbox.selectForeground", "#1a0c0d")
+    return style
+
+
+def tooltip(widget, text: str) -> None:
+    """Attach a hover tooltip (plain Tk, dark themed, coral hairline border).
+
+    Shows `text` in a small popup below the widget on mouse-enter; hides on leave
+    or destroy. Safe to call on any widget; no-op if text is empty.
+    """
+    if not text:
+        return
+    import tkinter as tk
+
+    p = PALETTE
+    state = {"tip": None}
+
+    def show(_=None):
+        if state["tip"] is not None:
+            return
+        try:
+            x = widget.winfo_rootx() + 14
+            y = widget.winfo_rooty() + widget.winfo_height() + 6
+            tip = tk.Toplevel(widget)
+            tip.wm_overrideredirect(True)
+            tip.configure(bg=p["accent"])  # 1px coral hairline
+            frame = tk.Frame(tip, bg=p["popover"], padx=11, pady=8)
+            frame.pack(padx=1, pady=1)
+            tk.Label(frame, text=text, bg=p["popover"], fg=p["fg"], justify="left",
+                     wraplength=320, font=("Segoe UI", 9)).pack()
+            tip.wm_geometry(f"+{x}+{y}")
+            try:
+                tip.attributes("-topmost", True)
+            except Exception:
+                pass
+            state["tip"] = tip
+        except Exception:
+            state["tip"] = None
+
+    def hide(_=None):
+        if state["tip"] is not None:
+            try:
+                state["tip"].destroy()
+            except Exception:
+                pass
+            state["tip"] = None
+
+    widget.bind("<Enter>", show, add="+")
+    widget.bind("<Leave>", hide, add="+")
+    widget.bind("<Destroy>", hide, add="+")
+
 
 def dark_titlebar(root, color: str = DARK) -> None:
     """Force a dark title bar (Windows 10 1809+ / 11) instead of the user's

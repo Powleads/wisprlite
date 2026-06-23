@@ -9,6 +9,7 @@ trouble.
 
 from __future__ import annotations
 
+import os
 import threading
 import webbrowser
 
@@ -187,6 +188,73 @@ def _build_guide(parent, wheel) -> None:
     tk.Label(g, text="", bg=BG).pack(pady=6)  # bottom breathing room
 
 
+def _build_voices_tab(parent, show_tab=None, wheel=None) -> None:
+    """Flagship 'Voices & App Profiles' page: explain the feature, launch the editors."""
+    import tkinter as tk
+    from tkinter import ttk
+
+    # scrollable (mirrors the other content tabs) so nothing is clipped on short screens
+    canvas = tk.Canvas(parent, bg=BG, highlightthickness=0)
+    sbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+    canvas.configure(yscrollcommand=sbar.set)
+    sbar.pack(side="right", fill="y")
+    canvas.pack(side="left", fill="both", expand=True)
+    wrap = tk.Frame(canvas, bg=BG, padx=34, pady=28)
+    canvas.create_window((0, 0), window=wrap, anchor="nw")
+    wrap.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    if wheel:
+        wheel(canvas)
+
+    tk.Label(wrap, text="VOICES & APP PROFILES", bg=BG, fg=ACCENT,
+             font=("Segoe UI", 10, "bold")).pack(anchor="w")
+    tk.Label(wrap, text="One voice in. The right style out.", bg=BG, fg=FG,
+             font=("Segoe UI", 20, "bold")).pack(anchor="w", pady=(4, 6))
+    tk.Label(wrap, text="PipeVoice's signature feature: dictate the same way everywhere and your words come out "
+                        "tailored to where they land — automatically per app, or on a key.",
+             bg=BG, fg=MUTED, font=("Segoe UI", 10), justify="left", wraplength=640).pack(anchor="w", pady=(0, 22))
+
+    def feature(title, badge, desc, bullets, btn_text, arg):
+        card = tk.Frame(wrap, bg=CARD, padx=22, pady=18,
+                        highlightbackground=ACCENT, highlightthickness=1)
+        card.pack(fill="x", pady=(0, 16))
+        top = tk.Frame(card, bg=CARD)
+        top.pack(fill="x")
+        tk.Label(top, text=title, bg=CARD, fg=FG, font=("Segoe UI", 14, "bold")).pack(side="left")
+        tk.Label(top, text=f" {badge} ", bg=ACCENT, fg="#1a0c0d",
+                 font=("Segoe UI", 8, "bold")).pack(side="left", padx=(10, 0))
+        tk.Label(card, text=desc, bg=CARD, fg=MUTED, font=("Segoe UI", 10),
+                 justify="left", wraplength=600).pack(anchor="w", pady=(8, 10))
+        for b in bullets:
+            r = tk.Frame(card, bg=CARD)
+            r.pack(anchor="w", fill="x", pady=1)
+            tk.Label(r, text="•", bg=CARD, fg=ACCENT, font=("Segoe UI", 10)).pack(side="left")
+            tk.Label(r, text="  " + b, bg=CARD, fg=FG, font=("Segoe UI", 9)).pack(side="left")
+        ttk.Button(card, text=btn_text, style="Accent.TButton",
+                   command=lambda: _launch_child(arg)).pack(anchor="w", pady=(14, 0))
+
+    feature("Voices", "PRESETS",
+            "Named polish presets you build once and reuse. Each Voice decides how your words are cleaned up — "
+            "and optionally the engine, whether it presses Enter, and where the text goes.",
+            ["Tidy — just clean up your words",
+             "Social — casual and emoji-friendly",
+             "Professional — formal, British spelling",
+             "Code / Prompt — a crisp instruction for AI tools"],
+            "Manage voices…", "--voices")
+
+    feature("App profiles", "AUTOMATIC",
+            "Assign a Voice to an app. PipeVoice detects the focused window and applies that app's Voice for the "
+            "next thing you say, then resets — no menus, no mode switching.",
+            ["Terminal → raw + Enter",
+             "Slack → Social, auto-send",
+             "Cursor / VS Code → Code / Prompt",
+             "Outlook → Professional"],
+            "Manage app profiles…", "--profiles")
+
+    tk.Label(wrap, text="Tip: bind a Voice to a hotkey (Settings → Voice hotkeys) to switch style mid-sentence. "
+                        "A key always wins over the app's default.",
+             bg=BG, fg=MUTED, font=("Segoe UI", 9), justify="left", wraplength=640).pack(anchor="w", pady=(4, 0))
+
+
 def main(first_run: bool = False) -> None:
     import tkinter as tk
     from tkinter import ttk
@@ -203,46 +271,7 @@ def main(first_run: bool = False) -> None:
         except Exception:
             pass
 
-    style = ttk.Style(root)
-    try:
-        style.theme_use("clam")
-    except Exception:
-        pass
-    style.configure(".", background=BG, foreground=FG, fieldbackground=CARD,
-                    bordercolor="#2a2e3d", lightcolor=CARD, darkcolor=CARD,
-                    font=("Segoe UI", 10))
-    style.configure("TLabel", background=BG, foreground=FG, font=("Segoe UI", 10))
-    style.configure("Muted.TLabel", background=BG, foreground=MUTED, font=("Segoe UI", 9))
-    style.configure("Head.TLabel", background=BG, foreground=ACCENT, font=("Segoe UI", 13, "bold"))
-    style.configure("TButton", background=CARD, foreground=FG, padding=6)
-    style.map("TButton", background=[("active", "#262a3a")])
-    style.configure("Accent.TButton", background=ACCENT, foreground="#1a0c0d",
-                    font=("Segoe UI", 9, "bold"), padding=7)
-    style.map("Accent.TButton", background=[("active", "#e8838b")])
-    style.configure("TCheckbutton", background=BG, foreground=FG)
-    style.map("TCheckbutton", background=[("active", BG)])
-    style.configure("Card.TCheckbutton", background=CARD, foreground=FG)
-    style.map("Card.TCheckbutton", background=[("active", CARD)])
-    style.configure("TNotebook", background=BG, borderwidth=0, tabmargins=(10, 8, 0, 0))
-    style.configure("TNotebook.Tab", background=CARD, foreground=MUTED,
-                    padding=(26, 12), font=("Segoe UI", 10, "bold"), borderwidth=0)
-    style.map("TNotebook.Tab", background=[("selected", BG)],
-              foreground=[("selected", ACCENT), ("active", FG)])
-    style.configure("Footer.TFrame", background=CARD)
-    style.configure("TCombobox", fieldbackground=CARD, background=CARD,
-                    foreground=FG, arrowcolor=FG)
-    style.map("TCombobox",
-              fieldbackground=[("readonly", CARD), ("disabled", CARD)],
-              foreground=[("readonly", FG), ("disabled", MUTED)],
-              selectbackground=[("readonly", CARD)],
-              selectforeground=[("readonly", FG)],
-              background=[("readonly", CARD), ("active", CARD)])
-    # the dropdown popup is a plain Tk Listbox, not themed by ttk
-    root.option_add("*TCombobox*Listbox.background", CARD)
-    root.option_add("*TCombobox*Listbox.foreground", FG)
-    root.option_add("*TCombobox*Listbox.selectBackground", ACCENT)
-    root.option_add("*TCombobox*Listbox.selectForeground", "#1a0c0d")
-    style.configure("TEntry", fieldbackground=CARD, foreground=FG, insertcolor=FG)
+    style = winui.apply_theme(root)
 
     pad = dict(padx=14, pady=8, sticky="w")
 
@@ -265,14 +294,17 @@ def main(first_run: bool = False) -> None:
     body_wrap.pack(side="top", fill="both", expand=True)
 
     tab_settings = tk.Frame(body_wrap, bg=BG)
+    tab_voices = tk.Frame(body_wrap, bg=BG)
     tab_history = tk.Frame(body_wrap, bg=BG)
     tab_guide = tk.Frame(body_wrap, bg=BG)
     tab_about = tk.Frame(body_wrap, bg=BG)
-    _tabs = [("Settings", tab_settings), ("History", tab_history),
+    _tabs = [("Settings", tab_settings), ("Voices", tab_voices), ("History", tab_history),
              ("Guide", tab_guide), ("About", tab_about)]
     _tab_w = {}
 
     def _show_tab(name):
+        if name not in dict(_tabs):
+            name = "Settings"
         for _n, _f in _tabs:
             _f.pack_forget()
         dict(_tabs)[name].pack(fill="both", expand=True)
@@ -305,7 +337,8 @@ def main(first_run: bool = False) -> None:
     history.build(tab_history, root, _wheel)
     _build_guide(tab_guide, _wheel)
     about.build(tab_about, root, _wheel)
-    _show_tab("Settings")
+    _build_voices_tab(tab_voices, _show_tab, _wheel)
+    _show_tab(os.getenv("PV_TAB") or "Settings")  # PV_TAB is a render/test seam
     DIV = "#272b37"
 
     def card(title, subtitle=None):
@@ -623,10 +656,8 @@ def main(first_run: bool = False) -> None:
     check(c, "Start on Windows login", autostart_var)
     check(c, "Automatic updates", auto_update_var, "Check for a newer version on startup and install it silently.")
     check(c, "Keep a local dictation history", history_var, "Saved on your PC; open it from the tray.")
-    pr = stack(c, "App profiles", "Give specific apps their own engine, cleanup and Enter behaviour.")
-    ttk.Button(pr, text="Manage app profiles…", command=lambda: _launch_child("--profiles")).pack(anchor="w")
-    vc = stack(c, "Voices", "Named polish presets (Tidy, Social, Professional, Code…). Bind them to keys or apps.")
-    ttk.Button(vc, text="Manage voices…", command=lambda: _launch_child("--voices")).pack(anchor="w")
+    pr = stack(c, "Voices & app profiles", "Per-app styles and key-bound Voices — PipeVoice's signature feature.")
+    ttk.Button(pr, text="Open the Voices tab  →", command=lambda: _show_tab("Voices")).pack(anchor="w")
 
     # --- Advanced ---
     c = card("Advanced", "Most people never need these.")
