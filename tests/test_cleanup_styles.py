@@ -10,7 +10,18 @@ def test_tidy_is_default():
 def test_prompt_style():
     s = cleanup._style_system("prompt")
     assert s == cleanup._PROMPT
-    assert "rewrite" in s.lower() and "only" in s.lower()  # restructure + output-only rail
+    low = s.lower()
+    # restructure + output-only rail
+    assert "reshuffle" in low or "rewrite" in low
+    assert s.strip().endswith("Return ONLY the polished text, nothing else.")
+    # faithfulness rail: polarity / negation must be called out and protected
+    assert "negation" in low
+    assert "'with'" in low and "'without'" in low
+    # speech-act rail: never fabricate a command; keep the kind of utterance
+    assert "fabricate a command" in low
+    assert "a question stays a question" in low
+    assert "stays a request for ideas" in low
+    assert "what do you think" in low  # tentative brainstorm / opinion-ask preserved
 
 def test_custom_style():
     s = cleanup._style_system("custom", "Rewrite as a git commit message.")
