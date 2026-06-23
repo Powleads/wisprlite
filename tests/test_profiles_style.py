@@ -1,21 +1,64 @@
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from wisprlite import profiles
+from wisprlite import profiles, voices, config
 
-def test_resolve_passes_style_overrides():
-    p = [{"name": "code.exe", "match": {"exe": "code.exe"},
-          "overrides": {"engine": "deepgram", "cleanup_style": "prompt",
-                        "cleanup_instruction": "x", "bogus": "drop"}}]
-    ov = profiles.resolve(p, {"exe": "code.exe", "title": "whatever"})
-    assert ov.get("cleanup_style") == "prompt", ov
-    assert ov.get("cleanup_instruction") == "x", ov
-    assert ov.get("engine") == "deepgram", ov
-    assert "bogus" not in ov  # still whitelisted
+
+def test_voice_profile():
+    """Profile with a voice key: resolve returns the Voice's overrides."""
+    cfg = config.Config()
+    cfg.profiles = [{"match": {"exe": "x.exe"}, "voice": "Code / Prompt"}]
+    result = profiles.resolve(cfg, {"exe": "x.exe"})
+    assert result == {"cleanup_style": "prompt"}, result
+
+
+def test_legacy_backcompat():
+    """Profile with legacy overrides (no voice key): overrides are filtered to VOICE_KEYS."""
+    cfg = config.Config()
+    cfg.profiles = [{"match": {"exe": "y.exe"},
+                     "overrides": {"cleanup_style": "prompt", "auto_enter": True}}]
+    result = profiles.resolve(cfg, {"exe": "y.exe"})
+    assert result == {"cleanup_style": "prompt", "auto_enter": True}, result
+
 
 def test_no_match_returns_empty():
-    assert profiles.resolve([{"match": {"exe": "x.exe"}, "overrides": {"cleanup_style": "prompt"}}],
-                            {"exe": "other.exe"}) == {}
+    """No matching profile: resolve returns {}."""
+    cfg = config.Config()
+    cfg.profiles = [{"match": {"exe": "x.exe"}, "voice": "Tidy"}]
+    assert profiles.resolve(cfg, {"exe": "other.exe"}) == {}
+
+
+def test_migrate_profiles():
+    """Migration converts legacy overrides to a named Voice (idempotent)."""
+    cfg = config.Config()
+    cfg.profiles = [
+        {"name": "code.exe", "match": {"exe": "code.exe"},
+         "overrides": {"cleanup_style": "prompt", "engine": "deepgram"}},
+    ]
+
+    # First run: should change something
+    changed = voices.migrate_profiles(cfg)
+    assert changed is True, "expected migration to report changes"
+
+    # Profile now has voice, no overrides
+    p = cfg.profiles[0]
+    assert p.get("voice") is not None, "profile should have a voice key after migration"
+    assert "overrides" not in p, "profile should not have overrides after migration"
+
+    # A matching Voice was added to cfg.voices
+    voice_name = p["voice"]
+    v = voices.by_name(cfg, voice_name)
+    assert v is not None, f"Voice '{voice_name}' not found in cfg.voices"
+    assert v.get("cleanup_style") == "prompt"
+    assert v.get("engine") == "deepgram"
+
+    # Second run: idempotent — no further changes
+    changed2 = voices.migrate_profiles(cfg)
+    assert changed2 is False, "second run should be a no-op"
+
 
 if __name__ == "__main__":
-    test_resolve_passes_style_overrides(); test_no_match_returns_empty()
+    test_voice_profile()
+    test_legacy_backcompat()
+    test_no_match_returns_empty()
+    test_migrate_profiles()
     print("OK")

@@ -135,7 +135,7 @@ class App:
         try:
             from . import foreground, profiles
             self._fg_ctx = foreground.detect()
-            self._active = profiles.resolve(self.cfg.profiles, self._fg_ctx)
+            self._active = profiles.resolve(self.cfg, self._fg_ctx)
         except Exception:
             self._fg_ctx, self._active = {}, {}
         try:

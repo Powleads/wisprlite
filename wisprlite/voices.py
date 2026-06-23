@@ -45,3 +45,40 @@ def resolve(cfg, name: str) -> dict:
         elif val:                      # non-empty string
             out[k] = val
     return out
+
+
+def migrate_profiles(cfg) -> bool:
+    """One-shot, idempotent migration of legacy profile overrides into named Voices.
+
+    For each profile that has legacy ``overrides`` and no ``voice``: create a Voice
+    named "<exe-base> voice" (deduped against existing voice names), append it to
+    ``cfg.voices``, set ``profile["voice"] = name``, and drop ``profile["overrides"]``.
+    Returns True if anything changed so the caller can persist cfg.
+    Profiles already carrying ``voice`` are skipped so re-running is a no-op.
+    """
+    changed = False
+    existing = set(names(cfg))
+    for p in (getattr(cfg, "profiles", None) or []):
+        if not isinstance(p, dict) or p.get("voice") or not p.get("overrides"):
+            continue
+        ov = {k: v for k, v in p["overrides"].items() if k in VOICE_KEYS}
+        base = ((p.get("match") or {}).get("exe") or p.get("name") or "app").split(".")[0]
+        name = f"{base} voice"
+        i = 2
+        while name in existing:
+            name = f"{base} voice {i}"
+            i += 1
+        existing.add(name)
+        voice = {
+            "name": name,
+            "cleanup_style": ov.get("cleanup_style", ""),
+            "cleanup_instruction": ov.get("cleanup_instruction", ""),
+            "engine": ov.get("engine", ""),
+            "auto_enter": ov.get("auto_enter"),
+            "output_mode": ov.get("output_mode", ""),
+        }
+        cfg.voices.append(voice)
+        p["voice"] = name
+        p.pop("overrides", None)
+        changed = True
+    return changed

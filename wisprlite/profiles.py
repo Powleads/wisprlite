@@ -10,33 +10,37 @@ from __future__ import annotations
 
 import os
 
-from . import config
+from . import config, voices
 
 KEYS = ("engine", "ai_cleanup", "auto_enter", "output_mode", "cleanup_style", "cleanup_instruction")
 
 
-def resolve(profiles, ctx) -> dict:
-    """Overrides of the first profile whose match fits ctx, else {}."""
-    if not profiles or not ctx:
+def resolve(cfg, ctx) -> dict:
+    """Overrides of the first profile whose match fits ctx, else {}.
+
+    Accepts a Config object (new style) and reads cfg.profiles / cfg.voices.
+    On a match: if the profile has a ``voice`` key the Voice's resolved overrides
+    are returned; if it has legacy ``overrides`` those are filtered to VOICE_KEYS
+    (back-compat); otherwise {}.
+    """
+    profs = getattr(cfg, "profiles", None) or []
+    if not profs or not ctx:
         return {}
     exe = (ctx.get("exe") or "").lower()
     title = (ctx.get("title") or "").lower()
-    for p in profiles:
+    for p in profs:
         if not isinstance(p, dict):
             continue
-        match = p.get("match") or {}
-        m_exe = (match.get("exe") or "").lower()
-        m_title = (match.get("title_contains") or "").lower()
+        m = p.get("match") or {}
+        m_exe = (m.get("exe") or "").lower()
+        m_title = (m.get("title_contains") or "").lower()
         if not (m_exe or m_title):
             continue
-        ok = True
-        if m_exe:
-            ok = ok and exe == m_exe
-        if m_title:
-            ok = ok and m_title in title
-        if ok:
+        if (not m_exe or exe == m_exe) and (not m_title or m_title in title):
+            if p.get("voice"):
+                return voices.resolve(cfg, p["voice"])
             ov = p.get("overrides") or {}
-            return {k: v for k, v in ov.items() if k in KEYS}
+            return {k: v for k, v in ov.items() if k in voices.VOICE_KEYS}
     return {}
 
 
