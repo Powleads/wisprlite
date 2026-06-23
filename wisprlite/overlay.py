@@ -27,6 +27,7 @@ ACCENT = {
     "error": "#f87171",
     "done": "#60a5fa",
     "idle": "#64748b",
+    "picker": "#a78bfa",
 }
 
 
@@ -64,6 +65,9 @@ class Overlay:
 
     def stop(self) -> None:
         self._q.put(("quit", None, ""))
+
+    def show_picker(self, items: list, title: str = "Pick a voice") -> None:
+        self._q.put(("picker", title, list(items or [])))
 
     # ---- tkinter thread ---------------------------------------------------
     def _run(self) -> None:
@@ -106,6 +110,8 @@ class Overlay:
             "hist": [0.0] * METER_N,
             "visible": False,
             "hide_at": 0.0,
+            "picker_title": "",
+            "picker_items": [],
         }
 
         def reveal():
@@ -151,6 +157,12 @@ class Overlay:
                     elif kind == "text":
                         st["text"] = text or ""
                         reveal()
+                    elif kind == "picker":
+                        st["name"] = "picker"
+                        st["picker_title"] = state or "Pick a voice"
+                        st["picker_items"] = text if isinstance(text, list) else []
+                        st["hide_at"] = 0.0
+                        reveal()
             except queue.Empty:
                 pass
             return True
@@ -175,6 +187,19 @@ class Overlay:
         c.delete("all")
         accent = ACCENT.get(st["name"], ACCENT["idle"])
         self._round_rect(c, 3, 3, WIN_W - 3, WIN_H - 3, 24, fill="#13151d", outline=accent, width=2)
+
+        if st["name"] == "picker":
+            title = st["picker_title"] or "Pick a voice"
+            items = st["picker_items"][:6]
+            line = "  ".join(f"{i + 1} {name}" for i, name in enumerate(items))
+            line = self._fit(line, WIN_W - 20)
+            title_y = WIN_H // 2 - 12
+            items_y = WIN_H // 2 + 8
+            c.create_text(WIN_W // 2, title_y, text=title, anchor="center",
+                          fill=accent, font=("Segoe UI", 8, "bold"))
+            c.create_text(WIN_W // 2, items_y, text=line, anchor="center",
+                          fill="#e5e7eb", font=("Segoe UI", 11))
+            return
 
         st["phase"] += 0.18
         cy = WIN_H // 2
