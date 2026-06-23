@@ -23,6 +23,7 @@ GOOD = "#98c379"
 WARN = "#e5c07b"
 
 RELEASES_URL = "https://github.com/Powleads/PipeVoice/releases"
+GITHUB_URL = "https://github.com/Powleads/PipeVoice"
 
 
 def _open_feedback() -> None:
@@ -98,6 +99,8 @@ def build(container, root, wheel=None) -> None:
     actions.pack(anchor="w", fill="x", pady=(14, 0))
     btn = ttk.Button(actions, text="Checking…", state="disabled", style="Accent.TButton")
     btn.pack(side="left")
+    ttk.Button(actions, text="⭐ Star on GitHub",
+               command=lambda: webbrowser.open(GITHUB_URL)).pack(side="left", padx=(10, 0))
     link = tk.Label(actions, text="All releases ↗", bg=BG, fg=ACCENT, cursor="hand2",
                     font=("Segoe UI", 9, "underline"))
     link.pack(side="left", padx=(16, 0))

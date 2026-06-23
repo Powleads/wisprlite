@@ -112,6 +112,7 @@ class Overlay:
             "hide_at": 0.0,
             "picker_title": "",
             "picker_items": [],
+            "h": WIN_H,            # current window height (grows for the picker list)
         }
 
         def reveal():
@@ -131,6 +132,18 @@ class Overlay:
             except Exception:
                 pass
 
+        def resize(h: int) -> None:
+            # the picker grows the pill upward from its usual corner so each voice
+            # gets its own line; everything else uses the short pill.
+            if h == st["h"]:
+                return
+            st["h"] = h
+            try:
+                canvas.config(height=h)
+                root.geometry(f"{WIN_W}x{h}+{x}+{sh - h - 60}")
+            except Exception:
+                pass
+
         def drain() -> bool:
             try:
                 while True:
@@ -140,28 +153,34 @@ class Overlay:
                         return False
                     if kind == "hide":
                         st["name"] = "idle"
+                        resize(WIN_H)
                         conceal()
                     elif kind == "show":
                         st["name"] = state or "listening"
                         st["text"] = text or ""
                         st["hide_at"] = 0.0
+                        resize(WIN_H)
                         reveal()
                     elif kind == "state":
                         if state:
                             st["name"] = state
                         if text is not None:
                             st["text"] = text
+                        resize(WIN_H)
                         reveal()
                         if state in ("done", "error"):
                             st["hide_at"] = time.time() + (2.2 if state == "error" else 1.4)
                     elif kind == "text":
                         st["text"] = text or ""
+                        resize(WIN_H)
                         reveal()
                     elif kind == "picker":
                         st["name"] = "picker"
                         st["picker_title"] = state or "Pick a voice"
-                        st["picker_items"] = text if isinstance(text, list) else []
+                        items = text if isinstance(text, list) else []
+                        st["picker_items"] = items
                         st["hide_at"] = 0.0
+                        resize(44 + 30 * max(1, min(6, len(items))) + 12)
                         reveal()
             except queue.Empty:
                 pass
@@ -185,20 +204,22 @@ class Overlay:
     # ---- drawing ----------------------------------------------------------
     def _draw(self, c, st) -> None:
         c.delete("all")
+        H = st.get("h", WIN_H)
         accent = ACCENT.get(st["name"], ACCENT["idle"])
-        self._round_rect(c, 3, 3, WIN_W - 3, WIN_H - 3, 24, fill="#13151d", outline=accent, width=2)
+        self._round_rect(c, 3, 3, WIN_W - 3, H - 3, 24, fill="#13151d", outline=accent, width=2)
 
         if st["name"] == "picker":
             title = st["picker_title"] or "Pick a voice"
             items = st["picker_items"][:6]
-            line = "  ".join(f"{i + 1} {name}" for i, name in enumerate(items))
-            line = self._fit(line, WIN_W - 20)
-            title_y = WIN_H // 2 - 12
-            items_y = WIN_H // 2 + 8
-            c.create_text(WIN_W // 2, title_y, text=title, anchor="center",
-                          fill=accent, font=("Segoe UI", 8, "bold"))
-            c.create_text(WIN_W // 2, items_y, text=line, anchor="center",
-                          fill="#e5e7eb", font=("Segoe UI", 11))
+            c.create_text(WIN_W // 2, 22, text=title, anchor="center",
+                          fill=accent, font=("Segoe UI", 9, "bold"))
+            row, y0 = 30, 50
+            for i, name in enumerate(items):
+                yy = y0 + i * row
+                c.create_text(24, yy, text=str(i + 1), anchor="w",
+                              fill=accent, font=("Consolas", 13, "bold"))
+                c.create_text(48, yy, text=self._fit(name, WIN_W - 64), anchor="w",
+                              fill="#e5e7eb", font=("Segoe UI", 12))
             return
 
         st["phase"] += 0.18

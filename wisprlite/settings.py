@@ -10,6 +10,7 @@ trouble.
 from __future__ import annotations
 
 import threading
+import webbrowser
 
 from . import about, autostart, cleanup, config, history, voices, winui
 
@@ -724,8 +725,10 @@ def main(first_run: bool = False) -> None:
 
     ttk.Button(footer, text="Save", style="Accent.TButton", command=save).pack(side="right")
     ttk.Button(footer, text="Cancel", command=root.destroy).pack(side="right", padx=(0, 8))
-    ttk.Label(footer, text="Not sure what to pick? Open the Guide tab.",
-              style="Muted.TLabel").pack(side="left")
+    ttk.Button(footer, text="⭐ Star on GitHub",
+               command=lambda: webbrowser.open(_URLS["github"])).pack(side="left")
+    ttk.Label(footer, text="Free & open-source — a star really helps.",
+              style="Muted.TLabel").pack(side="left", padx=(12, 0))
 
     root.update_idletasks()
     cw = frm.winfo_reqwidth() + 22          # form width + scrollbar

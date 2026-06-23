@@ -95,6 +95,8 @@ class Config:
     deepgram_finish_timeout: float = 6.0  # seconds to wait for Deepgram's final words
     paste_speed: str = "normal"       # fast | normal | slow — clipboard-paste timing
     last_version: str = ""            # app version last run, to detect a fresh update
+    launches: int = 0                 # count of app starts (for the one-time star nudge)
+    star_prompt_shown: bool = False   # one-time "star us on GitHub" nudge already shown
     profiles: list = field(default_factory=list)  # per-app behaviour overrides
     # Agent MCP server (listen + transcribe). Off by default; opt-in via the tray.
     mcp_enabled: bool = False
