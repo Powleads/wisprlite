@@ -3,23 +3,28 @@ app profiles apply), bound to hotkeys and/or apps. resolve() turns a name into t
 non-empty overrides that App._eff reads."""
 from __future__ import annotations
 
-# the per-utterance dials a Voice may set; "" / None mean "leave as-is"
-VOICE_KEYS = ("cleanup_style", "cleanup_instruction", "engine", "auto_enter", "output_mode")
+# the per-utterance dials a Voice may set; "" means "leave as-is" for strings,
+# None means "leave as-is" for the tri-state bools (auto_enter, ai_cleanup)
+VOICE_KEYS = ("cleanup_style", "cleanup_instruction", "engine", "auto_enter",
+              "output_mode", "ai_cleanup")
+_TRISTATE = ("auto_enter", "ai_cleanup")
 
+# Starters force ai_cleanup=True: they ARE polish presets, so picking one should
+# polish even if the user's global cleanup is off.
 STARTER_VOICES = [
     {"name": "Tidy", "cleanup_style": "tidy", "cleanup_instruction": "",
-     "engine": "", "auto_enter": None, "output_mode": ""},
+     "engine": "", "auto_enter": None, "output_mode": "", "ai_cleanup": True},
     {"name": "Social", "cleanup_style": "custom",
      "cleanup_instruction": ("Rewrite as a friendly, casual social-media post in the "
         "speaker's own meaning. Natural, warm, light; emojis only if they fit. Keep it concise."),
-     "engine": "", "auto_enter": False, "output_mode": ""},
+     "engine": "", "auto_enter": False, "output_mode": "", "ai_cleanup": True},
     {"name": "Professional", "cleanup_style": "custom",
      "cleanup_instruction": ("Rewrite as clear, professional writing (e.g. an email): correct, "
         "polished, neutral-to-formal tone, British spelling. Preserve the speaker's meaning and every "
         "specific; do not add content."),
-     "engine": "", "auto_enter": None, "output_mode": ""},
+     "engine": "", "auto_enter": None, "output_mode": "", "ai_cleanup": True},
     {"name": "Code / Prompt", "cleanup_style": "prompt", "cleanup_instruction": "",
-     "engine": "", "auto_enter": None, "output_mode": ""},
+     "engine": "", "auto_enter": None, "output_mode": "", "ai_cleanup": True},
 ]
 
 def names(cfg) -> list:
@@ -39,7 +44,7 @@ def resolve(cfg, name: str) -> dict:
     out = {}
     for k in VOICE_KEYS:
         val = v.get(k)
-        if k == "auto_enter":
+        if k in _TRISTATE:
             if val is not None:
                 out[k] = bool(val)
         elif val:                      # non-empty string
@@ -76,6 +81,7 @@ def migrate_profiles(cfg) -> bool:
             "engine": ov.get("engine", ""),
             "auto_enter": ov.get("auto_enter"),
             "output_mode": ov.get("output_mode", ""),
+            "ai_cleanup": ov.get("ai_cleanup"),
         }
         cfg.voices.append(voice)
         p["voice"] = name

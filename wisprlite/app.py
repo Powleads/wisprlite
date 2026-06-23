@@ -183,8 +183,8 @@ class App:
         if not names:
             return
         self._picker_open = True
-        self.overlay.show_picker(names[:9], "Pick a voice (1-9, Esc)")
-        threading.Thread(target=self._picker_loop, args=(names[:9],), daemon=True).start()
+        self.overlay.show_picker(names[:6], "Pick a voice (1-6, Esc)")
+        threading.Thread(target=self._picker_loop, args=(names[:6],), daemon=True).start()
 
     def _picker_loop(self, names: list) -> None:
         import keyboard

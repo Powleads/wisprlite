@@ -8,7 +8,7 @@ def test_voice_profile():
     cfg = config.Config()
     cfg.profiles = [{"match": {"exe": "x.exe"}, "voice": "Code / Prompt"}]
     result = profiles.resolve(cfg, {"exe": "x.exe"})
-    assert result == {"cleanup_style": "prompt"}, result
+    assert result == {"cleanup_style": "prompt", "ai_cleanup": True}, result  # starters force cleanup on
 
 
 def test_legacy_backcompat():

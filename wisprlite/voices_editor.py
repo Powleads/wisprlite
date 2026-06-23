@@ -24,6 +24,7 @@ ENGINES = [("", "(leave as-is)"), ("gemini", "Gemini"), ("groq", "Groq"),
 OUTPUTS = [("", "(leave as-is)"), ("type", "Type"), ("paste", "Paste"),
            ("clipboard", "Clipboard")]
 AUTO = [("leave", "(leave as-is)"), ("yes", "Yes"), ("no", "No")]
+CLEANUP = [("leave", "(leave as-is)"), ("on", "On"), ("off", "Off")]
 
 
 def _value_for(label, table):
@@ -158,6 +159,15 @@ def main() -> None:
         ttk.Combobox(ae_col, textvariable=autoenter_var, values=[l for _, l in AUTO],
                      state="readonly", width=14).pack(anchor="w", pady=(5, 0))
 
+        cl_col = tk.Frame(ae_row, bg=CARD)
+        cl_col.pack(side="left", padx=(26, 0))
+        tk.Label(cl_col, text="AI CLEANUP", bg=CARD, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
+        ac = voice.get("ai_cleanup", None)
+        ac_label = CLEANUP[0][1] if ac is None else (CLEANUP[1][1] if ac else CLEANUP[2][1])
+        cleanup_var = tk.StringVar(value=ac_label)
+        ttk.Combobox(cl_col, textvariable=cleanup_var, values=[l for _, l in CLEANUP],
+                     state="readonly", width=14).pack(anchor="w", pady=(5, 0))
+
         # Custom instruction
         instr_frame = tk.Frame(inner, bg=CARD)
         instr_frame.pack(fill="x", pady=(16, 0))
@@ -167,7 +177,7 @@ def main() -> None:
         ttk.Entry(instr_frame, textvariable=instr_var, width=60).pack(anchor="w", pady=(4, 0))
 
         card.update(name=name_var, style=style_var, engine=engine_var, output=output_var,
-                    auto_enter=autoenter_var, instruction=instr_var)
+                    auto_enter=autoenter_var, ai_cleanup=cleanup_var, instruction=instr_var)
         cards.append(card)
 
     for v in (cfg.voices or []):
@@ -185,6 +195,8 @@ def main() -> None:
             style = _value_for(card["style"].get(), STYLES)
             ae_key = _value_for(card["auto_enter"].get(), AUTO)   # "leave"/"yes"/"no"
             auto_enter = None if ae_key == "leave" else (ae_key == "yes")
+            ac_key = _value_for(card["ai_cleanup"].get(), CLEANUP)  # "leave"/"on"/"off"
+            ai_cleanup = None if ac_key == "leave" else (ac_key == "on")
             out.append({
                 "name": name,
                 "cleanup_style": style,
@@ -192,6 +204,7 @@ def main() -> None:
                 "engine": _value_for(card["engine"].get(), ENGINES),
                 "auto_enter": auto_enter,
                 "output_mode": _value_for(card["output"].get(), OUTPUTS),
+                "ai_cleanup": ai_cleanup,
             })
         # Reload first so we only change `voices`, not other settings the user may
         # have edited in the Settings window meanwhile.
