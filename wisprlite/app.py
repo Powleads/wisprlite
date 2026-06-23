@@ -159,7 +159,7 @@ class App:
         if pk:
             self._picker_mgr = HotkeyManager(
                 get_hotkey=(lambda h=pk: h),
-                get_mode=lambda: "toggle",          # fire once on press, not hold-to-talk
+                get_mode=lambda: "ptt",             # fire on every press (toggle would skip every 2nd press)
                 on_start=self._open_picker,
                 on_stop=lambda: None,
                 is_paused=lambda: self.paused,
