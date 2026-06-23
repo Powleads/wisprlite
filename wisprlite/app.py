@@ -788,6 +788,13 @@ class App:
 
         keyprompt.ensure_api_key(self.cfg)
 
+        # One-time, dismissible "star us on GitHub" nudge (counts launches, shows once).
+        try:
+            from . import star_prompt
+            star_prompt.maybe_show(self.cfg)
+        except Exception:
+            pass
+
         self.overlay.start()
         self.tray.start()
         self.hotkeys.start()
