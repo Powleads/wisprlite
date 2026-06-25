@@ -184,9 +184,13 @@ Windows 10 and Windows 11.
 
 ---
 
-## ⭐ Star this repo
+## ⭐ Support PipeVoice
 
-If PipeVoice saves your wrists (or your sleep), **[star the repo](https://github.com/Powleads/PipeVoice)** — it's the single biggest thing you can do to help other people find a free, no-account voice typing tool for Windows.
+PipeVoice is free, open source, and has zero telemetry — so it grows entirely by word of mouth. If it saves your wrists (or your sleep), three things help, in order:
+
+1. **[Star the repo](https://github.com/Powleads/PipeVoice)** — the single biggest signal that helps other people find a free, no-account voice typing tool for Windows.
+2. **[Leave an honest review on Product Hunt](https://www.producthunt.com/products/pipevoice/reviews)** — it tells people weighing the download whether it's worth it.
+3. **Tell one person** who types all day — or who talks to Claude Code / Cursor more than they type.
 
 [![Star on GitHub](https://img.shields.io/github/stars/Powleads/PipeVoice?style=social)](https://github.com/Powleads/PipeVoice/stargazers)
 

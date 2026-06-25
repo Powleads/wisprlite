@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import threading
+import webbrowser
 
 STATE_COLOR = {
     "idle": (148, 163, 184, 255),
@@ -105,6 +106,11 @@ class Tray:
             Item("About / What's new…", lambda i, it: app.open_about()),
             Item("Send feedback…", lambda i, it: app.open_feedback()),
             Item("Check for updates…", lambda i, it: app.check_for_updates(manual=True)),
+            Item("★ Star us on GitHub",
+                 lambda i, it: webbrowser.open("https://github.com/Powleads/PipeVoice")),
+            Item("Review on Product Hunt",
+                 lambda i, it: webbrowser.open("https://www.producthunt.com/products/pipevoice/reviews?utm_source=pipevoice_app")),
+            Menu.SEPARATOR,
             Item("Quit", lambda i, it: app.quit()),
         )
 
